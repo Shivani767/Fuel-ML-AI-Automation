@@ -1,0 +1,83 @@
+case_id,imei,vehicle_name,matched_map_name,event_date,event_time,liters,source,resolution_status,match_method,notes
+1,357544374929160,Kamdhenu FBD TM HR-55-P-8009,Kamdhenu FBD TM HR-55-P-8009,2026-06-01,,2.34,user_spreadsheet_2026_06,RESOLVED,plate,
+2,,SKS Gorakhpur UP-80-HM-3534,,2026-06-02,,41.95,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+3,,VIPL/BR3/TRAILER/2011/05 BR-26-GC-1447,,2026-06-03,,14.02,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+4,,VIPL/GTP/CAR/2022/06 UP-44-BJ-4486,,2026-06-04,,2.05,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+5,,Ceigall LBG TM PB-10-HH-7081,Ceigall LBG TM PB-10-HH-7781,2026-06-03,,4.15,user_spreadsheet_2026_06,NEEDS_REVIEW,plate_near_miss,case plate pb10hh7081 vs map plate pb10hh7781 (candidate imei 353691849461768) - confirm same vehicle
+6,,Gawar HIM L-05 HR-20-AH-7350,,2026-06-03,,3.09,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+7,,Ceigall LBG TM PB-10-HH-7081,Ceigall LBG TM PB-10-HH-7781,2026-06-04,,7.26,user_spreadsheet_2026_06,NEEDS_REVIEW,plate_near_miss,case plate pb10hh7081 vs map plate pb10hh7781 (candidate imei 353691849461768) - confirm same vehicle
+8,,Ceigall LBG TM PB-10-HJ-2981,,2026-06-03,,8.15,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+9,,Ceigall LBG TM PB-10-HJ-2981,,2026-06-04,,8.33,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+10,,Ceigall LBG TM PB-10-HJ-2981,,2026-06-04,,7.29,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+11,,Gawar Mum Hydra MH-46-CV-4414,,2026-06-03,,2.02,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+12,,Gawar Mum Paver No 20 (1800-3),,2026-06-05,,21.27,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+13,,Gawar HIM EX-43 SR-YQ12178,,2026-06-05,,65.96,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+14,,Ceigall LBG TIP HR-65-A-9190,,2026-06-05,,29.22,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+15,,Ceigall LBG TIP PB-10-JT-7834,,2026-06-05,,53.9,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+16,,Excavator-210 Ananta Sany,,2026-06-05,,139.92,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+17,352016705582179,Kamdhenu Sohana HR-55-AQ-7995 TM,Kamdhenu Sohana HR-55-AQ-7995 TM,2026-06-05,,46.5,user_spreadsheet_2026_06,RESOLVED,plate,
+18,352625694767854,Kamdhenu Sohana TM HR-55-AF-6459,Kamdhenu Sohana TM HR-55-AF-6459,2026-06-06,,130.78,user_spreadsheet_2026_06,RESOLVED,plate,
+19,352625694767854,Kamdhenu Sohana TM HR-55-AF-6459,Kamdhenu Sohana TM HR-55-AF-6459,2026-06-06,,81.51,user_spreadsheet_2026_06,RESOLVED,plate,
+20,350612070117245,Kamdhenu Sohana TM HR-55-AQ-9083,Kamdhenu Sohana TM HR-55-AQ-9083,2026-06-05,,112.52,user_spreadsheet_2026_06,RESOLVED,plate,
+21,350612070117245,Kamdhenu Sohana TM HR-55-AQ-9083,Kamdhenu Sohana TM HR-55-AQ-9083,2026-06-06,,30.64,user_spreadsheet_2026_06,RESOLVED,plate,
+22,,RJ-14-GR-2657 Ananta TIP,,2026-06-07,,25.67,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+23,,ION-DevTech DG-100Kva,,2026-06-07,,8.97,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+24,,ION-DevTech DG-100Kva,,2026-06-08,,45.06,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+25,,Shiva Hyva RJ-14-GR-2593,,2026-06-07,,51.6,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+26,,SGI GUNA TM JK-17-A-2962,,2026-06-09,,9.87,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+27,,SGI GUNA DYNAPAC,,2026-06-09,,21.78,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+28,,SGI GUNA DYNAPAC,,2026-06-09,,10.83,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+29,,SGI GUNA Crusher Cone,,2026-06-10,,19.05,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+30,353691842777988,Gawar Mum Excavator EX-76/YC06538,Gawar Mum Excavator EX-76/YC06538,2026-06-09,,35.23,user_spreadsheet_2026_06,RESOLVED,plate,
+31,,Gawar Mum HR-39-E-5960,,2026-06-09,,2.66,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+32,,Gawar Mum HR-39-E-5960,,2026-06-10,,5.03,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+33,352016705645497,Krati Sany 210 C-9,Krati Sany 210 C-9,2026-06-09,,29.76,user_spreadsheet_2026_06,RESOLVED,exact_name,
+34,352016705645497,Krati Sany 210 C-9,Krati Sany 210 C-9,2026-06-10,,279.39,user_spreadsheet_2026_06,RESOLVED,exact_name,
+35,352592573935905,Krati Tipper MP-45-ZC-8873,Krati Tipper MP-45-ZC-8873,2026-06-10,,28.33,user_spreadsheet_2026_06,RESOLVED,plate,
+36,352592573935905,Krati Tipper MP-45-ZC-8873,Krati Tipper MP-45-ZC-8873,2026-06-10,,29.13,user_spreadsheet_2026_06,RESOLVED,plate,
+37,352592573935905,Krati Tipper MP-45-ZC-8873,Krati Tipper MP-45-ZC-8873,2026-06-10,,30.0,user_spreadsheet_2026_06,RESOLVED,plate,
+38,,RKC/TIPPER/103 HR-68-C-3144,,2026-06-09,,3.28,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+39,,Ceigall LBG TM PB-10-HJ-2981,,2026-06-11,,2.09,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+40,,Ceigall LBG TM PB-10-HJ-2981,,2026-06-11,,2.84,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+41,,RJ-14-GR-2655 Ananta Tipper,,2026-06-10,,57.62,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+42,,RJ-18-GB-7215 Ananta Trailer,,2026-06-11,,187.94,user_spreadsheet_2026_06,AMBIGUOUS,plate,"plate matches multiple IMEIs: 350544508625244,352016702577404"
+43,,Skylark Banglore DG51 DG-125kva (BOYD),,2026-06-10,,29.03,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+44,,SGI GUNA TPR-21 MZ-06-9500,,2026-06-11,,8.49,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+45,,SGI GUNA TPR-21 MZ-06-9500,,2026-06-11,,6.71,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+46,353691840944119,JSPL SMS Slag CG-13-AW-1214,JSPL SMS Slag CG-13-AW-1214,2026-06-12,,168.22,user_spreadsheet_2026_06,RESOLVED,plate,
+47,,RJ-14-GR-2655 Ananta Tipper,,2026-06-11,,67.39,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+48,,Skylark Akot HV31 HR-38-AD-4504 (New),,2026-06-12,,9.32,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+49,,ION-DevTech DG-200Kva,,2026-06-13,,44.22,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+50,353691840944119,JSPL SMS Slag CG-13-AW-1214,JSPL SMS Slag CG-13-AW-1214,2026-06-13,,204.37,user_spreadsheet_2026_06,RESOLVED,plate,
+51,,Shiva Hyva RJ 14 GQ 5746,,2026-06-12,,29.08,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+52,,Skylark Akot HB102 MH-30-BD-9131 (New),,2026-06-13,,33.68,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+53,,Skylark Akot HV37 HR-38-AD-1230 (New),,2026-06-13,,3.18,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+54,,Gawar HIM EX-75 SR-YQ13720,,2026-06-15,,52.95,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+55,353691840944119,JSPL SMS Slag CG-13-AW-1214,JSPL SMS Slag CG-13-AW-1214,2026-06-14,,133.6,user_spreadsheet_2026_06,RESOLVED,plate,
+56,,Krati Tipper RJ-21-GA-9016,,2026-06-15,,59.53,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+57,,Rise-11-Agra Tractor HR-51-CN-2046,,2026-06-15,,1.21,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+58,,Gawar Mum HR-39-E-4702,,2026-06-15,,244.67,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+59,,Skylark Akot A/F-5 MH-30-BD-9254 (New),,2026-06-15,,10.63,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+60,,ION-DevTech DG-100Kva,,2026-06-16,,37.82,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+61,,RJ-14-GR-2656 Ananta Tipper,,2026-06-16,,33.7,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+62,,ION-DevTech DG-100Kva,,2026-06-17,,12.91,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+63,,ION-DevTech DG-100Kva,,2026-06-17,,44.83,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+64,,Gawar Mum Hydra MH-46-CV-3406,,2026-06-19,,36.63,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+65,,JSPL DRI-1 CG-13-AF-5067,,2026-06-19,,16.78,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+66,,RoyalGen DG-62Kva HR-55-AN-8593,,2026-06-20,,24.96,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+67,,Skylark Akot EX11 YQ15511377 (BYOD),,2026-06-19,,5.05,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+68,,SKS Raebareli Transit Mixer UP-83-AT-7394,,2026-06-22,,2.02,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+69,,Ceigall LBG TIP PB-10-JX-0618,,2026-06-24,,66.82,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+70,,Ceigall LBG TIP PB-10-JX-0618,,2026-06-24,,26.75,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+71,,Skylark Surat HC09 NL-01-DA-0138 (BOYD),,2026-06-25,,31.93,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+72,,Gawar Mum EX-45 Excavator,,2026-06-25,,4.71,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+73,,Gawar HIM PTR Roller-26,,2026-06-25,,3.78,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+74,,Ceigall LBG TM PB-10-HH-7081,Ceigall LBG TM PB-10-HH-7781,2026-06-29,,4.49,user_spreadsheet_2026_06,NEEDS_REVIEW,plate_near_miss,case plate pb10hh7081 vs map plate pb10hh7781 (candidate imei 353691849461768) - confirm same vehicle
+75,,Ceigall LBG TM HR-65-B-2189,,2026-06-27,,2.13,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+76,,Ceigall LBG TM HR-65-B-2189,,2026-06-28,,1.86,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+77,,DevYash DHL TIP HR-58-E-3944,,2026-06-29,,98.69,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+78,,DevYash Meerut HR-58-E-0738,,2026-06-27,,56.75,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+79,,DevYash Meerut TIP UP-14-GT-9934,,2026-06-27,,19.77,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+80,,Kamdhenu DLI TM HR-55-AL-0751,,2026-06-28,,28.34,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+81,,Kamdhenu DLI TM HR-55-AL-1351,,2026-06-28,,23.67,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map
+82,,DMR Amritsar Kobelco Excavator 220,,2026-06-29,,1.36,user_spreadsheet_2026_06,UNRESOLVED,none,no plate or exact-name match in device_imei_map

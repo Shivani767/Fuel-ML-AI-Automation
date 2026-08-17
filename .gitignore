@@ -1,0 +1,51 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.DS_Store
+*.log
+
+# Large generated data.
+# Raw monthly telemetry dumps are 1-2.6 GB each; ~6 GB of them sat untracked and
+# unignored, one `git add .` away from being committed.
+fuel_data/[0-9]*_[0-9]*.json
+fuel_data/[0-9]*_[0-9]*.csv
+fuel_data/*_2026_*.json
+fuel_data/*_2026_*.csv
+fuel_data/*.parquet
+fuel_data/june_eval_subset.json
+fuel_data/live_fuel_data.json
+fuel_data/device_imei_map.json
+fuel_data/live_api_frames/
+fuel_data/live_frames/
+fuel_data/logs/
+fuel_data/*.gif
+fuel_data/*.mp4
+
+# Nightly capture: gzipped full payloads, ~5 MB/night (~2 GB/year). Never commit.
+fuel_data/daily/*/
+
+# Alert agent: per-cycle scratch (48 digests/day) is transient; the day-wise CSVs
+# are the record worth keeping.
+fuel_data/alerts/digest_*.json
+fuel_data/alerts/latest.json
+fuel_data/alerts/ledger.json
+fuel_data/alerts/*.migrated
+!fuel_data/alerts/daily/
+!fuel_data/alerts/daily/*.csv
+
+# Ground truth is small and hand-curated -- always track it.
+# So is the coverage log: it is what distinguishes "no theft" from "no data".
+!fuel_data/ground_truth/
+!fuel_data/ground_truth/*.csv
+!fuel_data/daily/coverage.csv
+
+# Model artifacts
+models/*.pkl
+models/*.csv
+
+# Legacy v1 alert output: 74 MB of 181,547 alerts for a month against 82 reported
+# thefts, median magnitude 0.17 L -- regenerable by legacy/ml_monitor.py and served
+# from disk at /api/ml_alerts. Version-controlling it made one generated file 92% of
+# the repo, permanently, for data the v3 engine supersedes.
+fuel_data/ml_alerts.json

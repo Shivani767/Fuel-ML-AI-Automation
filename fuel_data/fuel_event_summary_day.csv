@@ -1,0 +1,1841 @@
+date,deviceName,eventType,volume,events
+2026-06-01,Ananta TM MP-43-H-0693 ,Fuel Filling,332.1,7
+2026-06-01,Ananta TM MP-43-H-0693 ,Fuel Theft,152.63000000000002,4
+2026-06-01,Bedrock MH-48-BM-4590,Fuel Theft,215.77,1
+2026-06-01,CDS Head-Office,Fuel Filling,312.07,1
+2026-06-01,CDS Head-Office,Fuel Theft,759.08,10
+2026-06-01,Ceigall Danapur,Fuel Filling,1247.06,7
+2026-06-01,Ceigall Danapur,Fuel Theft,1025.3400000000001,33
+2026-06-01,DFCCIL Ambala Tower Wagon,Fuel Filling,34.269999999999996,3
+2026-06-01,DFCCIL Ambala Tower Wagon,Fuel Theft,17.259999999999998,2
+2026-06-01,Gawar HIM EX-65,Fuel Filling,207.44,3
+2026-06-01,Gawar HIM EX-65,Fuel Theft,98.77000000000001,4
+2026-06-01,Gawar HIM SR-YQ14688,Fuel Filling,203.26,2
+2026-06-01,Gawar Mum Excavator,Fuel Filling,818.26,8
+2026-06-01,Gawar Mum Excavator,Fuel Theft,1533.73,33
+2026-06-01,Gawar Mum Lifter,Fuel Filling,81.11,3
+2026-06-01,Gawar Mum Lifter,Fuel Theft,39.03,3
+2026-06-01,JSPL Batching,Fuel Theft,5.45,1
+2026-06-01,JSPL-PlateMill-Trailer,Fuel Filling,14.86,2
+2026-06-01,JSPL-RailMill-Hydra,Fuel Filling,46.03,2
+2026-06-01,JWIL BHARATPUR Hydra,Fuel Filling,43.07,2
+2026-06-01,JWIL BHARATPUR Hydra,Fuel Theft,137.0,4
+2026-06-01,JWIL-DHL JCB UP-85-ET-6083,Fuel Filling,90.48,5
+2026-06-01,Kamdhenu Sohana TM HR 55 AQ 2563,Fuel Filling,206.05,1
+2026-06-01,Kamdhenu Sohana TM HR 55 AQ 2563,Fuel Theft,141.3,1
+2026-06-01,MAK-UBL TM,Fuel Filling,852.4799999999999,8
+2026-06-01,MAK-UBL TM,Fuel Theft,68.27000000000001,7
+2026-06-01,MP-43-H-0694 Ananta TM,Fuel Filling,69.69,1
+2026-06-01,MP-43-H-0694 Ananta TM,Fuel Theft,69.69,1
+2026-06-01,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,2480.36,11
+2026-06-01,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,751.1399999999999,7
+2026-06-01,No-3 HAMM Soil-Compactor Ananta ,Fuel Filling,14.75,2
+2026-06-01,No-3 HAMM Soil-Compactor Ananta ,Fuel Theft,8.55,1
+2026-06-01,Prashant RIG CG-13-LA-5259,Fuel Filling,86.16,2
+2026-06-01,Prashant RIG CG-13-LA-5259,Fuel Theft,86.16,2
+2026-06-01,RJ-14-GP-7755 Ananta Tipper,Fuel Theft,14.65,1
+2026-06-01,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,26.87,1
+2026-06-01,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,2021.22,16
+2026-06-01,RJ-18-GB-7215 Ananta Trailer,Fuel Theft,60.62,1
+2026-06-01,RKC/DG-35Kva-008,Fuel Filling,12.79,1
+2026-06-01,RKC/DG-35Kva-008,Fuel Theft,12.79,1
+2026-06-01,RKC/TRAILOR/006,Fuel Filling,3383.9600000000005,7
+2026-06-01,RKC/TRAILOR/006,Fuel Theft,1625.25,39
+2026-06-01,SCLRCT Hydra UP-32-UN-3114,Fuel Filling,65.32,4
+2026-06-01,SK Genset DG-58Kva,Fuel Filling,123.62,3
+2026-06-01,SK-220 Ananta Excavator Kob,Fuel Filling,346.82,7
+2026-06-01,SK-220 Ananta Excavator Kob,Fuel Theft,75.02000000000001,5
+2026-06-01,SKS Nandurbar Hydra,Fuel Filling,25.55,1
+2026-06-01,SKS Nandurbar Tractor,Fuel Filling,100.73,5
+2026-06-01,SKS Nandurbar Tractor,Fuel Theft,26.62,3
+2026-06-01,SKS Raebareli Backhoe Loader,Fuel Filling,89.21,1
+2026-06-01,SKS Raebareli Boom Placer,Fuel Filling,199.45,1
+2026-06-01,SKS Raebareli Trailer,Fuel Filling,108.84,3
+2026-06-01,SKS Raebareli Water Tanker,Fuel Filling,28.96,1
+2026-06-01,Shiva Camper MP-45-G-1878,Fuel Theft,8.16,1
+2026-06-01,Shiva Trailer,Fuel Filling,714.16,4
+2026-06-01,Shiva Trailer,Fuel Theft,174.84,5
+2026-06-01,Skylark Akot EX05,Fuel Filling,133.58,1
+2026-06-01,Skylark Akot EX05,Fuel Theft,7.93,1
+2026-06-01,Skylark Banglore TRT05,Fuel Filling,98.26,1
+2026-06-01,Skylark Indore DD06,Fuel Filling,1058.35,8
+2026-06-01,Skylark Indore DD06,Fuel Theft,96.52,5
+2026-06-01,Skylark Indore EX14,Fuel Filling,281.65999999999997,5
+2026-06-01,Skylark Indore EX14,Fuel Theft,131.15,9
+2026-06-01,Skylark Indore LC03,Fuel Filling,12.2,2
+2026-06-01,Skylark Surat RR15,Fuel Filling,292.77,8
+2026-06-01,Skylark Surat RR15,Fuel Theft,28.86,3
+2026-06-01,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,927.8500000000001,13
+2026-06-01,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,108.48000000000002,8
+2026-06-01,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Filling,1477.2099999999996,8
+2026-06-01,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Theft,740.6399999999999,31
+2026-06-01,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Filling,477.85,3
+2026-06-01,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Theft,656.84,4
+2026-06-02,Ananta TM MP-43-H-0693 ,Fuel Filling,16.49,1
+2026-06-02,Ananta TM MP-43-H-0693 ,Fuel Theft,12.5,1
+2026-06-02,Ceigall Danapur,Fuel Filling,864.3100000000002,11
+2026-06-02,Ceigall Danapur,Fuel Theft,1020.0899999999999,37
+2026-06-02,Ceigall LBG TIP,Fuel Filling,163.24,1
+2026-06-02,DFCCIL Ambala Tower Wagon,Fuel Filling,744.57,2
+2026-06-02,DFCCIL Ambala Tower Wagon,Fuel Theft,1513.49,25
+2026-06-02,Gawar HIM EX-65,Fuel Filling,185.97,1
+2026-06-02,Gawar HIM EX-65,Fuel Theft,52.48,2
+2026-06-02,Gawar HIM SR-YQ14688,Fuel Filling,189.08999999999997,3
+2026-06-02,Gawar HIM SR-YQ14688,Fuel Theft,268.04999999999995,6
+2026-06-02,Gawar HIM TIP,Fuel Filling,116.15,1
+2026-06-02,Gawar Mum Excavator,Fuel Filling,1108.05,16
+2026-06-02,Gawar Mum Excavator,Fuel Theft,1480.6000000000001,40
+2026-06-02,Gawar Mum Lifter,Fuel Filling,90.94,4
+2026-06-02,Gawar Mum Lifter,Fuel Theft,20.36,2
+2026-06-02,JSPL-PlateMill-Trailer,Fuel Filling,25.979999999999997,3
+2026-06-02,JSPL-PlateMill-Trailer,Fuel Theft,12.09,1
+2026-06-02,JSPL-RailMill-Hydra,Fuel Filling,44.79,2
+2026-06-02,JWIL BHARATPUR Hydra,Fuel Filling,70.65,2
+2026-06-02,JWIL BHARATPUR Hydra,Fuel Theft,70.85,2
+2026-06-02,JWIL-DHL JCB UP-85-ET-6083,Fuel Filling,116.94999999999999,4
+2026-06-02,Kamdhenu Sohana TM HR-55-AF-6459,Fuel Filling,15.65,2
+2026-06-02,MAK-UBL TM,Fuel Filling,525.0900000000001,16
+2026-06-02,MAK-UBL TM,Fuel Theft,81.55000000000001,9
+2026-06-02,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,100.72,1
+2026-06-02,Pappu BIA NL-01-AB-9193,Fuel Filling,152.23000000000002,2
+2026-06-02,Pappu BIA NL-01-AB-9193,Fuel Theft,49.980000000000004,3
+2026-06-02,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,14482.640000000001,18
+2026-06-02,RJ-18-GB-7215 Ananta Trailer,Fuel Theft,754.5799999999999,10
+2026-06-02,RKC/DG-35Kva-008,Fuel Filling,86.03,2
+2026-06-02,RKC/DG-35Kva-008,Fuel Theft,10.99,1
+2026-06-02,RKC/TIPPER/126,Fuel Filling,100.26,1
+2026-06-02,RKC/TRAILOR/006,Fuel Filling,2792.12,8
+2026-06-02,RKC/TRAILOR/006,Fuel Theft,1115.7900000000002,29
+2026-06-02,SCLRCT Hydra UP-32-UN-3114,Fuel Filling,316.9,6
+2026-06-02,SCLRCT Hydra UP-32-UN-3114,Fuel Theft,7.61,1
+2026-06-02,SK Genset DG-58Kva,Fuel Filling,62.58,2
+2026-06-02,SK Genset DG-58Kva,Fuel Theft,60.81,2
+2026-06-02,SKS Nandurbar Hydra,Fuel Filling,7.29,1
+2026-06-02,SKS Nandurbar Tractor,Fuel Filling,16.96,1
+2026-06-02,SKS Raebareli Water Tanker,Fuel Filling,69.82000000000001,2
+2026-06-02,Shiva Camper MP-45-G-1878,Fuel Filling,42.970000000000006,4
+2026-06-02,Shiva Camper MP-45-G-1878,Fuel Theft,11.0,1
+2026-06-02,Shiva Trailer,Fuel Filling,78.42,3
+2026-06-02,Shiva Trailer,Fuel Theft,32.45,3
+2026-06-02,Skylark Akot EX05,Fuel Filling,86.38,7
+2026-06-02,Skylark Akot EX05,Fuel Theft,34.24,3
+2026-06-02,Skylark Indore DD06,Fuel Filling,843.4900000000001,9
+2026-06-02,Skylark Indore DD06,Fuel Theft,94.45,4
+2026-06-02,Skylark Indore EX14,Fuel Filling,387.03000000000003,4
+2026-06-02,Skylark Indore EX14,Fuel Theft,296.15,12
+2026-06-02,Skylark Indore LC03,Fuel Theft,5.81,1
+2026-06-02,Skylark Surat DG19,Fuel Filling,493.83,6
+2026-06-02,Skylark Surat DG19,Fuel Theft,91.91,3
+2026-06-02,Skylark Surat RR15,Fuel Filling,388.86,6
+2026-06-02,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,783.48,9
+2026-06-02,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,129.63000000000002,11
+2026-06-03,Ceigall Danapur,Fuel Filling,982.11,5
+2026-06-03,Ceigall Danapur,Fuel Theft,575.1800000000002,20
+2026-06-03,Ceigall LBG TIP,Fuel Filling,320.6,5
+2026-06-03,Ceigall LBG TIP,Fuel Theft,80.33,2
+2026-06-03,Ceigall LBG TM,Fuel Filling,15.419999999999998,2
+2026-06-03,Gawar HIM EX-65,Fuel Filling,102.61,1
+2026-06-03,Gawar HIM SR-YQ14688,Fuel Filling,135.98,3
+2026-06-03,Gawar Mum,Fuel Filling,64.96,1
+2026-06-03,Gawar Mum Excavator,Fuel Filling,300.01000000000005,5
+2026-06-03,Gawar Mum Excavator,Fuel Theft,518.19,14
+2026-06-03,Gawar Mum Lifter,Fuel Filling,36.47,4
+2026-06-03,Gawar Mum Lifter,Fuel Theft,18.689999999999998,2
+2026-06-03,Gawar Mum Mobile Carne,Fuel Filling,99.01,1
+2026-06-03,JSPL-RailMill-Hydra,Fuel Filling,49.61,2
+2026-06-03,JWIL BHARATPUR Hydra,Fuel Filling,38.23,1
+2026-06-03,JWIL BHARATPUR Hydra,Fuel Theft,235.11,7
+2026-06-03,JWIL-DHL JCB UP-85-ET-6083,Fuel Filling,16.46,1
+2026-06-03,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Filling,150.85999999999999,2
+2026-06-03,Kamdhenu Sohana,Fuel Filling,163.17,1
+2026-06-03,Kamdhenu Sohana,Fuel Theft,163.29,1
+2026-06-03,Kamdhenu Sohana TM HR-55-AF-6459,Fuel Filling,220.96,3
+2026-06-03,Krati JCB Model-770 SS,Fuel Filling,124.97999999999999,8
+2026-06-03,Krati JCB Model-770 SS,Fuel Theft,100.17999999999999,4
+2026-06-03,Krati Roller LT Vibro 1107,Fuel Filling,254.67,2
+2026-06-03,MAK-UBL TM,Fuel Filling,1077.14,17
+2026-06-03,MAK-UBL TM,Fuel Theft,88.55000000000001,8
+2026-06-03,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,713.84,4
+2026-06-03,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,303.77,3
+2026-06-03,Pappu BIA NL-01-AB-9193,Fuel Filling,27.01,1
+2026-06-03,Prashant RIG CG-13-LA-5259,Fuel Filling,20.0,2
+2026-06-03,Prashant RIG CG-13-LA-5259,Fuel Theft,75.9,1
+2026-06-03,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,26505.170000000002,16
+2026-06-03,RJ-18-GB-7215 Ananta Trailer,Fuel Theft,663.32,11
+2026-06-03,RKC/DG-35Kva-008,Fuel Filling,45.96,1
+2026-06-03,RKC/TIPPER/126,Fuel Filling,116.63,3
+2026-06-03,RKC/TIPPER/126,Fuel Theft,15.5,1
+2026-06-03,RKC/TRAILOR/006,Fuel Filling,9184.050000000001,7
+2026-06-03,RKC/TRAILOR/006,Fuel Theft,3160.0699999999993,68
+2026-06-03,SCLRCT Hydra UP-32-UN-3114,Fuel Filling,23.19,1
+2026-06-03,SCLRCT Hydra UP-32-UN-3114,Fuel Theft,8.45,1
+2026-06-03,SK Genset DG-58Kva,Fuel Filling,311.65999999999997,6
+2026-06-03,SK Genset DG-58Kva,Fuel Theft,179.04999999999998,8
+2026-06-03,SK-220 Ananta Excavator Kob,Fuel Filling,501.22,11
+2026-06-03,SK-220 Ananta Excavator Kob,Fuel Theft,121.64000000000001,7
+2026-06-03,SKS Nandurbar Tractor,Fuel Filling,82.68,6
+2026-06-03,SKS Nandurbar Tractor,Fuel Theft,19.84,2
+2026-06-03,SKS Raebareli Backhoe Loader,Fuel Filling,92.85,1
+2026-06-03,SKS Raebareli Boom Placer,Fuel Filling,196.72,1
+2026-06-03,SKS Raebareli Water Tanker,Fuel Filling,13.62,1
+2026-06-03,Shiva,Fuel Filling,47.96,1
+2026-06-03,Shiva Camper MP-45-G-1878,Fuel Filling,6.22,1
+2026-06-03,Shiva Camper MP-45-G-1878,Fuel Theft,10.45,1
+2026-06-03,Shiva Trailer,Fuel Filling,39.0,3
+2026-06-03,Skylark Akot EX05,Fuel Filling,205.18,1
+2026-06-03,Skylark Indore DD06,Fuel Filling,990.7399999999999,11
+2026-06-03,Skylark Indore DD06,Fuel Theft,415.91,7
+2026-06-03,Skylark Indore EX14,Fuel Filling,627.1700000000001,4
+2026-06-03,Skylark Indore EX14,Fuel Theft,250.24999999999997,11
+2026-06-03,Skylark Indore LC03,Fuel Filling,162.66,2
+2026-06-03,Skylark Surat DG19,Fuel Filling,263.15000000000003,3
+2026-06-03,Skylark Surat DG19,Fuel Theft,36.58,1
+2026-06-03,Skylark Surat RR15,Fuel Filling,376.5,6
+2026-06-03,Skylark Surat RR15,Fuel Theft,31.93,4
+2026-06-03,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,1345.5,5
+2026-06-03,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,73.82,5
+2026-06-03,VIPL/GTP/HYVA/2025/05,Fuel Filling,23.18,1
+2026-06-03,VIPL/GTP/TRANSIT MIXER/2018/03,Fuel Filling,34.6,1
+2026-06-03,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Filling,729.53,4
+2026-06-03,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Theft,449.74,18
+2026-06-03,VIPL/GTP/TRANSIT MIXER/2022/05,Fuel Filling,13.12,1
+2026-06-03,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Filling,494.67,3
+2026-06-03,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Theft,383.55,3
+2026-06-04,Ceigall Danapur,Fuel Filling,1048.04,8
+2026-06-04,Ceigall Danapur,Fuel Theft,653.9599999999999,22
+2026-06-04,Ceigall LBG TIP,Fuel Filling,184.44,1
+2026-06-04,Ceigall LBG TM,Fuel Filling,30.03,3
+2026-06-04,DFCCIL Ambala Tower Wagon,Fuel Filling,5.09,1
+2026-06-04,DFCCIL Ambala Tower Wagon,Fuel Theft,5.89,1
+2026-06-04,DFCCIL Hathras 180Kva DG-1,Fuel Filling,35.27,1
+2026-06-04,Gawar HIM EX-65,Fuel Filling,55.4,1
+2026-06-04,Gawar HIM SR-YQ14688,Fuel Filling,134.6,2
+2026-06-04,Gawar HIM SR-YQ14688,Fuel Theft,43.08,2
+2026-06-04,Gawar Mum Excavator,Fuel Filling,648.41,10
+2026-06-04,Gawar Mum Excavator,Fuel Theft,578.1799999999998,16
+2026-06-04,Gawar Mum Lifter,Fuel Filling,522.71,6
+2026-06-04,Gawar Mum Lifter,Fuel Theft,127.82,10
+2026-06-04,IIT Delhi LHC DG 750 Kva DG-2,Fuel Filling,7.1,1
+2026-06-04,IIT Delhi LHC DG 750 Kva DG-2,Fuel Theft,7.1,1
+2026-06-04,JSPL-PlateMill-Trailer,Fuel Filling,49.72,6
+2026-06-04,JSPL-PlateMill-Trailer,Fuel Theft,24.939999999999998,2
+2026-06-04,JSPL-RailMill-Hydra,Fuel Filling,39.07,2
+2026-06-04,JWIL BHARATPUR Hydra,Fuel Theft,58.37,2
+2026-06-04,Kamdhenu Sohana,Fuel Filling,172.42,1
+2026-06-04,Krati JCB Model-770 SS,Fuel Filling,81.8,5
+2026-06-04,Krati JCB Model-770 SS,Fuel Theft,72.72,4
+2026-06-04,MAK-UBL TM,Fuel Filling,943.16,11
+2026-06-04,MAK-UBL TM,Fuel Theft,97.96000000000001,10
+2026-06-04,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,717.5,6
+2026-06-04,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,951.79,6
+2026-06-04,No-3 HAMM Soil-Compactor Ananta ,Fuel Filling,6.06,1
+2026-06-04,No-3 HAMM Soil-Compactor Ananta ,Fuel Theft,6.46,1
+2026-06-04,Pappu BIA NL-01-AB-9193,Fuel Filling,97.34,1
+2026-06-04,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,55.33,2
+2026-06-04,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Theft,26.76,1
+2026-06-04,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,14300.07,21
+2026-06-04,RJ-18-GB-7215 Ananta Trailer,Fuel Theft,1578.65,26
+2026-06-04,RKC/DG-35Kva-008,Fuel Filling,26.84,2
+2026-06-04,RKC/TIPPER/126,Fuel Filling,121.85,2
+2026-06-04,RKC/TIPPER/126,Fuel Theft,30.86,2
+2026-06-04,RKC/TRAILOR/006,Fuel Filling,6293.310000000001,11
+2026-06-04,RKC/TRAILOR/006,Fuel Theft,2785.859999999999,70
+2026-06-04,Rise-11-GGN,Fuel Filling,64.61,3
+2026-06-04,Rise-11-GGN,Fuel Theft,18.11,2
+2026-06-04,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,5.34,1
+2026-06-04,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,5.34,1
+2026-06-04,SCLLKO CP SSMECP 1720006-2,Fuel Filling,65.7,2
+2026-06-04,SCLLKO CP SSMECP 1720006-2,Fuel Theft,12.59,1
+2026-06-04,SK Genset DG-58Kva,Fuel Filling,28.56,1
+2026-06-04,SK-220 Ananta Excavator Kob,Fuel Filling,374.49000000000007,10
+2026-06-04,SK-220 Ananta Excavator Kob,Fuel Theft,87.99000000000001,7
+2026-06-04,SKS Nandurbar Tractor,Fuel Filling,40.72,4
+2026-06-04,Shiva Camper MP-45-G-1878,Fuel Filling,26.25,2
+2026-06-04,Shiva Camper MP-45-G-1878,Fuel Theft,21.02,2
+2026-06-04,Skylark Akot EX05,Fuel Filling,116.1,6
+2026-06-04,Skylark Akot EX05,Fuel Theft,8.77,1
+2026-06-04,Skylark Indore DD06,Fuel Filling,1127.76,9
+2026-06-04,Skylark Indore DD06,Fuel Theft,266.12,9
+2026-06-04,Skylark Surat DG19,Fuel Filling,218.83,2
+2026-06-04,Skylark Surat DG19,Fuel Theft,8.18,1
+2026-06-04,Skylark Surat RR15,Fuel Filling,1085.6000000000001,13
+2026-06-04,Skylark Surat RR15,Fuel Theft,31.549999999999997,2
+2026-06-04,Snowman LKO DG-400Kva,Fuel Filling,170.2,1
+2026-06-04,VIPL/BR3/DG 40KVA/2019/01,Fuel Theft,7.89,1
+2026-06-04,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,456.16,1
+2026-06-04,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,46.89,3
+2026-06-04,VIPL/GTP/HYVA/2025/05,Fuel Filling,23.03,1
+2026-06-04,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Filling,1582.9299999999998,8
+2026-06-04,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Theft,707.1200000000001,29
+2026-06-04,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Filling,909.71,4
+2026-06-04,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Theft,613.93,4
+2026-06-05,CDS Head-Office,Fuel Filling,239.89,3
+2026-06-05,CTS RIG CG-13-L-3097,Fuel Theft,383.02,2
+2026-06-05,Ceigall Danapur,Fuel Filling,450.37,2
+2026-06-05,Ceigall Danapur,Fuel Theft,158.82999999999998,5
+2026-06-05,Ceigall LBG TIP,Fuel Filling,182.6,2
+2026-06-05,Ceigall LBG TM,Fuel Filling,90.95,4
+2026-06-05,Ceigall LBG TM,Fuel Theft,16.21,2
+2026-06-05,DFCCIL Ambala Tower Wagon,Fuel Filling,1838.97,4
+2026-06-05,DFCCIL Ambala Tower Wagon,Fuel Theft,2425.63,47
+2026-06-05,GJ-20-AH-8048 Ananta Camper,Fuel Filling,8.25,1
+2026-06-05,Gawar HIM EX-65,Fuel Filling,117.11,1
+2026-06-05,Gawar HIM EX-65,Fuel Theft,11.38,1
+2026-06-05,Gawar HIM SR-YQ14688,Fuel Filling,59.96,1
+2026-06-05,Gawar Mum Excavator,Fuel Filling,379.6,5
+2026-06-05,Gawar Mum Excavator,Fuel Theft,661.6800000000002,18
+2026-06-05,Gawar Mum Lifter,Fuel Filling,98.57,8
+2026-06-05,Gawar Mum Lifter,Fuel Theft,23.300000000000004,3
+2026-06-05,JSPL-PlateMill-Trailer,Fuel Theft,5.24,1
+2026-06-05,JSPL-RailMill-Hydra,Fuel Filling,49.34,2
+2026-06-05,JWIL BHARATPUR Hydra,Fuel Filling,44.81,1
+2026-06-05,JWIL BHARATPUR Hydra,Fuel Theft,97.92,3
+2026-06-05,JWIL Vidisha Hydra,Fuel Filling,15.79,1
+2026-06-05,Kamdhenu Sohana,Fuel Theft,93.27,1
+2026-06-05,Kamdhenu Sohana TM HR-55-AF-6459,Fuel Filling,146.13,2
+2026-06-05,Kamdhenu Sohana TM HR-55-AQ-9083,Fuel Filling,238.61,2
+2026-06-05,Kamdhenu Sohana TM HR-55-AQ-9083,Fuel Theft,183.08,1
+2026-06-05,MAK-UBL TM,Fuel Filling,731.0500000000001,7
+2026-06-05,MAK-UBL TM,Fuel Theft,86.5,6
+2026-06-05,MP-43-G-2751 Ananta Pickup,Fuel Filling,87.17999999999999,3
+2026-06-05,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,2574.16,10
+2026-06-05,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,1645.42,9
+2026-06-05,Pappu BIA NL-01-AB-9193,Fuel Filling,47.25,1
+2026-06-05,RJ-14-GR-8447 Ananta Camper,Fuel Filling,21.71,1
+2026-06-05,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,26.44,1
+2026-06-05,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,3337.46,12
+2026-06-05,RJ-18-GB-7215 Ananta Trailer,Fuel Theft,888.9599999999998,15
+2026-06-05,RKC/TIPPER/126,Fuel Filling,159.1,6
+2026-06-05,RKC/TIPPER/126,Fuel Theft,22.16,2
+2026-06-05,RKC/TRAILOR/006,Fuel Filling,5680.24,9
+2026-06-05,RKC/TRAILOR/006,Fuel Theft,1697.08,47
+2026-06-05,Rise-11-GGN,Fuel Filling,48.05,4
+2026-06-05,Rise-11-GGN,Fuel Theft,6.7,1
+2026-06-05,SK Genset DG-58Kva,Fuel Filling,65.24000000000001,2
+2026-06-05,SKS Nandurbar Hydra,Fuel Filling,22.61,1
+2026-06-05,SKS Nandurbar Tractor,Fuel Filling,102.41999999999999,11
+2026-06-05,SKS Nandurbar Tractor,Fuel Theft,26.049999999999997,3
+2026-06-05,SKS Raebareli Backhoe Loader,Fuel Filling,77.46,1
+2026-06-05,SKS Raebareli Boom Placer,Fuel Filling,181.83,1
+2026-06-05,SKS Raebareli Water Tanker,Fuel Filling,75.68,2
+2026-06-05,Shiva Camper MP-45-G-1878,Fuel Filling,13.75,1
+2026-06-05,Shiva Camper MP-45-G-1878,Fuel Theft,9.59,1
+2026-06-05,Shiva Trailer,Fuel Filling,30.28,2
+2026-06-05,Skylark Akot EX05,Fuel Filling,243.39,1
+2026-06-05,Skylark Indore DD06,Fuel Filling,974.6099999999999,12
+2026-06-05,Skylark Indore DD06,Fuel Theft,281.47,4
+2026-06-05,Skylark Indore EX14,Fuel Filling,145.01999999999998,2
+2026-06-05,Skylark Indore HC08,Fuel Filling,24.36,1
+2026-06-05,Skylark Surat DG19,Fuel Filling,70.6,1
+2026-06-05,Skylark Surat RR15,Fuel Filling,849.46,15
+2026-06-05,Skylark Surat RR15,Fuel Theft,21.08,2
+2026-06-05,Snowman LKO DG-400Kva,Fuel Filling,8.37,1
+2026-06-05,Snowman LKO DG-400Kva,Fuel Theft,9.33,1
+2026-06-05,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,156.22000000000003,3
+2026-06-05,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,19.630000000000003,2
+2026-06-05,VIPL/GTP/HYVA/2025/05,Fuel Filling,23.09,1
+2026-06-06,CDS Head-Office,Fuel Filling,56.28,1
+2026-06-06,CDS Head-Office,Fuel Theft,181.95,3
+2026-06-06,Ceigall Danapur,Fuel Filling,973.4,6
+2026-06-06,Ceigall Danapur,Fuel Theft,788.5899999999999,22
+2026-06-06,Ceigall LBG TIP,Fuel Filling,349.57000000000005,4
+2026-06-06,Ceigall LBG TIP,Fuel Theft,8.47,1
+2026-06-06,Ceigall LBG TM,Fuel Filling,44.9,5
+2026-06-06,DFCCIL Ambala Tower Wagon,Fuel Filling,130.45000000000002,3
+2026-06-06,DFCCIL Ambala Tower Wagon,Fuel Theft,6.03,1
+2026-06-06,Gawar HIM EX-65,Fuel Filling,58.46,1
+2026-06-06,Gawar HIM SR-YQ14688,Fuel Filling,151.01,2
+2026-06-06,Gawar HIM SR-YQ14688,Fuel Theft,89.23,4
+2026-06-06,Gawar HIM TIP,Fuel Filling,118.15,1
+2026-06-06,Gawar Mum Excavator,Fuel Filling,198.85999999999999,3
+2026-06-06,Gawar Mum Lifter,Fuel Filling,48.63999999999999,5
+2026-06-06,Gawar Mum Lifter,Fuel Theft,37.949999999999996,4
+2026-06-06,Gawar Mum Mobile Carne,Fuel Filling,49.76,1
+2026-06-06,JSPL-RailMill-Hydra,Fuel Filling,38.34,2
+2026-06-06,JWIL BHARATPUR Hydra,Fuel Filling,60.6,3
+2026-06-06,JWIL BHARATPUR Hydra,Fuel Theft,231.57999999999998,7
+2026-06-06,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Filling,6.45,1
+2026-06-06,Kamdhenu Sohana,Fuel Filling,225.26000000000002,2
+2026-06-06,Kamdhenu Sohana,Fuel Theft,244.36,2
+2026-06-06,Kamdhenu Sohana TM HR 55 AQ 2563,Fuel Filling,165.95,1
+2026-06-06,Kamdhenu Sohana TM HR-55-AF-6459,Fuel Filling,12.55,2
+2026-06-06,Kamdhenu Sohana TM HR-55-AF-6459,Fuel Theft,1417.6099999999997,25
+2026-06-06,Kamdhenu Sohana TM HR-55-AQ-9083,Fuel Filling,36.16,1
+2026-06-06,Kamdhenu Sohana TM HR-55-AQ-9083,Fuel Theft,66.7,1
+2026-06-06,Krati JCB Model-770 SS,Fuel Filling,79.44,5
+2026-06-06,Krati JCB Model-770 SS,Fuel Theft,87.87,4
+2026-06-06,Krati Roller LT Vibro 1107,Fuel Filling,263.37,1
+2026-06-06,MAK-UBL TM,Fuel Theft,6.33,1
+2026-06-06,MP-43-G-2751 Ananta Pickup,Fuel Filling,109.86999999999999,4
+2026-06-06,MP-43-G-2751 Ananta Pickup,Fuel Theft,22.12,3
+2026-06-06,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,1661.04,10
+2026-06-06,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,882.83,8
+2026-06-06,Pappu BIA NL-01-AB-9193,Fuel Filling,116.46,1
+2026-06-06,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,3140.1699999999996,9
+2026-06-06,RJ-18-GB-7215 Ananta Trailer,Fuel Theft,1652.4900000000002,18
+2026-06-06,RKC/TIPPER/126,Fuel Filling,134.20999999999998,3
+2026-06-06,RKC/TIPPER/126,Fuel Theft,15.19,1
+2026-06-06,RKC/TRAILOR/006,Fuel Filling,3784.0699999999997,4
+2026-06-06,RKC/TRAILOR/006,Fuel Theft,1168.2799999999997,30
+2026-06-06,Rise-11-GGN,Fuel Filling,94.46000000000001,5
+2026-06-06,Rise-11-GGN,Fuel Theft,14.04,2
+2026-06-06,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,84.39,6
+2026-06-06,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,77.84,4
+2026-06-06,SK Genset DG-58Kva,Fuel Filling,30.74,1
+2026-06-06,SK-220 Ananta Excavator Kob,Fuel Filling,417.34000000000003,11
+2026-06-06,SK-220 Ananta Excavator Kob,Fuel Theft,271.78,13
+2026-06-06,SKS Nandurbar Tractor,Fuel Filling,68.83,6
+2026-06-06,SKS Nandurbar Tractor,Fuel Theft,8.53,1
+2026-06-06,SKS Raebareli Boom Placer,Fuel Filling,128.79,1
+2026-06-06,SKS Raebareli Trailer,Fuel Filling,100.52,1
+2026-06-06,SKS Raebareli Water Tanker,Fuel Filling,40.16,1
+2026-06-06,Shiva Camper MP-45-G-1878,Fuel Filling,19.03,2
+2026-06-06,Shiva Trailer,Fuel Filling,80.22,3
+2026-06-06,Shiva Trailer,Fuel Theft,23.490000000000002,3
+2026-06-06,Skylark Akot EX05,Fuel Filling,94.18,2
+2026-06-06,Skylark Akot EX05,Fuel Theft,21.64,1
+2026-06-06,Skylark Indore DD06,Fuel Filling,615.6100000000001,11
+2026-06-06,Skylark Indore DD06,Fuel Theft,49.309999999999995,3
+2026-06-06,Skylark Indore EX14,Fuel Filling,888.05,4
+2026-06-06,Skylark Indore EX14,Fuel Theft,467.4,17
+2026-06-06,Skylark Indore LC03,Fuel Filling,23.12,3
+2026-06-06,Skylark Indore LC03,Fuel Theft,10.9,1
+2026-06-06,Skylark Surat DG19,Fuel Filling,6.23,1
+2026-06-06,Skylark Surat DG19,Fuel Theft,6.23,1
+2026-06-06,Skylark Surat RR15,Fuel Filling,322.74,6
+2026-06-06,Skylark Surat RR15,Fuel Theft,23.21,2
+2026-06-06,Snowman LKO DG-400Kva,Fuel Filling,9.12,1
+2026-06-06,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,560.7,5
+2026-06-06,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,43.44,3
+2026-06-06,VIPL/GTP/HYVA/2025/05,Fuel Filling,20.67,1
+2026-06-06,VIPL/GTP/TRANSIT MIXER/2018/03,Fuel Filling,30.28,1
+2026-06-06,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Filling,262.11,4
+2026-06-06,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Theft,166.61,9
+2026-06-06,VIPL/GTP/TRANSIT MIXER/2022/05,Fuel Filling,31.99,1
+2026-06-06,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Filling,158.21,2
+2026-06-06,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Theft,135.72,1
+2026-06-07,Ceigall Danapur,Fuel Filling,755.4999999999999,7
+2026-06-07,Ceigall Danapur,Fuel Theft,894.4899999999999,29
+2026-06-07,Ceigall LBG Roller,Fuel Filling,91.05,6
+2026-06-07,Ceigall LBG TIP,Fuel Filling,342.18,2
+2026-06-07,Ceigall LBG TM,Fuel Filling,24.93,3
+2026-06-07,Gawar HIM EX-65,Fuel Filling,147.61,1
+2026-06-07,Gawar HIM EX-65,Fuel Theft,23.91,2
+2026-06-07,Gawar HIM SR-YQ14688,Fuel Filling,75.16,1
+2026-06-07,Gawar Mum Excavator,Fuel Filling,188.71,2
+2026-06-07,Gawar Mum Excavator,Fuel Theft,39.980000000000004,2
+2026-06-07,Gawar Mum Lifter,Fuel Filling,76.88,6
+2026-06-07,Gawar Mum Lifter,Fuel Theft,42.0,4
+2026-06-07,JSPL-RailMill-Hydra,Fuel Filling,38.22,2
+2026-06-07,JWIL BHARATPUR Hydra,Fuel Theft,40.46,1
+2026-06-07,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Filling,6.39,1
+2026-06-07,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Theft,18.0,2
+2026-06-07,Krati Roller LT Vibro 1107,Fuel Filling,397.98,2
+2026-06-07,Krati Roller LT Vibro 1107,Fuel Theft,6.64,1
+2026-06-07,MAK-UBL TM,Fuel Filling,143.67,6
+2026-06-07,MAK-UBL TM,Fuel Theft,21.96,2
+2026-06-07,MP-43-G-2751 Ananta Pickup,Fuel Filling,577.08,7
+2026-06-07,MP-43-G-2751 Ananta Pickup,Fuel Theft,30.67,3
+2026-06-07,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,2631.84,15
+2026-06-07,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,1362.42,9
+2026-06-07,No-3 HAMM Soil-Compactor Ananta ,Fuel Filling,36.03,1
+2026-06-07,No-3 HAMM Soil-Compactor Ananta ,Fuel Theft,36.27,1
+2026-06-07,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,235.68,7
+2026-06-07,RJ-18-GB-7215 Ananta Trailer,Fuel Theft,147.84,7
+2026-06-07,RKC/TIPPER/126,Fuel Filling,13.21,2
+2026-06-07,RKC/TIPPER/126,Fuel Theft,7.9,1
+2026-06-07,RKC/TRAILOR/006,Fuel Filling,4317.63,8
+2026-06-07,RKC/TRAILOR/006,Fuel Theft,2282.4799999999996,53
+2026-06-07,Rise-11-GGN,Fuel Filling,5.95,1
+2026-06-07,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,57.2,3
+2026-06-07,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,70.65,4
+2026-06-07,SCLLKO CP SSMECP 1720006-2,Fuel Filling,9.32,1
+2026-06-07,SK Genset DG-58Kva,Fuel Filling,34.52,2
+2026-06-07,SK Genset DG-58Kva,Fuel Theft,6.35,1
+2026-06-07,SKS Nandurbar Tractor,Fuel Filling,108.04,6
+2026-06-07,SKS Nandurbar Tractor,Fuel Theft,12.96,2
+2026-06-07,SKS Raebareli Backhoe Loader,Fuel Filling,62.99,1
+2026-06-07,SKS Raebareli Water Tanker,Fuel Filling,40.98,1
+2026-06-07,Shiva,Fuel Filling,28.11,1
+2026-06-07,Shiva Camper MP-45-G-1878,Fuel Filling,14.77,2
+2026-06-07,Shiva Camper MP-45-G-1878,Fuel Theft,6.18,1
+2026-06-07,Skylark Akot EX05,Fuel Filling,165.60999999999999,2
+2026-06-07,Skylark Indore DD06,Fuel Filling,381.52,5
+2026-06-07,Skylark Indore EX14,Fuel Filling,67.56,2
+2026-06-07,Skylark Indore LC03,Fuel Filling,12.87,1
+2026-06-07,Skylark Indore LC03,Fuel Theft,6.69,1
+2026-06-07,Skylark Surat DG19,Fuel Filling,94.29,1
+2026-06-07,Skylark Surat DG19,Fuel Theft,47.15,1
+2026-06-07,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,5.04,1
+2026-06-07,VIPL/BR3/DG 40KVA/2019/01,Fuel Theft,6.03,1
+2026-06-07,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,384.43,1
+2026-06-07,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,72.39,4
+2026-06-07,VIPL/GTP/HYVA/2025/05,Fuel Filling,22.83,1
+2026-06-07,VIPL/GTP/TRANSIT MIXER/2018/03,Fuel Filling,6.47,1
+2026-06-07,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Filling,3106.879999999999,20
+2026-06-07,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Theft,1315.2700000000002,60
+2026-06-07,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Filling,964.26,5
+2026-06-07,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Theft,816.19,5
+2026-06-08,Ceigall Danapur,Fuel Filling,959.6,6
+2026-06-08,Ceigall Danapur,Fuel Theft,907.0599999999997,29
+2026-06-08,Ceigall LBG TIP,Fuel Filling,412.38,2
+2026-06-08,Ceigall LBG TM,Fuel Filling,102.19,4
+2026-06-08,Gawar HIM EX-65,Fuel Filling,116.0,2
+2026-06-08,Gawar HIM EX-65,Fuel Theft,10.56,1
+2026-06-08,Gawar HIM SR-YQ14688,Fuel Filling,98.2,1
+2026-06-08,Gawar HIM TIP,Fuel Filling,166.52,1
+2026-06-08,Gawar Mum Excavator,Fuel Filling,146.43,1
+2026-06-08,Gawar Mum Lifter,Fuel Filling,60.85999999999999,3
+2026-06-08,Gawar Mum Lifter,Fuel Theft,43.45,4
+2026-06-08,JSPL Batching,Fuel Theft,51.71,1
+2026-06-08,JSPL-PlateMill-Trailer,Fuel Filling,157.62,2
+2026-06-08,JSPL-RailMill-Hydra,Fuel Filling,25.94,2
+2026-06-08,JWIL BHARATPUR Hydra,Fuel Filling,8.65,1
+2026-06-08,Kamdhenu Sohana,Fuel Filling,23.68,1
+2026-06-08,Kamdhenu Sohana TM HR 55 AQ 2563,Fuel Filling,33.84,1
+2026-06-08,Krati Roller LT Vibro 1107,Fuel Filling,9.33,1
+2026-06-08,Krati Tipper,Fuel Filling,41.79,1
+2026-06-08,MAK-UBL TM,Fuel Filling,2029.3099999999997,11
+2026-06-08,MAK-UBL TM,Fuel Theft,41.25,5
+2026-06-08,MP-43-G-2751 Ananta Pickup,Fuel Filling,908.27,7
+2026-06-08,MP-43-G-2751 Ananta Pickup,Fuel Theft,45.66,5
+2026-06-08,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,2268.67,10
+2026-06-08,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,1323.51,10
+2026-06-08,No-3 HAMM Soil-Compactor Ananta ,Fuel Filling,338.74,1
+2026-06-08,No-3 HAMM Soil-Compactor Ananta ,Fuel Theft,170.23,1
+2026-06-08,RJ-14-GR-8520 Ananta Pickup,Fuel Filling,9.18,1
+2026-06-08,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,104.08,2
+2026-06-08,RJ-18-GB-7215 Ananta Trailer,Fuel Theft,624.26,3
+2026-06-08,RKC/TRAILOR/006,Fuel Filling,2956.9800000000005,10
+2026-06-08,RKC/TRAILOR/006,Fuel Theft,1347.7900000000002,36
+2026-06-08,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,5.06,1
+2026-06-08,SK Genset DG-58Kva,Fuel Filling,64.3,2
+2026-06-08,SK-220 Ananta Excavator Kob,Fuel Filling,1614.5500000000002,18
+2026-06-08,SK-220 Ananta Excavator Kob,Fuel Theft,879.1300000000002,39
+2026-06-08,SKS Nandurbar Tractor,Fuel Filling,69.96,8
+2026-06-08,SKS Nandurbar Tractor,Fuel Theft,18.990000000000002,2
+2026-06-08,SKS Raebareli Boom Placer,Fuel Filling,250.15,1
+2026-06-08,SKS Raebareli Water Tanker,Fuel Filling,36.96,1
+2026-06-08,Shiva,Fuel Filling,71.68,1
+2026-06-08,Shiva Camper MP-45-G-1878,Fuel Filling,13.32,1
+2026-06-08,Shiva Trailer,Fuel Filling,106.21,4
+2026-06-08,Shiva Trailer,Fuel Theft,35.730000000000004,3
+2026-06-08,Skylark Akot EX05,Fuel Filling,12.98,1
+2026-06-08,Skylark Akot EX05,Fuel Theft,7.27,1
+2026-06-08,Skylark Indore DD06,Fuel Filling,425.11,7
+2026-06-08,Skylark Indore DD06,Fuel Theft,62.86,3
+2026-06-08,Skylark Indore EX14,Fuel Filling,228.21,6
+2026-06-08,Skylark Indore EX14,Fuel Theft,61.089999999999996,5
+2026-06-08,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,439.40000000000003,6
+2026-06-08,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,42.17,2
+2026-06-08,VIPL/GTP/TRANSIT MIXER/2018/03,Fuel Filling,64.83,2
+2026-06-08,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Filling,2228.5499999999997,20
+2026-06-08,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Theft,1325.0499999999995,61
+2026-06-08,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Filling,69.16,2
+2026-06-09,Bedrock DG 180 Kva,Fuel Filling,131.07,1
+2026-06-09,CDS Head-Office,Fuel Filling,58.55,1
+2026-06-09,CDS Head-Office,Fuel Theft,58.96,2
+2026-06-09,Ceigall Danapur,Fuel Filling,288.60999999999996,5
+2026-06-09,Ceigall Danapur,Fuel Theft,141.73000000000002,6
+2026-06-09,Ceigall LBG TM,Fuel Filling,24.049999999999997,4
+2026-06-09,Ceigall LBG TM,Fuel Theft,11.2,1
+2026-06-09,GJ-20-AH-8048 Ananta Camper,Fuel Filling,42.97,1
+2026-06-09,Gawar HIM EX-65,Fuel Filling,69.25,1
+2026-06-09,Gawar HIM SR-YQ14688,Fuel Filling,172.27,1
+2026-06-09,Gawar HIM SR-YQ14688,Fuel Theft,514.8900000000001,12
+2026-06-09,Gawar Mum Excavator,Fuel Filling,261.4,2
+2026-06-09,Gawar Mum Excavator,Fuel Theft,1084.82,27
+2026-06-09,Gawar Mum Lifter,Fuel Filling,87.03000000000002,5
+2026-06-09,JSPL-RailMill-Hydra,Fuel Filling,13.83,1
+2026-06-09,JWIL BHARATPUR Hydra,Fuel Filling,5.26,1
+2026-06-09,JWIL BHARATPUR Hydra,Fuel Theft,6.52,1
+2026-06-09,JWIL Vidisha Hydra,Fuel Filling,12.19,1
+2026-06-09,Kamdhenu Sohana,Fuel Filling,861.1899999999999,3
+2026-06-09,Krati JCB Model-770 SS,Fuel Filling,35.58,2
+2026-06-09,Krati JCB Model-770 SS,Fuel Theft,18.75,1
+2026-06-09,Krati Tipper,Fuel Filling,42.2,1
+2026-06-09,MAK-UBL TM,Fuel Filling,28.97,1
+2026-06-09,MAK-UBL TM,Fuel Theft,10.75,1
+2026-06-09,MP-43-G-2751 Ananta Pickup,Fuel Filling,493.95000000000005,4
+2026-06-09,MP-43-G-2751 Ananta Pickup,Fuel Theft,17.46,2
+2026-06-09,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,1297.37,9
+2026-06-09,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,989.19,9
+2026-06-09,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,29.75,1
+2026-06-09,RKC/TRAILOR/006,Fuel Filling,4162.48,9
+2026-06-09,RKC/TRAILOR/006,Fuel Theft,1793.2199999999996,53
+2026-06-09,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,107.73,2
+2026-06-09,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,18.44,1
+2026-06-09,SCLRCT Hydra UP-32-UN-3114,Fuel Filling,9.06,1
+2026-06-09,SCLRCT Hydra UP-32-UN-3114,Fuel Theft,9.06,1
+2026-06-09,SK Genset DG-58Kva,Fuel Filling,32.21,1
+2026-06-09,SK-220 Ananta Excavator Kob,Fuel Filling,839.7499999999998,22
+2026-06-09,SK-220 Ananta Excavator Kob,Fuel Theft,566.75,26
+2026-06-09,SKS Nandurbar Tractor,Fuel Filling,50.66,5
+2026-06-09,SKS Nandurbar Tractor,Fuel Theft,15.149999999999999,2
+2026-06-09,SKS Raebareli Backhoe Loader,Fuel Filling,79.45,1
+2026-06-09,SKS Raebareli Water Tanker,Fuel Filling,41.69,1
+2026-06-09,Shiva Trailer,Fuel Filling,26.98,2
+2026-06-09,Shiva Trailer,Fuel Theft,10.21,1
+2026-06-09,Skylark Akot EX05,Fuel Filling,182.6,2
+2026-06-09,Skylark Akot EX05,Fuel Theft,20.55,2
+2026-06-09,Skylark Banglore TRT05,Fuel Theft,12.0,1
+2026-06-09,Skylark Indore DD06,Fuel Filling,251.9,8
+2026-06-09,Skylark Indore DD06,Fuel Theft,37.27,2
+2026-06-09,Skylark Indore EX14,Fuel Filling,65.2,1
+2026-06-09,Skylark Indore LC03,Fuel Filling,53.83,1
+2026-06-09,Skylark Surat RR15,Fuel Theft,7.71,1
+2026-06-09,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,28.68,3
+2026-06-09,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,114.17,5
+2026-06-09,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,6.09,1
+2026-06-09,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Filling,972.63,7
+2026-06-09,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Theft,566.91,22
+2026-06-09,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Filling,185.92000000000002,2
+2026-06-09,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Theft,167.7,1
+2026-06-10,CDS Head-Office,Fuel Filling,85.35000000000001,4
+2026-06-10,CDS Head-Office,Fuel Theft,63.78,2
+2026-06-10,CTS RIG,Fuel Filling,3364.89,6
+2026-06-10,CTS RIG,Fuel Theft,3353.9700000000003,76
+2026-06-10,Ceigall Danapur,Fuel Filling,969.3100000000001,6
+2026-06-10,Ceigall Danapur,Fuel Theft,545.1999999999999,21
+2026-06-10,Ceigall LBG TIP,Fuel Filling,155.23,1
+2026-06-10,Ceigall LBG TM,Fuel Filling,130.21,7
+2026-06-10,Ceigall LBG TM,Fuel Theft,24.58,3
+2026-06-10,DFCCIL Ambala Tower Wagon,Fuel Filling,1230.85,6
+2026-06-10,DFCCIL Ambala Tower Wagon,Fuel Theft,3431.0699999999993,41
+2026-06-10,Gawar HIM EX-65,Fuel Filling,129.16,2
+2026-06-10,Gawar HIM EX-65,Fuel Theft,15.87,1
+2026-06-10,Gawar HIM SR-YQ14688,Fuel Filling,490.12,3
+2026-06-10,Gawar HIM SR-YQ14688,Fuel Theft,196.51,7
+2026-06-10,Gawar HIM TIP,Fuel Filling,152.54,1
+2026-06-10,Gawar HIM TIP,Fuel Theft,11.33,1
+2026-06-10,Gawar Mum Excavator,Fuel Filling,657.68,9
+2026-06-10,Gawar Mum Excavator,Fuel Theft,712.52,18
+2026-06-10,Gawar Mum Lifter,Fuel Filling,37.870000000000005,5
+2026-06-10,Gawar Mum Lifter,Fuel Theft,20.869999999999997,2
+2026-06-10,Gawar Mum Mobile Carne,Fuel Filling,99.04,1
+2026-06-10,IIT Delhi LHC DG 750 Kva DG-2,Fuel Filling,21.43,1
+2026-06-10,IIT Delhi LHC DG 750 Kva DG-2,Fuel Theft,7.1,1
+2026-06-10,JSPL-RailMill-Hydra,Fuel Filling,28.880000000000003,2
+2026-06-10,MAK-UBL TM,Fuel Filling,24.68,1
+2026-06-10,MAK-UBL TM,Fuel Theft,9.15,1
+2026-06-10,MP-43-G-2751 Ananta Pickup,Fuel Filling,1057.54,1
+2026-06-10,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,2326.88,9
+2026-06-10,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,1876.7500000000002,10
+2026-06-10,RJ-14-GR-8447 Ananta Camper,Fuel Filling,15.23,1
+2026-06-10,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,36.58,2
+2026-06-10,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Theft,11.66,1
+2026-06-10,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,105.46,3
+2026-06-10,RJ-18-GB-7215 Ananta Trailer,Fuel Theft,17.8,1
+2026-06-10,RKC/DG-35Kva-008,Fuel Theft,77.91,2
+2026-06-10,RKC/TIPPER/126,Fuel Theft,22.82,1
+2026-06-10,RKC/TRAILOR/006,Fuel Filling,5674.21,9
+2026-06-10,RKC/TRAILOR/006,Fuel Theft,2127.3400000000006,52
+2026-06-10,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,245.68000000000004,5
+2026-06-10,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,131.86,5
+2026-06-10,SCLLKO CP SSMECP 1720006-2,Fuel Filling,49.91,1
+2026-06-10,SCLLKO CP SSMECP 1720006-2,Fuel Theft,8.98,1
+2026-06-10,SK Genset DG-58Kva,Fuel Filling,11.35,1
+2026-06-10,SKS Nandurbar Hydra,Fuel Filling,22.4,1
+2026-06-10,SKS Nandurbar Tractor,Fuel Filling,80.2,5
+2026-06-10,SKS Nandurbar Tractor,Fuel Theft,17.32,2
+2026-06-10,SKS Raebareli Boom Placer,Fuel Filling,196.09,1
+2026-06-10,SKS Raebareli Water Tanker,Fuel Filling,39.13,1
+2026-06-10,Shiva Trailer,Fuel Filling,57.019999999999996,2
+2026-06-10,Shiva Trailer,Fuel Theft,40.1,2
+2026-06-10,Skylark Akot EX05,Fuel Filling,75.59,1
+2026-06-10,Skylark Akot EX05,Fuel Theft,7.32,1
+2026-06-10,Skylark Banglore TRT05,Fuel Filling,98.24,1
+2026-06-10,Skylark Indore DD06,Fuel Filling,162.63,4
+2026-06-10,Skylark Indore EX14,Fuel Filling,10.04,1
+2026-06-10,Skylark Indore HC08,Fuel Filling,24.44,1
+2026-06-10,Skylark Surat DG19,Fuel Filling,33.02,1
+2026-06-10,Skylark Surat RR15,Fuel Theft,156.24,1
+2026-06-10,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,14.71,1
+2026-06-10,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,176.0,5
+2026-06-10,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Filling,1364.57,8
+2026-06-10,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Theft,569.9399999999999,27
+2026-06-10,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Filling,341.01,2
+2026-06-10,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Theft,348.40999999999997,2
+2026-06-11,Bedrock MH-48-BM-4590,Fuel Filling,197.99,1
+2026-06-11,CDS Head-Office,Fuel Filling,11.16,1
+2026-06-11,Ceigall Danapur,Fuel Filling,1578.3999999999999,6
+2026-06-11,Ceigall Danapur,Fuel Theft,1099.54,32
+2026-06-11,Ceigall LBG TIP,Fuel Filling,86.52,1
+2026-06-11,Ceigall LBG TM,Fuel Filling,114.5,6
+2026-06-11,Ceigall LBG TM,Fuel Theft,54.32,5
+2026-06-11,DFCCIL Ambala Tower Wagon,Fuel Filling,1184.83,5
+2026-06-11,DFCCIL Ambala Tower Wagon,Fuel Theft,4183.4,52
+2026-06-11,Gawar HIM EX-65,Fuel Filling,98.83,1
+2026-06-11,Gawar HIM EX-65,Fuel Theft,45.8,2
+2026-06-11,Gawar HIM SR-YQ14688,Fuel Filling,143.12,3
+2026-06-11,Gawar HIM SR-YQ14688,Fuel Theft,71.99,4
+2026-06-11,Gawar HIM TIP,Fuel Filling,11.33,1
+2026-06-11,Gawar HIM TIP,Fuel Theft,14.9,1
+2026-06-11,Gawar Mum Excavator,Fuel Filling,548.38,10
+2026-06-11,Gawar Mum Excavator,Fuel Theft,554.2700000000001,17
+2026-06-11,JSPL-RailMill-Hydra,Fuel Filling,26.25,2
+2026-06-11,JWIL BHARATPUR Hydra,Fuel Filling,6.07,1
+2026-06-11,JWIL BHARATPUR Hydra,Fuel Theft,6.26,1
+2026-06-11,JWIL Vidisha Hydra,Fuel Filling,10.31,1
+2026-06-11,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Filling,158.98,1
+2026-06-11,Kamdhenu Sohana,Fuel Theft,131.15,1
+2026-06-11,Kamdhenu Sohana TM HR 55 AQ 2563,Fuel Theft,98.12,1
+2026-06-11,Kamdhenu Sohana TM HR-55-AQ-9083,Fuel Filling,184.11,1
+2026-06-11,MAK-UBL TM,Fuel Filling,943.1500000000001,9
+2026-06-11,MAK-UBL TM,Fuel Theft,8623.659999999996,80
+2026-06-11,MP-43-G-2751 Ananta Pickup,Fuel Filling,2194.89,1
+2026-06-11,MP-43-G-2751 Ananta Pickup,Fuel Theft,52.099999999999994,3
+2026-06-11,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,1721.1,9
+2026-06-11,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,727.54,6
+2026-06-11,No-3 HAMM Soil-Compactor Ananta ,Fuel Filling,5.94,1
+2026-06-11,No-3 HAMM Soil-Compactor Ananta ,Fuel Theft,12.79,2
+2026-06-11,Pappu BIA NL-01-AB-9193,Fuel Filling,143.39,2
+2026-06-11,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,311.78000000000003,5
+2026-06-11,RJ-18-GB-7215 Ananta Trailer,Fuel Theft,1888.2899999999997,23
+2026-06-11,RKC/DG-35Kva-008,Fuel Filling,73.03,1
+2026-06-11,RKC/DG-35Kva-008,Fuel Theft,39.35,3
+2026-06-11,RKC/TRAILOR/006,Fuel Filling,1959.61,8
+2026-06-11,RKC/TRAILOR/006,Fuel Theft,1356.6,38
+2026-06-11,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,319.52,8
+2026-06-11,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,205.63,11
+2026-06-11,SCLLKO CP SSMECP 1720006-2,Fuel Theft,8.98,1
+2026-06-11,SK Genset DG-58Kva,Fuel Filling,60.94,2
+2026-06-11,SK-220 Ananta Excavator Kob,Fuel Filling,1866.0500000000002,27
+2026-06-11,SK-220 Ananta Excavator Kob,Fuel Theft,1042.0500000000002,50
+2026-06-11,SKS Nandurbar Hydra,Fuel Filling,28.63,1
+2026-06-11,SKS Nandurbar Tractor,Fuel Filling,92.83999999999999,10
+2026-06-11,SKS Nandurbar Tractor,Fuel Theft,7.37,1
+2026-06-11,SKS Raebareli Backhoe Loader,Fuel Filling,60.58,1
+2026-06-11,SKS Raebareli Water Tanker,Fuel Filling,5.65,1
+2026-06-11,Shiva Trailer,Fuel Filling,61.230000000000004,2
+2026-06-11,Shiva Trailer,Fuel Theft,20.05,2
+2026-06-11,Skylark Akot EX05,Fuel Filling,6.09,1
+2026-06-11,Skylark Akot EX05,Fuel Theft,7.56,1
+2026-06-11,Skylark Indore DD06,Fuel Filling,1697.81,8
+2026-06-11,Skylark Indore EX14,Fuel Filling,37.519999999999996,3
+2026-06-11,Skylark Indore EX14,Fuel Theft,42.62,3
+2026-06-11,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,139.91,3
+2026-06-11,VIPL/BR3/DG 40KVA/2019/01,Fuel Theft,46.650000000000006,3
+2026-06-11,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,666.5200000000001,9
+2026-06-11,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,75.61000000000001,7
+2026-06-11,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Filling,175.67,2
+2026-06-11,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Theft,62.410000000000004,3
+2026-06-11,VIPL/GTP/TRANSIT MIXER/2022/05,Fuel Filling,13.69,1
+2026-06-11,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Filling,359.52,3
+2026-06-11,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Theft,333.47,2
+2026-06-12,Ananta TM MP-43-H-0693 ,Fuel Filling,17.520000000000003,3
+2026-06-12,Bedrock MH-48-BM-4590,Fuel Filling,143.42000000000002,11
+2026-06-12,Bedrock MH-48-BM-4590,Fuel Theft,41.56,3
+2026-06-12,CDS Head-Office,Fuel Filling,172.25,2
+2026-06-12,CDS Head-Office,Fuel Theft,35.35,1
+2026-06-12,Ceigall Danapur,Fuel Filling,605.35,3
+2026-06-12,Ceigall Danapur,Fuel Theft,424.30000000000007,13
+2026-06-12,Ceigall LBG TM,Fuel Filling,53.25,2
+2026-06-12,Ceigall LBG TM,Fuel Theft,30.35,2
+2026-06-12,DFCCIL Ambala Tower Wagon,Fuel Filling,1071.58,6
+2026-06-12,DFCCIL Ambala Tower Wagon,Fuel Theft,1981.1400000000003,43
+2026-06-12,Gawar HIM EX-65,Fuel Filling,66.13,1
+2026-06-12,Gawar Mum Excavator,Fuel Filling,406.82,7
+2026-06-12,Gawar Mum Excavator,Fuel Theft,661.1199999999999,21
+2026-06-12,Gawar Mum Lifter,Fuel Filling,97.94,2
+2026-06-12,Gawar Mum Lifter,Fuel Theft,7.33,1
+2026-06-12,JSPL SMS,Fuel Filling,184.93,1
+2026-06-12,JSPL SMS,Fuel Theft,141.14000000000001,4
+2026-06-12,JSPL-RailMill-Hydra,Fuel Filling,24.82,1
+2026-06-12,JWIL BHARATPUR Hydra,Fuel Filling,33.120000000000005,2
+2026-06-12,JWIL BHARATPUR Hydra,Fuel Theft,35.3,3
+2026-06-12,JWIL Vidisha Hydra,Fuel Filling,18.36,1
+2026-06-12,Kamdhenu Sohana,Fuel Theft,130.97,1
+2026-06-12,MAK-UBL TM,Fuel Filling,1598.02,16
+2026-06-12,MAK-UBL TM,Fuel Theft,166.76000000000002,16
+2026-06-12,MP-43-G-2751 Ananta Pickup,Fuel Filling,1776.63,4
+2026-06-12,MP-43-G-2751 Ananta Pickup,Fuel Theft,68.75999999999999,4
+2026-06-12,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,1133.98,7
+2026-06-12,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,402.17,5
+2026-06-12,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,28.15,1
+2026-06-12,RJ-14-GR-8520 Ananta Pickup,Fuel Filling,8.89,1
+2026-06-12,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,25.5,3
+2026-06-12,RJ-18-GB-7215 Ananta Trailer,Fuel Theft,38.68,3
+2026-06-12,RKC/TRAILOR/006,Fuel Filling,1284.95,3
+2026-06-12,RKC/TRAILOR/006,Fuel Theft,873.1600000000001,20
+2026-06-12,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,71.9,2
+2026-06-12,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,23.3,2
+2026-06-12,SK Genset DG-58Kva,Fuel Filling,24.98,1
+2026-06-12,SK Genset DG-58Kva,Fuel Theft,5.09,1
+2026-06-12,SKS Nandurbar Hydra,Fuel Filling,60.42,2
+2026-06-12,SKS Nandurbar Tractor,Fuel Filling,86.62,10
+2026-06-12,SKS Raebareli Backhoe Loader,Fuel Filling,7.78,1
+2026-06-12,SKS Raebareli Backhoe Loader,Fuel Theft,7.42,1
+2026-06-12,SKS Raebareli Boom Placer,Fuel Filling,107.45,1
+2026-06-12,SKS Raebareli Water Tanker,Fuel Filling,37.82,1
+2026-06-12,Shiva,Fuel Filling,47.12,1
+2026-06-12,Shiva Trailer,Fuel Filling,32.08,3
+2026-06-12,Shiva Trailer,Fuel Theft,13.01,1
+2026-06-12,Skylark Akot EX05,Fuel Filling,127.17,2
+2026-06-12,Skylark Akot EX05,Fuel Theft,18.4,2
+2026-06-12,Skylark Indore DD06,Fuel Filling,906.04,6
+2026-06-12,Skylark Indore DD06,Fuel Theft,27.38,1
+2026-06-12,Skylark Indore EX14,Fuel Filling,131.08,6
+2026-06-12,Skylark Indore EX14,Fuel Theft,34.53,3
+2026-06-12,Skylark Indore LC03,Fuel Filling,20.34,2
+2026-06-12,Snowman LKO DG-400Kva,Fuel Filling,15.88,1
+2026-06-12,Snowman LKO DG-400Kva,Fuel Theft,16.31,1
+2026-06-12,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,115.11,3
+2026-06-12,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,320.53000000000003,6
+2026-06-12,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,52.01,4
+2026-06-12,VIPL/GTP/TRANSIT MIXER/2018/03,Fuel Filling,30.96,1
+2026-06-12,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Filling,413.71000000000004,7
+2026-06-12,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Theft,203.60000000000002,12
+2026-06-12,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Filling,176.58,1
+2026-06-12,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Theft,177.16,1
+2026-06-13,Bedrock MH-48-BM-4590,Fuel Filling,510.55,21
+2026-06-13,Bedrock MH-48-BM-4590,Fuel Theft,40.53,4
+2026-06-13,CTS RIG CG-13-L-3097,Fuel Filling,53.71,1
+2026-06-13,CTS RIG CG-13-L-3097,Fuel Theft,48.89,2
+2026-06-13,Ceigall Danapur,Fuel Filling,624.0,2
+2026-06-13,Ceigall Danapur,Fuel Theft,389.84999999999997,10
+2026-06-13,Ceigall LBG TM,Fuel Filling,122.53,5
+2026-06-13,Ceigall LBG TM,Fuel Theft,47.96999999999999,4
+2026-06-13,DFCCIL Ambala Tower Wagon,Fuel Filling,5.75,1
+2026-06-13,Gawar HIM EX-65,Fuel Filling,66.43,1
+2026-06-13,Gawar HIM SR-YQ14688,Fuel Filling,154.66,3
+2026-06-13,Gawar HIM SR-YQ14688,Fuel Theft,95.62,5
+2026-06-13,Gawar Mum Excavator,Fuel Filling,195.48,1
+2026-06-13,Gawar Mum Excavator,Fuel Theft,114.16,6
+2026-06-13,Gawar Mum Lifter,Fuel Filling,38.480000000000004,4
+2026-06-13,Gawar Mum Lifter,Fuel Theft,23.86,3
+2026-06-13,Gawar Mum Mobile Carne,Fuel Filling,95.62,1
+2026-06-13,JSPL SMS,Fuel Filling,144.92,1
+2026-06-13,JSPL SMS,Fuel Theft,237.97,5
+2026-06-13,JSPL-RailMill-Hydra,Fuel Filling,32.31,2
+2026-06-13,Krati Tipper,Fuel Filling,132.60999999999999,2
+2026-06-13,MAK-UBL TM,Fuel Filling,693.76,15
+2026-06-13,MAK-UBL TM,Fuel Theft,144.67,14
+2026-06-13,MP-43-G-2751 Ananta Pickup,Fuel Filling,931.72,3
+2026-06-13,MP-43-G-2751 Ananta Pickup,Fuel Theft,34.72,2
+2026-06-13,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,895.5799999999999,9
+2026-06-13,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,449.75,5
+2026-06-13,No-3 HAMM Soil-Compactor Ananta ,Fuel Filling,289.47,4
+2026-06-13,No-3 HAMM Soil-Compactor Ananta ,Fuel Theft,296.01,5
+2026-06-13,Pappu BIA NL-01-AB-9193,Fuel Filling,105.25,1
+2026-06-13,RJ-14-GR-8447 Ananta Camper,Fuel Filling,15.1,2
+2026-06-13,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,28.38,1
+2026-06-13,RJ-14-GR-8520 Ananta Pickup,Fuel Filling,23.57,2
+2026-06-13,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,18.71,1
+2026-06-13,RKC/TRAILOR/006,Fuel Filling,3011.01,7
+2026-06-13,RKC/TRAILOR/006,Fuel Theft,1564.4799999999998,43
+2026-06-13,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,168.62,5
+2026-06-13,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,82.73,5
+2026-06-13,SK-220 Ananta Excavator Kob,Fuel Filling,413.33,13
+2026-06-13,SK-220 Ananta Excavator Kob,Fuel Theft,163.63,9
+2026-06-13,SKS Raebareli Backhoe Loader,Fuel Filling,115.61,1
+2026-06-13,SKS Raebareli Farana ,Fuel Filling,88.25,1
+2026-06-13,Shiva Trailer,Fuel Filling,164.97000000000003,4
+2026-06-13,Shiva Trailer,Fuel Theft,18.009999999999998,2
+2026-06-13,Skylark Akot EX05,Fuel Filling,7.99,1
+2026-06-13,Skylark Indore DD06,Fuel Filling,698.8100000000001,8
+2026-06-13,Skylark Indore DD06,Fuel Theft,256.26,5
+2026-06-13,Skylark Indore EX14,Fuel Filling,217.25,3
+2026-06-13,Skylark Indore EX14,Fuel Theft,154.35,5
+2026-06-13,Skylark Indore HC08,Fuel Filling,16.99,1
+2026-06-13,Skylark Indore LC03,Fuel Filling,5.54,1
+2026-06-13,Skylark Indore LC03,Fuel Theft,16.86,2
+2026-06-13,Skylark Surat DG19,Fuel Filling,62.3,1
+2026-06-13,Snowman LKO DG-400Kva,Fuel Filling,31.54,1
+2026-06-13,Snowman LKO DG-400Kva,Fuel Theft,33.69,1
+2026-06-13,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,166.82999999999998,3
+2026-06-13,VIPL/BR3/DG 40KVA/2019/01,Fuel Theft,29.99,2
+2026-06-13,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,565.6400000000001,10
+2026-06-13,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,52.169999999999995,4
+2026-06-13,VIPL/GTP/HYVA/2025/05,Fuel Filling,21.21,1
+2026-06-13,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Filling,29.48,1
+2026-06-14,Ananta TM MP-43-H-0693 ,Fuel Filling,6.46,1
+2026-06-14,CTS RIG CG-13-L-3097,Fuel Filling,146.07000000000002,8
+2026-06-14,CTS RIG CG-13-L-3097,Fuel Theft,175.43,11
+2026-06-14,Ceigall Danapur,Fuel Filling,17.02,1
+2026-06-14,Ceigall LBG TM,Fuel Filling,46.76,3
+2026-06-14,Ceigall LBG TM,Fuel Theft,24.65,2
+2026-06-14,Gawar HIM EX-65,Fuel Filling,75.98,1
+2026-06-14,Gawar HIM SR-YQ14688,Fuel Filling,178.18,2
+2026-06-14,Gawar Mum Excavator,Fuel Filling,89.95,1
+2026-06-14,Gawar Mum Excavator,Fuel Theft,27.66,1
+2026-06-14,Gawar Mum Lifter,Fuel Filling,27.56,2
+2026-06-14,Gawar Mum Lifter,Fuel Theft,12.68,1
+2026-06-14,JSPL-RailMill-Hydra,Fuel Filling,33.38,2
+2026-06-14,Kamdhenu Sohana,Fuel Theft,128.44,1
+2026-06-14,Krati JCB Model-770 SS,Fuel Filling,36.59,2
+2026-06-14,Krati JCB Model-770 SS,Fuel Theft,49.87,2
+2026-06-14,Krati Tipper,Fuel Filling,326.69,2
+2026-06-14,Krati Tipper,Fuel Theft,149.11,2
+2026-06-14,MAK-UBL TM,Fuel Filling,996.9200000000001,15
+2026-06-14,MAK-UBL TM,Fuel Theft,4052.95,37
+2026-06-14,MP-43-H-0694 Ananta TM,Fuel Theft,23.53,2
+2026-06-14,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,2919.33,11
+2026-06-14,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,1207.92,6
+2026-06-14,Pappu BIA NL-01-AB-9193,Fuel Filling,7.01,1
+2026-06-14,Pappu BIA NL-01-AB-9193,Fuel Theft,24.14,3
+2026-06-14,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,34.55,2
+2026-06-14,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Theft,38.25,1
+2026-06-14,RJ-14-GR-8520 Ananta Pickup,Fuel Filling,11.31,1
+2026-06-14,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,5.57,1
+2026-06-14,RKC/TRAILOR/006,Fuel Filling,3218.2999999999997,10
+2026-06-14,RKC/TRAILOR/006,Fuel Theft,1432.5399999999997,45
+2026-06-14,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,220.69,4
+2026-06-14,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,87.4,5
+2026-06-14,SKS Nandurbar Tractor,Fuel Filling,22.35,4
+2026-06-14,Shiva Trailer,Fuel Filling,50.88,1
+2026-06-14,Shiva Trailer,Fuel Theft,15.92,1
+2026-06-14,Skylark Akot EX05,Fuel Filling,63.62,1
+2026-06-14,Skylark Indore DD06,Fuel Filling,1114.9599999999998,9
+2026-06-14,Skylark Indore DD06,Fuel Theft,206.21,4
+2026-06-14,Skylark Indore EX14,Fuel Filling,249.93,9
+2026-06-14,Skylark Indore EX14,Fuel Theft,94.16000000000001,6
+2026-06-14,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,56.52,1
+2026-06-14,VIPL/BR3/DG 40KVA/2019/01,Fuel Theft,34.83,1
+2026-06-14,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,397.60999999999996,8
+2026-06-14,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,79.94,6
+2026-06-14,VIPL/GTP/TRANSIT MIXER/2022/05,Fuel Filling,5.27,1
+2026-06-15,Ananta TM MP-43-H-0693 ,Fuel Filling,10.620000000000001,2
+2026-06-15,Ceigall Danapur,Fuel Filling,17.09,1
+2026-06-15,Ceigall LBG TM,Fuel Filling,47.650000000000006,5
+2026-06-15,Ceigall LBG TM,Fuel Theft,8.59,1
+2026-06-15,DFCCIL Ambala Tower Wagon,Fuel Filling,209.33,3
+2026-06-15,DFCCIL Ambala Tower Wagon,Fuel Theft,18.28,2
+2026-06-15,Gawar HIM EX-65,Fuel Filling,133.19,2
+2026-06-15,Gawar HIM EX-65,Fuel Theft,100.34,4
+2026-06-15,Gawar HIM SR-YQ14688,Fuel Filling,202.27999999999997,4
+2026-06-15,Gawar HIM SR-YQ14688,Fuel Theft,121.69,4
+2026-06-15,Gawar HIM TIP,Fuel Filling,104.29,1
+2026-06-15,Gawar Mum,Fuel Filling,24.89,1
+2026-06-15,Gawar Mum Excavator,Fuel Filling,235.77,5
+2026-06-15,Gawar Mum Excavator,Fuel Theft,292.69000000000005,11
+2026-06-15,Gawar Mum Mobile Carne,Fuel Filling,96.18,1
+2026-06-15,JSPL-RailMill-Hydra,Fuel Filling,27.14,2
+2026-06-15,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Filling,5.24,1
+2026-06-15,Kamdhenu Sohana,Fuel Filling,151.71,1
+2026-06-15,Kamdhenu Sohana,Fuel Theft,450.65999999999997,2
+2026-06-15,Kamdhenu Sohana TM HR 55 AQ 2563,Fuel Filling,121.4,1
+2026-06-15,Kamdhenu Sohana TM HR-55-AF-6459,Fuel Filling,28.14,1
+2026-06-15,Kamdhenu Sohana TM HR-55-AF-6459,Fuel Theft,29.8,1
+2026-06-15,MAK-UBL TM,Fuel Filling,195.4,7
+2026-06-15,MAK-UBL TM,Fuel Theft,31.73,2
+2026-06-15,MP-43-G-2751 Ananta Pickup,Fuel Filling,619.75,2
+2026-06-15,MP-43-G-2751 Ananta Pickup,Fuel Theft,33.37,3
+2026-06-15,MP-43-H-0694 Ananta TM,Fuel Filling,460.51,1
+2026-06-15,MP-43-H-0694 Ananta TM,Fuel Theft,74.14,3
+2026-06-15,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,2820.91,10
+2026-06-15,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,1026.69,8
+2026-06-15,Pappu BIA NL-01-AB-9193,Fuel Filling,47.550000000000004,3
+2026-06-15,Pappu BIA NL-01-AB-9193,Fuel Theft,31.66,3
+2026-06-15,RJ-14-GR-8447 Ananta Camper,Fuel Filling,18.060000000000002,2
+2026-06-15,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,26.34,1
+2026-06-15,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,75.74,2
+2026-06-15,RJ-18-GB-7215 Ananta Trailer,Fuel Theft,70.99,4
+2026-06-15,RKC/TRAILOR/006,Fuel Filling,2768.17,7
+2026-06-15,RKC/TRAILOR/006,Fuel Theft,1347.7099999999998,39
+2026-06-15,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,140.46999999999997,8
+2026-06-15,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,59.86,3
+2026-06-15,SK-220 Ananta Excavator Kob,Fuel Filling,655.61,13
+2026-06-15,SK-220 Ananta Excavator Kob,Fuel Theft,260.26,18
+2026-06-15,SKS Nandurbar Hydra,Fuel Filling,20.65,1
+2026-06-15,SKS Nandurbar Tractor,Fuel Filling,31.7,3
+2026-06-15,SKS Raebareli Boom Placer,Fuel Filling,221.19,1
+2026-06-15,SKS Raebareli Trailer,Fuel Filling,8.34,1
+2026-06-15,SKS Raebareli Water Tanker,Fuel Filling,76.97,2
+2026-06-15,Shiva Trailer,Fuel Filling,40.730000000000004,2
+2026-06-15,Shiva Trailer,Fuel Theft,10.87,1
+2026-06-15,Skylark Indore DD06,Fuel Theft,6.86,1
+2026-06-15,Skylark Indore EX14,Fuel Filling,88.57,4
+2026-06-15,Skylark Indore LC03,Fuel Filling,75.53,1
+2026-06-15,Skylark Surat DG19,Fuel Filling,73.32,1
+2026-06-15,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,478.28,11
+2026-06-15,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,105.46000000000001,9
+2026-06-15,VIPL/GTP/TRANSIT MIXER/2022/05,Fuel Filling,28.86,1
+2026-06-16,Ananta TM MP-43-H-0693 ,Fuel Filling,5.65,1
+2026-06-16,Bedrock MH-48-BM-4590,Fuel Theft,11.55,1
+2026-06-16,Ceigall Danapur,Fuel Filling,17.2,1
+2026-06-16,Ceigall LBG TM,Fuel Filling,167.5,4
+2026-06-16,Ceigall LBG TM,Fuel Theft,23.63,2
+2026-06-16,DFCCIL Ambala Tower Wagon,Fuel Filling,1836.9299999999998,8
+2026-06-16,DFCCIL Ambala Tower Wagon,Fuel Theft,4385.3,52
+2026-06-16,Gawar HIM EX-65,Fuel Filling,165.33999999999997,4
+2026-06-16,Gawar HIM EX-65,Fuel Theft,17.37,1
+2026-06-16,Gawar HIM TIP,Fuel Filling,161.73,1
+2026-06-16,Gawar Mum Excavator,Fuel Filling,41.78999999999999,4
+2026-06-16,Gawar Mum Excavator,Fuel Theft,116.96000000000001,5
+2026-06-16,Gawar Mum Lifter,Fuel Filling,67.25,5
+2026-06-16,Gawar Mum Lifter,Fuel Theft,16.05,2
+2026-06-16,JSPL SMS,Fuel Theft,28.08,1
+2026-06-16,JSPL-PlateMill-Trailer,Fuel Filling,6.53,1
+2026-06-16,JSPL-PlateMill-Trailer,Fuel Theft,10.34,1
+2026-06-16,JSPL-RailMill-Hydra,Fuel Filling,29.310000000000002,2
+2026-06-16,JWIL BHARATPUR Hydra,Fuel Filling,61.959999999999994,5
+2026-06-16,JWIL BHARATPUR Hydra,Fuel Theft,6.31,1
+2026-06-16,JWIL Vidisha Hydra,Fuel Filling,16.71,1
+2026-06-16,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Filling,96.27,1
+2026-06-16,Kamdhenu Sohana TM HR-55-AQ-9083,Fuel Filling,215.59,1
+2026-06-16,Kamdhenu Sohana TM HR-55-AQ-9083,Fuel Theft,215.87,1
+2026-06-16,MAK-UBL TM,Fuel Filling,1113.3,8
+2026-06-16,MAK-UBL TM,Fuel Theft,19.310000000000002,2
+2026-06-16,MP-43-G-2751 Ananta Pickup,Fuel Filling,1775.6300000000003,6
+2026-06-16,MP-43-G-2751 Ananta Pickup,Fuel Theft,66.71000000000001,5
+2026-06-16,MP-43-H-0694 Ananta TM,Fuel Filling,48.269999999999996,2
+2026-06-16,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,430.78,1
+2026-06-16,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,171.99,3
+2026-06-16,No-3 HAMM Soil-Compactor Ananta ,Fuel Filling,87.49000000000001,6
+2026-06-16,No-3 HAMM Soil-Compactor Ananta ,Fuel Theft,37.28,3
+2026-06-16,Pappu BIA NL-01-AB-9193,Fuel Filling,92.97,1
+2026-06-16,Prashant RIG CG-13-L-9949,Fuel Filling,31.53,1
+2026-06-16,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,24.93,1
+2026-06-16,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,50.480000000000004,3
+2026-06-16,RJ-18-GB-7215 Ananta Trailer,Fuel Theft,58.53,3
+2026-06-16,RKC/TRAILOR/006,Fuel Filling,2769.73,8
+2026-06-16,RKC/TRAILOR/006,Fuel Theft,1240.0000000000002,41
+2026-06-16,Rise-11-GGN,Fuel Filling,9.82,1
+2026-06-16,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,98.22,4
+2026-06-16,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,61.07,4
+2026-06-16,SCLLKO CP SSMECP 1720006-2,Fuel Filling,75.01,1
+2026-06-16,SK-220 Ananta Excavator Kob,Fuel Filling,133.54,8
+2026-06-16,SK-220 Ananta Excavator Kob,Fuel Theft,112.52,7
+2026-06-16,SKS Nandurbar Hydra,Fuel Filling,20.92,1
+2026-06-16,SKS Raebareli Boom Placer,Fuel Filling,158.15,1
+2026-06-16,SKS Raebareli Trailer,Fuel Filling,112.69,2
+2026-06-16,Skylark Akot EX05,Fuel Filling,46.24,4
+2026-06-16,Skylark Akot EX05,Fuel Theft,17.91,1
+2026-06-16,Skylark Banglore TRT05,Fuel Filling,45.26,1
+2026-06-16,Skylark Indore DD06,Fuel Filling,668.3900000000001,8
+2026-06-16,Skylark Indore DD06,Fuel Theft,77.83,3
+2026-06-16,Skylark Indore EX14,Fuel Filling,157.01999999999998,3
+2026-06-16,Skylark Surat DG19,Fuel Filling,73.72,1
+2026-06-16,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,23.92,1
+2026-06-16,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,490.7199999999999,13
+2026-06-16,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,90.35000000000001,7
+2026-06-16,VIPL/GTP/TRANSIT MIXER/2022/05,Fuel Filling,27.51,1
+2026-06-16,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Filling,205.48000000000002,2
+2026-06-16,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Theft,177.23,1
+2026-06-17,Bedrock MH-48-BM-4590,Fuel Filling,398.40999999999997,2
+2026-06-17,Bedrock MH-48-BM-4590,Fuel Theft,103.32,1
+2026-06-17,CTS RIG,Fuel Filling,4253.320000000001,21
+2026-06-17,CTS RIG,Fuel Theft,5342.470000000002,121
+2026-06-17,CTS RIG CG-13-L-3097,Fuel Filling,50.04,1
+2026-06-17,CTS RIG CG-13-L-3097,Fuel Theft,30.62,3
+2026-06-17,Ceigall Danapur,Fuel Filling,17.01,1
+2026-06-17,Ceigall LBG TIP,Fuel Theft,10.53,1
+2026-06-17,Ceigall LBG TM,Fuel Filling,133.53,6
+2026-06-17,Ceigall LBG TM,Fuel Theft,23.22,2
+2026-06-17,DFCCIL Ambala Tower Wagon,Fuel Filling,1133.85,4
+2026-06-17,DFCCIL Ambala Tower Wagon,Fuel Theft,2801.42,33
+2026-06-17,GJ-20-AH-8048 Ananta Camper,Fuel Filling,15.43,1
+2026-06-17,Gawar HIM EX-65,Fuel Filling,114.57,2
+2026-06-17,Gawar HIM SR-YQ14688,Fuel Filling,171.45999999999998,6
+2026-06-17,Gawar HIM SR-YQ14688,Fuel Theft,148.96,7
+2026-06-17,Gawar Mum,Fuel Filling,26.46,1
+2026-06-17,Gawar Mum Excavator,Fuel Filling,259.89,3
+2026-06-17,Gawar Mum Excavator,Fuel Theft,138.22,6
+2026-06-17,Gawar Mum Lifter,Fuel Filling,66.55,5
+2026-06-17,Gawar Mum Lifter,Fuel Theft,86.68,9
+2026-06-17,Gawar Mum Mobile Carne,Fuel Filling,7.34,1
+2026-06-17,IIT Delhi LHC DG 750 Kva DG-2,Fuel Filling,7.1,1
+2026-06-17,IIT Delhi LHC DG 750 Kva DG-2,Fuel Theft,7.1,1
+2026-06-17,JSPL-RailMill-Hydra,Fuel Filling,30.03,2
+2026-06-17,JWIL BHARATPUR Hydra,Fuel Filling,74.57999999999998,9
+2026-06-17,JWIL Vidisha Hydra,Fuel Filling,38.93,2
+2026-06-17,JWIL-DHL JCB UP-85-ET-6083,Fuel Filling,8.91,1
+2026-06-17,JWIL-DHL JCB UP-85-ET-6083,Fuel Theft,6.12,1
+2026-06-17,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Filling,204.78,3
+2026-06-17,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Theft,8.09,1
+2026-06-17,Kamdhenu Sohana,Fuel Filling,13.98,1
+2026-06-17,Krati Tipper,Fuel Filling,197.60000000000002,2
+2026-06-17,Krati Tipper,Fuel Theft,481.22999999999996,6
+2026-06-17,MAK-UBL TM,Fuel Filling,759.3199999999999,12
+2026-06-17,MAK-UBL TM,Fuel Theft,6009.1,62
+2026-06-17,MP-43-G-2751 Ananta Pickup,Fuel Filling,227.51999999999998,2
+2026-06-17,MP-43-G-2751 Ananta Pickup,Fuel Theft,54.12,3
+2026-06-17,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,530.59,3
+2026-06-17,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,428.34999999999997,5
+2026-06-17,Pappu BIA NL-01-AB-9193,Fuel Theft,8.97,1
+2026-06-17,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,29.37,1
+2026-06-17,RKC/TRAILOR/006,Fuel Filling,8439.58,8
+2026-06-17,RKC/TRAILOR/006,Fuel Theft,2356.0499999999997,58
+2026-06-17,Rise-11-GGN,Fuel Filling,124.22,9
+2026-06-17,Rise-11-GGN,Fuel Theft,34.99,4
+2026-06-17,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,40.49,2
+2026-06-17,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,20.43,1
+2026-06-17,SK-220 Ananta Excavator Kob,Fuel Filling,817.67,9
+2026-06-17,SK-220 Ananta Excavator Kob,Fuel Theft,863.6300000000002,29
+2026-06-17,SKS Nandurbar Hydra,Fuel Filling,99.54,1
+2026-06-17,SKS Raebareli Backhoe Loader,Fuel Filling,108.25,1
+2026-06-17,SKS Raebareli Boom Placer,Fuel Filling,161.86,1
+2026-06-17,SKS Raebareli Trailer,Fuel Filling,167.07999999999998,2
+2026-06-17,SKS Raebareli Water Tanker,Fuel Filling,40.17,1
+2026-06-17,Shiva,Fuel Filling,49.45,1
+2026-06-17,Skylark Akot EX05,Fuel Filling,133.67000000000002,7
+2026-06-17,Skylark Akot EX05,Fuel Theft,89.07,6
+2026-06-17,Skylark Indore DD06,Fuel Filling,893.61,6
+2026-06-17,Skylark Indore EX14,Fuel Filling,226.21,6
+2026-06-17,Skylark Indore EX14,Fuel Theft,128.29,8
+2026-06-17,Skylark Surat DG19,Fuel Filling,91.08,1
+2026-06-17,Skylark Surat DG19,Fuel Theft,16.48,1
+2026-06-17,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,870.2100000000002,9
+2026-06-17,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,110.66,9
+2026-06-17,VIPL/GTP/TRANSIT MIXER/2018/03,Fuel Filling,50.38,1
+2026-06-17,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Filling,547.47,3
+2026-06-17,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Theft,215.32,10
+2026-06-17,VIPL/GTP/TRANSIT MIXER/2022/05,Fuel Filling,56.25,1
+2026-06-17,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Filling,55.65,1
+2026-06-18,Ananta TM MP-43-H-0693 ,Fuel Filling,5.01,1
+2026-06-18,CTS RIG,Fuel Filling,4974.87,16
+2026-06-18,CTS RIG,Fuel Theft,6282.670000000002,145
+2026-06-18,CTS RIG CG-13-L-3097,Fuel Filling,161.61,1
+2026-06-18,Ceigall Danapur,Fuel Filling,17.01,1
+2026-06-18,Ceigall LBG TIP,Fuel Filling,124.41,1
+2026-06-18,Ceigall LBG TM,Fuel Filling,119.11999999999999,5
+2026-06-18,Ceigall LBG TM,Fuel Theft,16.46,2
+2026-06-18,Gawar HIM EX-65,Fuel Filling,98.24,1
+2026-06-18,Gawar HIM SR-YQ14688,Fuel Filling,311.87,4
+2026-06-18,Gawar HIM SR-YQ14688,Fuel Theft,56.06,2
+2026-06-18,Gawar Mum Lifter,Fuel Filling,66.01,7
+2026-06-18,Gawar Mum Lifter,Fuel Theft,49.08,6
+2026-06-18,JSPL SMS,Fuel Theft,28.76,1
+2026-06-18,JSPL-RailMill-Hydra,Fuel Filling,38.91,2
+2026-06-18,JWIL BHARATPUR Hydra,Fuel Filling,34.81,2
+2026-06-18,JWIL BHARATPUR Hydra,Fuel Theft,6.13,1
+2026-06-18,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Filling,9.22,1
+2026-06-18,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Theft,13.9,1
+2026-06-18,Kamdhenu Sohana,Fuel Filling,34.11,1
+2026-06-18,Krati JCB Model-770 SS,Fuel Filling,41.64,3
+2026-06-18,Krati JCB Model-770 SS,Fuel Theft,28.85,1
+2026-06-18,MAK-UBL TM,Fuel Filling,1290.0,8
+2026-06-18,MAK-UBL TM,Fuel Theft,5836.810000000001,55
+2026-06-18,MP-43-G-2751 Ananta Pickup,Fuel Filling,546.09,1
+2026-06-18,MP-43-G-2751 Ananta Pickup,Fuel Theft,30.44,2
+2026-06-18,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,1806.0800000000002,12
+2026-06-18,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,1427.57,15
+2026-06-18,No-3 HAMM Soil-Compactor Ananta ,Fuel Filling,13.879999999999999,2
+2026-06-18,No-3 HAMM Soil-Compactor Ananta ,Fuel Theft,10.59,1
+2026-06-18,Pappu BIA NL-01-AB-9193,Fuel Filling,32.48,1
+2026-06-18,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,29.66,1
+2026-06-18,RJ-14-GR-8520 Ananta Pickup,Fuel Filling,9.31,1
+2026-06-18,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,190.7,1
+2026-06-18,RKC/DG-35Kva-008,Fuel Filling,767.48,7
+2026-06-18,RKC/DG-35Kva-008,Fuel Theft,12.45,1
+2026-06-18,RKC/TRAILOR/006,Fuel Filling,2509.2900000000004,8
+2026-06-18,RKC/TRAILOR/006,Fuel Theft,1135.4599999999998,33
+2026-06-18,Rise-11-GGN,Fuel Filling,168.16,11
+2026-06-18,Rise-11-GGN,Fuel Theft,38.57000000000001,4
+2026-06-18,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,36.410000000000004,3
+2026-06-18,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,30.03,2
+2026-06-18,SKS Raebareli Boom Placer,Fuel Filling,177.14,1
+2026-06-18,Shiva Trailer,Fuel Filling,88.61,2
+2026-06-18,Shiva Trailer,Fuel Theft,34.85,3
+2026-06-18,Skylark Akot EX05,Fuel Filling,543.21,10
+2026-06-18,Skylark Akot EX05,Fuel Theft,213.17000000000002,11
+2026-06-18,Skylark Indore DD06,Fuel Filling,757.31,12
+2026-06-18,Skylark Indore DD06,Fuel Theft,119.07000000000001,8
+2026-06-18,Skylark Indore EX14,Fuel Filling,204.25,3
+2026-06-18,Skylark Indore EX14,Fuel Theft,17.96,2
+2026-06-18,Skylark Indore HC08,Fuel Filling,12.15,1
+2026-06-18,Skylark Indore LC03,Fuel Filling,7.22,1
+2026-06-18,Skylark Indore LC03,Fuel Theft,16.15,2
+2026-06-18,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,56.440000000000005,2
+2026-06-18,VIPL/BR3/DG 40KVA/2019/01,Fuel Theft,5.09,1
+2026-06-18,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,1030.6000000000001,10
+2026-06-18,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,84.45,8
+2026-06-18,VIPL/GTP/HYVA/2025/05,Fuel Filling,44.03,2
+2026-06-18,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Filling,37.85,3
+2026-06-18,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Theft,41.07,3
+2026-06-19,Bedrock MH-48-BM-4590,Fuel Filling,78.47,1
+2026-06-19,CTS RIG CG-13-L-3097,Fuel Filling,13.7,1
+2026-06-19,CTS RIG CG-13-L-3097,Fuel Theft,13.97,1
+2026-06-19,Ceigall Danapur,Fuel Filling,34.14,1
+2026-06-19,Ceigall LBG TIP,Fuel Filling,368.84999999999997,4
+2026-06-19,Ceigall LBG TM,Fuel Filling,44.870000000000005,4
+2026-06-19,Ceigall LBG TM,Fuel Theft,74.04,5
+2026-06-19,DFCCIL Ambala Tower Wagon,Fuel Filling,13.42,2
+2026-06-19,DFCCIL Ambala Tower Wagon,Fuel Theft,22.25,2
+2026-06-19,Gawar HIM EX-65,Fuel Filling,75.99,1
+2026-06-19,Gawar HIM SR-YQ14688,Fuel Filling,65.18,1
+2026-06-19,Gawar HIM SR-YQ14688,Fuel Theft,136.35,4
+2026-06-19,Gawar HIM TIP,Fuel Filling,172.55,1
+2026-06-19,Gawar Mum Lifter,Fuel Filling,94.06,1
+2026-06-19,Gawar Mum Lifter,Fuel Theft,9.64,1
+2026-06-19,Gawar Mum Mobile Carne,Fuel Filling,96.82,1
+2026-06-19,JSPL-RailMill-Hydra,Fuel Filling,42.31,2
+2026-06-19,MAK-UBL TM,Fuel Filling,1033.1599999999999,13
+2026-06-19,MAK-UBL TM,Fuel Theft,3522.679999999999,43
+2026-06-19,MP-43-G-2751 Ananta Pickup,Fuel Filling,31.6,2
+2026-06-19,MP-43-H-0694 Ananta TM,Fuel Filling,103.32,1
+2026-06-19,MP-43-H-0694 Ananta TM,Fuel Theft,10.0,1
+2026-06-19,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,4136.490000000001,17
+2026-06-19,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,2179.9999999999995,14
+2026-06-19,No-3 HAMM Soil-Compactor Ananta ,Fuel Filling,33.94,1
+2026-06-19,No-3 HAMM Soil-Compactor Ananta ,Fuel Theft,11.02,1
+2026-06-19,Pappu BIA NL-01-AB-9193,Fuel Filling,148.96,2
+2026-06-19,Pappu BIA NL-01-AB-9193,Fuel Theft,42.38,1
+2026-06-19,RJ-14-GR-8447 Ananta Camper,Fuel Filling,9.17,1
+2026-06-19,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,57.879999999999995,2
+2026-06-19,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Theft,32.05,1
+2026-06-19,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,95.62,3
+2026-06-19,RJ-18-GB-7215 Ananta Trailer,Fuel Theft,59.239999999999995,3
+2026-06-19,RKC/DG-35Kva-008,Fuel Filling,1037.5600000000002,8
+2026-06-19,RKC/DG-35Kva-008,Fuel Theft,21.439999999999998,2
+2026-06-19,RKC/TRAILOR/006,Fuel Filling,6609.26,9
+2026-06-19,RKC/TRAILOR/006,Fuel Theft,2485.5299999999993,62
+2026-06-19,Rise-11-GGN,Fuel Filling,303.66999999999996,17
+2026-06-19,Rise-11-GGN,Fuel Theft,15.350000000000001,2
+2026-06-19,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,60.98,1
+2026-06-19,SK-220 Ananta Excavator Kob,Fuel Filling,745.37,16
+2026-06-19,SK-220 Ananta Excavator Kob,Fuel Theft,378.24,16
+2026-06-19,SKS Nandurbar Tractor,Fuel Filling,71.95,6
+2026-06-19,SKS Raebareli Backhoe Loader,Fuel Filling,63.98,1
+2026-06-19,SKS Raebareli Boom Placer,Fuel Filling,231.84,1
+2026-06-19,SKS Raebareli Trailer,Fuel Filling,11.93,1
+2026-06-19,Shiva Trailer,Fuel Filling,32.83,1
+2026-06-19,Skylark Banglore TRT05,Fuel Filling,93.9,1
+2026-06-19,Skylark Indore DD06,Fuel Filling,233.70999999999998,3
+2026-06-19,Skylark Indore EX14,Fuel Filling,207.28999999999996,5
+2026-06-19,Skylark Indore EX14,Fuel Theft,46.580000000000005,3
+2026-06-19,Skylark Indore HC08,Fuel Filling,25.72,1
+2026-06-19,Skylark Surat DG19,Fuel Filling,70.08,1
+2026-06-19,Skylark Surat DG19,Fuel Theft,22.97,1
+2026-06-19,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,127.63999999999999,4
+2026-06-19,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,217.20999999999998,8
+2026-06-19,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,67.8,6
+2026-06-20,Ananta TM MP-43-H-0693 ,Fuel Filling,150.17,9
+2026-06-20,Ananta TM MP-43-H-0693 ,Fuel Theft,76.07,5
+2026-06-20,Bedrock MH-48-BM-4590,Fuel Filling,101.76,1
+2026-06-20,CTS RIG CG-13-L-3097,Fuel Filling,26.71,3
+2026-06-20,CTS RIG CG-13-L-3097,Fuel Theft,243.94,6
+2026-06-20,Ceigall LBG TIP,Fuel Filling,310.54,4
+2026-06-20,Ceigall LBG TM,Fuel Filling,13.469999999999999,2
+2026-06-20,Ceigall LBG TM,Fuel Theft,23.19,2
+2026-06-20,GJ-20-AH-8048 Ananta Camper,Fuel Filling,15.31,1
+2026-06-20,Gawar HIM EX-65,Fuel Filling,75.35,1
+2026-06-20,Gawar HIM SR-YQ14688,Fuel Filling,182.05,3
+2026-06-20,Gawar Mum,Fuel Filling,57.27,1
+2026-06-20,Gawar Mum Lifter,Fuel Filling,50.8,6
+2026-06-20,Gawar Mum Lifter,Fuel Theft,17.490000000000002,2
+2026-06-20,IIT Delhi LHC DG 750 Kva DG-2,Fuel Filling,23.16,2
+2026-06-20,IIT Delhi LHC DG 750 Kva DG-2,Fuel Theft,15.16,2
+2026-06-20,JSPL-RailMill-Hydra,Fuel Filling,57.82,3
+2026-06-20,JWIL BHARATPUR Hydra,Fuel Filling,10.16,1
+2026-06-20,Krati JCB Model-770 SS,Fuel Filling,42.77,3
+2026-06-20,Krati JCB Model-770 SS,Fuel Theft,23.15,1
+2026-06-20,MAK-UBL TM,Fuel Filling,1971.37,14
+2026-06-20,MAK-UBL TM,Fuel Theft,1864.65,28
+2026-06-20,MP-43-G-2751 Ananta Pickup,Fuel Filling,12.19,1
+2026-06-20,MP-43-H-0694 Ananta TM,Fuel Filling,42.62,1
+2026-06-20,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,1632.5399999999997,14
+2026-06-20,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,698.2900000000002,11
+2026-06-20,Pappu BIA NL-01-AB-9193,Fuel Filling,46.43,1
+2026-06-20,RJ-14-GP-7755 Ananta Tipper,Fuel Filling,133.28,2
+2026-06-20,RJ-14-GP-7755 Ananta Tipper,Fuel Theft,45.95,3
+2026-06-20,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,29.57,1
+2026-06-20,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,91.30000000000001,3
+2026-06-20,RJ-18-GB-7215 Ananta Trailer,Fuel Theft,62.7,4
+2026-06-20,RKC/TRAILOR/006,Fuel Filling,2261.21,11
+2026-06-20,RKC/TRAILOR/006,Fuel Theft,1045.0099999999998,30
+2026-06-20,Rise-11-GGN,Fuel Filling,118.32000000000001,7
+2026-06-20,Rise-11-GGN,Fuel Theft,7.54,1
+2026-06-20,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,106.86000000000001,5
+2026-06-20,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,7.51,1
+2026-06-20,SK-220 Ananta Excavator Kob,Fuel Filling,691.0699999999999,17
+2026-06-20,SK-220 Ananta Excavator Kob,Fuel Theft,610.94,30
+2026-06-20,SKS Nandurbar Hydra,Fuel Filling,63.05,2
+2026-06-20,SKS Nandurbar Tractor,Fuel Filling,66.04,7
+2026-06-20,SKS Raebareli Boom Placer,Fuel Filling,256.19,1
+2026-06-20,Shiva Trailer,Fuel Filling,88.98,4
+2026-06-20,Shiva Trailer,Fuel Theft,36.480000000000004,3
+2026-06-20,Skylark Akot EX05,Fuel Filling,231.05,7
+2026-06-20,Skylark Akot EX05,Fuel Theft,118.59,9
+2026-06-20,Skylark Indore DD06,Fuel Filling,345.21,8
+2026-06-20,Skylark Indore DD06,Fuel Theft,94.13999999999999,4
+2026-06-20,Skylark Indore EX14,Fuel Filling,427.59000000000003,9
+2026-06-20,Skylark Indore EX14,Fuel Theft,75.94,5
+2026-06-20,Snowman LKO DG-400Kva,Fuel Filling,8.93,1
+2026-06-20,Snowman LKO DG-400Kva,Fuel Theft,9.61,1
+2026-06-20,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,81.5,3
+2026-06-20,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,89.16000000000001,3
+2026-06-20,VIPL/GTP/HYVA/2025/05,Fuel Filling,28.16,1
+2026-06-20,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Filling,26.96,1
+2026-06-20,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Theft,59.8,2
+2026-06-21,Bedrock MH-48-BM-4590,Fuel Theft,78.18,1
+2026-06-21,CTS RIG CG-13-L-3097,Fuel Filling,5.27,1
+2026-06-21,CTS RIG CG-13-L-3097,Fuel Theft,5.54,1
+2026-06-21,Ceigall Danapur,Fuel Filling,17.02,1
+2026-06-21,Ceigall LBG TIP,Fuel Filling,149.51,1
+2026-06-21,Ceigall LBG TM,Fuel Filling,12.87,2
+2026-06-21,Ceigall LBG TM,Fuel Theft,23.19,2
+2026-06-21,GJ-20-AH-8048 Ananta Camper,Fuel Filling,6.75,1
+2026-06-21,Gawar HIM EX-65,Fuel Filling,98.13,1
+2026-06-21,Gawar HIM EX-65,Fuel Theft,20.95,1
+2026-06-21,Gawar HIM TIP,Fuel Filling,167.85,1
+2026-06-21,Gawar Mum Lifter,Fuel Filling,95.87,9
+2026-06-21,Gawar Mum Lifter,Fuel Theft,30.709999999999997,4
+2026-06-21,JSPL-RailMill-Hydra,Fuel Filling,45.08,2
+2026-06-21,Kamdhenu Sohana,Fuel Filling,99.45,1
+2026-06-21,Krati JCB Model-770 SS,Fuel Filling,42.230000000000004,4
+2026-06-21,Krati JCB Model-770 SS,Fuel Theft,18.92,1
+2026-06-21,Krati Roller LT Vibro 1107,Fuel Filling,179.16,2
+2026-06-21,MAK-UBL TM,Fuel Filling,486.95000000000005,8
+2026-06-21,MAK-UBL TM,Fuel Theft,86.93,8
+2026-06-21,MP-43-G-2751 Ananta Pickup,Fuel Theft,20.87,1
+2026-06-21,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,2276.3399999999997,11
+2026-06-21,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,752.85,8
+2026-06-21,Pappu BIA NL-01-AB-9193,Fuel Filling,101.93,1
+2026-06-21,RJ-14-GR-8447 Ananta Camper,Fuel Filling,6.17,1
+2026-06-21,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,29.67,1
+2026-06-21,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,28.68,3
+2026-06-21,RKC/DG-35Kva-008,Fuel Filling,3903.76,7
+2026-06-21,RKC/DG-35Kva-008,Fuel Theft,124.72,5
+2026-06-21,RKC/TRAILOR/006,Fuel Filling,3948.5600000000004,8
+2026-06-21,RKC/TRAILOR/006,Fuel Theft,1240.8899999999996,42
+2026-06-21,Rise-11-GGN,Fuel Filling,123.73000000000002,7
+2026-06-21,Rise-11-GGN,Fuel Theft,8.45,1
+2026-06-21,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,75.09,2
+2026-06-21,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,81.05,4
+2026-06-21,SK-220 Ananta Excavator Kob,Fuel Filling,911.4399999999999,18
+2026-06-21,SK-220 Ananta Excavator Kob,Fuel Theft,466.17,22
+2026-06-21,SKS Nandurbar Tractor,Fuel Filling,16.65,2
+2026-06-21,SKS Nandurbar Tractor,Fuel Theft,8.79,1
+2026-06-21,SKS Raebareli Backhoe Loader,Fuel Filling,78.34,2
+2026-06-21,SKS Raebareli Boom Placer,Fuel Filling,67.73,1
+2026-06-21,SKS Raebareli Trailer,Fuel Filling,19.77,2
+2026-06-21,SKS Raebareli Trailer,Fuel Theft,33.86,2
+2026-06-21,SKS Raebareli Water Tanker,Fuel Filling,48.97,1
+2026-06-21,Shiva Trailer,Fuel Filling,61.019999999999996,2
+2026-06-21,Shiva Trailer,Fuel Theft,5.31,1
+2026-06-21,Skylark Akot EX05,Fuel Theft,6.97,1
+2026-06-21,Skylark Indore DD06,Fuel Filling,1005.05,6
+2026-06-21,Skylark Indore EX14,Fuel Filling,142.1,1
+2026-06-21,Skylark Indore LC03,Fuel Filling,80.69,1
+2026-06-21,Skylark Surat DG19,Fuel Filling,61.43,1
+2026-06-21,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,303.83000000000004,3
+2026-06-21,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,17.59,2
+2026-06-21,VIPL/GTP/TRANSIT MIXER/2022/05,Fuel Filling,5.92,1
+2026-06-22,CTS RIG CG-13-L-3097,Fuel Filling,17.94,1
+2026-06-22,CTS RIG CG-13-L-3097,Fuel Theft,17.94,1
+2026-06-22,Ceigall LBG TM,Fuel Filling,136.97,7
+2026-06-22,Ceigall LBG TM,Fuel Theft,42.85,4
+2026-06-22,DFCCIL Ambala Tower Wagon,Fuel Filling,202.09000000000003,6
+2026-06-22,DFCCIL Ambala Tower Wagon,Fuel Theft,210.4,12
+2026-06-22,Gawar HIM EX-65,Fuel Filling,98.07,1
+2026-06-22,Gawar HIM SR-YQ14688,Fuel Filling,146.32999999999998,3
+2026-06-22,Gawar Mum Excavator,Fuel Filling,183.21,3
+2026-06-22,Gawar Mum Lifter,Fuel Filling,28.3,3
+2026-06-22,Gawar Mum Lifter,Fuel Theft,30.27,3
+2026-06-22,Gawar Mum Mobile Carne,Fuel Filling,92.94,1
+2026-06-22,JSPL-RailMill-Hydra,Fuel Filling,50.489999999999995,2
+2026-06-22,JWIL BHARATPUR Hydra,Fuel Filling,13.34,1
+2026-06-22,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Filling,5.46,1
+2026-06-22,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Theft,8.63,1
+2026-06-22,Kamdhenu Sohana,Fuel Filling,308.26,2
+2026-06-22,Kamdhenu Sohana TM HR 55 AQ 2563,Fuel Filling,10.63,1
+2026-06-22,Kamdhenu Sohana TM HR-55-AF-6459,Fuel Filling,386.83,3
+2026-06-22,Kamdhenu Sohana TM HR-55-AF-6459,Fuel Theft,427.93999999999994,4
+2026-06-22,Krati JCB Model-770 SS,Fuel Filling,64.25,6
+2026-06-22,Krati JCB Model-770 SS,Fuel Theft,77.75,3
+2026-06-22,MAK-UBL TM,Fuel Filling,33.69,3
+2026-06-22,MAK-UBL TM,Fuel Theft,18.17,1
+2026-06-22,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,1838.1999999999998,8
+2026-06-22,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,986.26,6
+2026-06-22,Prashant RIG CG-13-L-9949,Fuel Filling,97.25,1
+2026-06-22,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,23.43,1
+2026-06-22,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,264.31,5
+2026-06-22,RJ-18-GB-7215 Ananta Trailer,Fuel Theft,410.39,11
+2026-06-22,RKC/DG-35Kva-008,Fuel Filling,957.84,6
+2026-06-22,RKC/DG-35Kva-008,Fuel Theft,66.0,4
+2026-06-22,RKC/TIPPER/126,Fuel Filling,81.52,1
+2026-06-22,RKC/TIPPER/126,Fuel Theft,10.45,1
+2026-06-22,RKC/TRAILOR/006,Fuel Filling,2228.76,6
+2026-06-22,RKC/TRAILOR/006,Fuel Theft,878.4199999999998,33
+2026-06-22,Rise-11-GGN,Fuel Filling,7.64,1
+2026-06-22,SK-220 Ananta Excavator Kob,Fuel Filling,450.32,13
+2026-06-22,SK-220 Ananta Excavator Kob,Fuel Theft,311.91,17
+2026-06-22,SKS Nandurbar Hydra,Fuel Filling,215.0,2
+2026-06-22,SKS Nandurbar Tractor,Fuel Filling,33.41,3
+2026-06-22,SKS Nandurbar Tractor,Fuel Theft,8.07,1
+2026-06-22,SKS Raebareli Backhoe Loader,Fuel Filling,10.21,1
+2026-06-22,SKS Raebareli Boom Placer,Fuel Filling,86.23,1
+2026-06-22,SKS Raebareli Trailer,Fuel Filling,5.7,1
+2026-06-22,SKS Raebareli Water Tanker,Fuel Filling,31.13,1
+2026-06-22,Shiva Trailer,Fuel Filling,84.9,4
+2026-06-22,Shiva Trailer,Fuel Theft,51.040000000000006,3
+2026-06-22,Skylark Banglore TRT05,Fuel Filling,100.67,1
+2026-06-22,Skylark Indore DD06,Fuel Filling,708.61,5
+2026-06-22,Skylark Indore EX14,Fuel Filling,199.07,2
+2026-06-22,Snowman LKO DG-400Kva,Fuel Filling,19.9,2
+2026-06-22,Snowman LKO DG-400Kva,Fuel Theft,22.04,2
+2026-06-22,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,51.26,2
+2026-06-22,VIPL/BR3/DG 40KVA/2019/01,Fuel Theft,22.41,1
+2026-06-22,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,536.88,7
+2026-06-22,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,87.87,8
+2026-06-22,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Filling,12.39,1
+2026-06-22,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Theft,12.12,1
+2026-06-23,CTS RIG CG-13-L-3097,Fuel Filling,725.66,11
+2026-06-23,CTS RIG CG-13-L-3097,Fuel Theft,152.72,9
+2026-06-23,Ceigall LBG TIP,Fuel Filling,549.06,4
+2026-06-23,Ceigall LBG TIP,Fuel Theft,9.63,1
+2026-06-23,Ceigall LBG TM,Fuel Filling,126.91,3
+2026-06-23,Ceigall LBG TM,Fuel Theft,23.7,2
+2026-06-23,DFCCIL Ambala Tower Wagon,Fuel Filling,119.17,5
+2026-06-23,DFCCIL Ambala Tower Wagon,Fuel Theft,83.24,7
+2026-06-23,Gawar HIM EX-65,Fuel Filling,107.63,1
+2026-06-23,Gawar Mum Excavator,Fuel Filling,375.51,7
+2026-06-23,Gawar Mum Excavator,Fuel Theft,368.04999999999995,11
+2026-06-23,Gawar Mum Lifter,Fuel Filling,26.92,3
+2026-06-23,Gawar Mum Lifter,Fuel Theft,22.439999999999998,3
+2026-06-23,JSPL-RailMill-Hydra,Fuel Filling,14.71,1
+2026-06-23,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Filling,198.49,5
+2026-06-23,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Theft,16.32,1
+2026-06-23,MAK-UBL TM,Fuel Filling,22.200000000000003,3
+2026-06-23,MAK-UBL TM,Fuel Theft,17.72,1
+2026-06-23,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,1030.36,4
+2026-06-23,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,611.64,4
+2026-06-23,Pappu BIA NL-01-AB-9193,Fuel Filling,107.43,1
+2026-06-23,RJ-14-GP-7755 Ananta Tipper,Fuel Filling,10.06,1
+2026-06-23,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,57.05,4
+2026-06-23,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Theft,11.09,1
+2026-06-23,RJ-18-GB-7215 Ananta Trailer,Fuel Theft,1153.5800000000002,16
+2026-06-23,RKC/TRAILOR/006,Fuel Filling,3166.29,7
+2026-06-23,RKC/TRAILOR/006,Fuel Theft,761.66,28
+2026-06-23,Rise-11-GGN,Fuel Filling,122.22,6
+2026-06-23,Rise-11-GGN,Fuel Theft,17.0,2
+2026-06-23,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,280.38,5
+2026-06-23,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,138.68,5
+2026-06-23,SK-220 Ananta Excavator Kob,Fuel Filling,237.14000000000001,9
+2026-06-23,SK-220 Ananta Excavator Kob,Fuel Theft,202.95000000000002,10
+2026-06-23,SKS Nandurbar Hydra,Fuel Filling,665.2099999999999,5
+2026-06-23,SKS Nandurbar Tractor,Fuel Filling,67.22999999999999,5
+2026-06-23,SKS Raebareli Backhoe Loader,Fuel Filling,104.78,1
+2026-06-23,SKS Raebareli Boom Placer,Fuel Filling,145.57,1
+2026-06-23,SKS Raebareli Trailer,Fuel Filling,203.36,1
+2026-06-23,SKS Raebareli Water Tanker,Fuel Filling,39.24,1
+2026-06-23,Shiva Trailer,Fuel Filling,235.27,8
+2026-06-23,Shiva Trailer,Fuel Theft,81.8,6
+2026-06-23,Skylark Indore DD06,Fuel Filling,1008.69,5
+2026-06-23,Skylark Indore DD06,Fuel Theft,98.28999999999999,5
+2026-06-23,Skylark Indore EX14,Fuel Filling,151.82999999999998,4
+2026-06-23,Skylark Indore EX14,Fuel Theft,45.83,4
+2026-06-23,Skylark Indore HC08,Fuel Filling,27.37,1
+2026-06-23,Skylark Surat DG19,Fuel Filling,63.4,1
+2026-06-23,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Filling,33.64,1
+2026-06-23,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Theft,8.84,1
+2026-06-24,Ananta TM MP-43-H-0693 ,Fuel Filling,14.940000000000001,2
+2026-06-24,CDS Head-Office,Fuel Filling,687.42,3
+2026-06-24,Ceigall LBG TIP,Fuel Filling,158.66,2
+2026-06-24,Ceigall LBG TM,Fuel Filling,19.79,3
+2026-06-24,Ceigall LBG TM,Fuel Theft,13.26,1
+2026-06-24,DFCCIL Ambala Tower Wagon,Fuel Filling,29.41,2
+2026-06-24,DFCCIL Ambala Tower Wagon,Fuel Theft,12.2,1
+2026-06-24,GJ-20-AH-8048 Ananta Camper,Fuel Filling,10.14,1
+2026-06-24,Gawar HIM EX-65,Fuel Filling,148.39,4
+2026-06-24,Gawar HIM EX-65,Fuel Theft,26.1,1
+2026-06-24,Gawar HIM SR-YQ14688,Fuel Filling,65.21,1
+2026-06-24,Gawar Mum Excavator,Fuel Filling,204.15,3
+2026-06-24,Gawar Mum Excavator,Fuel Theft,146.92999999999998,7
+2026-06-24,Gawar Mum Lifter,Fuel Filling,11.77,2
+2026-06-24,Gawar Mum Lifter,Fuel Theft,6.31,1
+2026-06-24,JSPL SMS,Fuel Theft,59.4,2
+2026-06-24,JSPL-RailMill-Hydra,Fuel Filling,40.59,2
+2026-06-24,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Filling,12.44,1
+2026-06-24,Kamdhenu Sohana TM HR-55-AF-6459,Fuel Filling,40.3,2
+2026-06-24,Krati JCB Model-770 SS,Fuel Filling,17.79,1
+2026-06-24,Krati JCB Model-770 SS,Fuel Theft,27.04,1
+2026-06-24,Krati Roller LT Vibro 1107,Fuel Filling,67.79,1
+2026-06-24,Krati Tipper,Fuel Filling,183.34,2
+2026-06-24,Krati Tipper,Fuel Theft,12.879999999999999,2
+2026-06-24,MAK-UBL TM,Fuel Filling,464.52,10
+2026-06-24,MAK-UBL TM,Fuel Theft,97.28999999999999,9
+2026-06-24,MP-43-G-2751 Ananta Pickup,Fuel Filling,459.25,3
+2026-06-24,MP-43-G-2751 Ananta Pickup,Fuel Theft,24.049999999999997,2
+2026-06-24,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,150.7,1
+2026-06-24,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,373.40999999999997,3
+2026-06-24,RJ-14-GP-7755 Ananta Tipper,Fuel Filling,113.30000000000001,5
+2026-06-24,RJ-14-GP-7755 Ananta Tipper,Fuel Theft,93.4,7
+2026-06-24,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,29.72,1
+2026-06-24,RKC/DG-35Kva-008,Fuel Filling,356.21000000000004,3
+2026-06-24,RKC/DG-35Kva-008,Fuel Theft,7.21,1
+2026-06-24,RKC/TRAILOR/006,Fuel Filling,1012.89,3
+2026-06-24,RKC/TRAILOR/006,Fuel Theft,444.62,15
+2026-06-24,Rise-11-GGN,Fuel Filling,220.12999999999997,10
+2026-06-24,Rise-11-GGN,Fuel Theft,53.54,6
+2026-06-24,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,125.76999999999998,6
+2026-06-24,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,151.85999999999999,6
+2026-06-24,SK-220 Ananta Excavator Kob,Fuel Filling,664.85,11
+2026-06-24,SK-220 Ananta Excavator Kob,Fuel Theft,507.7100000000001,20
+2026-06-24,SKS Nandurbar Tractor,Fuel Filling,59.55,6
+2026-06-24,SKS Raebareli Backhoe Loader,Fuel Theft,6.45,1
+2026-06-24,SKS Raebareli Boom Placer,Fuel Filling,104.35,1
+2026-06-24,SKS Raebareli Trailer,Fuel Filling,11.72,1
+2026-06-24,SKS Raebareli Water Tanker,Fuel Filling,44.52,1
+2026-06-24,Shiva,Fuel Filling,21.28,1
+2026-06-24,Skylark Akot EX05,Fuel Filling,77.64,5
+2026-06-24,Skylark Akot EX05,Fuel Theft,44.32,4
+2026-06-24,Skylark Akot HB29,Fuel Filling,13.42,1
+2026-06-24,Skylark Indore DD06,Fuel Filling,538.92,5
+2026-06-24,Skylark Indore DD06,Fuel Theft,34.15,2
+2026-06-24,Skylark Indore EX14,Fuel Filling,30.889999999999997,3
+2026-06-24,Skylark Indore EX14,Fuel Theft,7.96,1
+2026-06-24,Skylark Surat DG19,Fuel Filling,51.69,1
+2026-06-24,Snowman LKO DG-400Kva,Fuel Filling,24.43,1
+2026-06-24,Snowman LKO DG-400Kva,Fuel Theft,25.1,1
+2026-06-24,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,13.39,1
+2026-06-24,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,511.63,3
+2026-06-24,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,47.029999999999994,3
+2026-06-25,Ananta TM MP-43-H-0693 ,Fuel Filling,18.54,1
+2026-06-25,Ananta TM MP-43-H-0693 ,Fuel Theft,8.42,1
+2026-06-25,CDS Head-Office,Fuel Filling,1804.0900000000001,2
+2026-06-25,Ceigall LBG TM,Fuel Filling,168.72000000000003,8
+2026-06-25,Ceigall LBG TM,Fuel Theft,40.11,4
+2026-06-25,DFCCIL Ambala Tower Wagon,Fuel Filling,11.23,2
+2026-06-25,DFCCIL Ambala Tower Wagon,Fuel Theft,7.72,1
+2026-06-25,Gawar HIM EX-65,Fuel Filling,56.97,1
+2026-06-25,Gawar HIM TIP,Fuel Filling,165.0,1
+2026-06-25,Gawar Mum Excavator,Fuel Theft,8.09,1
+2026-06-25,Gawar Mum Lifter,Fuel Filling,28.880000000000003,4
+2026-06-25,Gawar Mum Lifter,Fuel Theft,18.91,2
+2026-06-25,JSPL SMS,Fuel Filling,140.57999999999998,2
+2026-06-25,JSPL SMS,Fuel Theft,83.96000000000001,3
+2026-06-25,JSPL-RailMill-Hydra,Fuel Filling,50.5,2
+2026-06-25,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Filling,7.72,1
+2026-06-25,Kamdhenu Sohana TM HR-55-AQ-9083,Fuel Filling,145.86,1
+2026-06-25,Krati JCB Model-770 SS,Fuel Filling,17.09,1
+2026-06-25,Krati JCB Model-770 SS,Fuel Theft,26.43,1
+2026-06-25,Krati Tipper,Fuel Filling,41.019999999999996,4
+2026-06-25,Krati Tipper,Fuel Theft,15.27,2
+2026-06-25,MAK-UBL TM,Fuel Filling,488.28999999999996,18
+2026-06-25,MAK-UBL TM,Fuel Theft,125.96999999999998,13
+2026-06-25,MP-43-G-2751 Ananta Pickup,Fuel Filling,240.09,2
+2026-06-25,MP-43-G-2751 Ananta Pickup,Fuel Theft,13.83,1
+2026-06-25,MP-43-H-0694 Ananta TM,Fuel Filling,58.7,1
+2026-06-25,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,2045.9399999999998,13
+2026-06-25,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,1462.4899999999998,10
+2026-06-25,Pappu BIA NL-01-AB-9193,Fuel Filling,163.19,4
+2026-06-25,Pappu BIA NL-01-AB-9193,Fuel Theft,52.94,4
+2026-06-25,Prashant RIG CG-13-LA-5259,Fuel Filling,55.27000000000001,5
+2026-06-25,Prashant RIG CG-13-LA-5259,Fuel Theft,17.16,1
+2026-06-25,RJ-14-GP-7755 Ananta Tipper,Fuel Filling,558.17,15
+2026-06-25,RJ-14-GP-7755 Ananta Tipper,Fuel Theft,238.89000000000001,14
+2026-06-25,RJ-14-GR-8447 Ananta Camper,Fuel Filling,7.33,1
+2026-06-25,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,7.79,1
+2026-06-25,RKC/DG-35Kva-008,Fuel Filling,1003.98,1
+2026-06-25,RKC/DG-35Kva-008,Fuel Theft,93.93,1
+2026-06-25,RKC/TRAILOR/006,Fuel Filling,3316.0599999999995,7
+2026-06-25,RKC/TRAILOR/006,Fuel Theft,1071.4400000000003,34
+2026-06-25,Rise-11-GGN,Fuel Filling,30.069999999999997,4
+2026-06-25,Rise-11-GGN,Fuel Theft,12.11,2
+2026-06-25,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,150.01,1
+2026-06-25,SK Genset DG-58Kva,Fuel Filling,20.01,1
+2026-06-25,SK-220 Ananta Excavator Kob,Fuel Filling,900.1,12
+2026-06-25,SK-220 Ananta Excavator Kob,Fuel Theft,543.6,22
+2026-06-25,SKS Nandurbar Tractor,Fuel Filling,50.75,6
+2026-06-25,SKS Nandurbar Tractor,Fuel Theft,7.11,1
+2026-06-25,SKS Raebareli Backhoe Loader,Fuel Filling,87.64,1
+2026-06-25,SKS Raebareli Boom Placer,Fuel Filling,145.75,1
+2026-06-25,SKS Raebareli Trailer,Fuel Theft,6.79,1
+2026-06-25,Skylark Akot EX05,Fuel Filling,240.85,2
+2026-06-25,Skylark Akot EX05,Fuel Theft,14.17,1
+2026-06-25,Skylark Indore DD06,Fuel Filling,712.4900000000001,8
+2026-06-25,Skylark Indore DD06,Fuel Theft,19.23,2
+2026-06-25,Skylark Indore EX14,Fuel Filling,229.01999999999998,2
+2026-06-25,Skylark Indore LC03,Fuel Filling,7.54,1
+2026-06-25,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,232.95999999999998,2
+2026-06-25,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,155.4,3
+2026-06-25,VIPL/GTP/HYVA/2025/05,Fuel Filling,28.39,1
+2026-06-26,Ananta TM MP-43-H-0693 ,Fuel Filling,80.69999999999999,2
+2026-06-26,Ceigall LBG TM,Fuel Filling,80.46000000000001,3
+2026-06-26,Ceigall LBG TM,Fuel Theft,12.26,1
+2026-06-26,DFCCIL Ambala Tower Wagon,Fuel Filling,10.54,2
+2026-06-26,GJ-20-AH-8048 Ananta Camper,Fuel Filling,7.81,1
+2026-06-26,Gawar HIM EX-65,Fuel Filling,140.93,1
+2026-06-26,Gawar HIM SR-YQ14688,Fuel Theft,6.77,1
+2026-06-26,Gawar Mum Lifter,Fuel Filling,94.62,2
+2026-06-26,JSPL SMS,Fuel Filling,55.5,2
+2026-06-26,JSPL SMS,Fuel Theft,27.75,1
+2026-06-26,JSPL-PlateMill-Trailer,Fuel Theft,184.20999999999998,3
+2026-06-26,JSPL-RailMill-Hydra,Fuel Filling,50.879999999999995,2
+2026-06-26,Kamdhenu Sohana TM HR-55-AQ-9083,Fuel Filling,39.7,1
+2026-06-26,Krati JCB Model-770 SS,Fuel Filling,17.24,1
+2026-06-26,Krati JCB Model-770 SS,Fuel Theft,29.64,2
+2026-06-26,Krati Tipper,Fuel Filling,48.56,3
+2026-06-26,MAK-UBL TM,Fuel Filling,722.1,14
+2026-06-26,MAK-UBL TM,Fuel Theft,131.01000000000002,12
+2026-06-26,MP-43-G-2751 Ananta Pickup,Fuel Filling,264.99,1
+2026-06-26,MP-43-H-0694 Ananta TM,Fuel Filling,58.61,1
+2026-06-26,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,853.4,4
+2026-06-26,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,910.76,6
+2026-06-26,Pappu BIA NL-01-AB-9193,Fuel Filling,115.32,1
+2026-06-26,Prashant RIG CG-13-LA-5259,Fuel Filling,10.92,1
+2026-06-26,RJ-14-GP-7755 Ananta Tipper,Fuel Filling,121.23,9
+2026-06-26,RJ-14-GP-7755 Ananta Tipper,Fuel Theft,102.94,7
+2026-06-26,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,48.44,2
+2026-06-26,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Theft,24.13,1
+2026-06-26,RKC/TRAILOR/006,Fuel Filling,1770.32,3
+2026-06-26,RKC/TRAILOR/006,Fuel Theft,780.9000000000001,20
+2026-06-26,Rise-11-GGN,Fuel Filling,280.97,12
+2026-06-26,Rise-11-GGN,Fuel Theft,39.66,4
+2026-06-26,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,48.29,2
+2026-06-26,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,15.98,1
+2026-06-26,SK Genset DG-58Kva,Fuel Filling,745.65,6
+2026-06-26,SK Genset DG-58Kva,Fuel Theft,83.55,6
+2026-06-26,SK-220 Ananta Excavator Kob,Fuel Filling,681.58,14
+2026-06-26,SK-220 Ananta Excavator Kob,Fuel Theft,428.35999999999996,21
+2026-06-26,SKS Nandurbar Hydra,Fuel Filling,14.62,1
+2026-06-26,SKS Nandurbar Tractor,Fuel Filling,42.39,5
+2026-06-26,SKS Raebareli Trailer,Fuel Filling,121.94,3
+2026-06-26,Shiva,Fuel Filling,18.37,1
+2026-06-26,Shiva Trailer,Fuel Filling,53.9,1
+2026-06-26,Skylark Akot EX05,Fuel Filling,60.65,3
+2026-06-26,Skylark Akot EX05,Fuel Theft,75.31,4
+2026-06-26,Skylark Akot HB29,Fuel Theft,12.08,1
+2026-06-26,Skylark Indore DD06,Fuel Filling,404.21,6
+2026-06-26,Skylark Indore DD06,Fuel Theft,19.42,2
+2026-06-26,Skylark Indore EX14,Fuel Filling,168.1,2
+2026-06-26,Skylark Indore EX14,Fuel Theft,13.32,1
+2026-06-26,Skylark Indore HC08,Fuel Filling,24.82,1
+2026-06-26,Skylark Indore LC03,Fuel Filling,173.84,3
+2026-06-26,Skylark Surat DG19,Fuel Filling,64.36,1
+2026-06-26,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,45.99,1
+2026-06-26,VIPL/BR3/DG 40KVA/2019/01,Fuel Theft,17.83,1
+2026-06-26,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,725.4499999999999,11
+2026-06-26,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,75.84,4
+2026-06-26,VIPL/GTP/HYVA/2025/05,Fuel Filling,37.89,1
+2026-06-27,Ananta TM MP-43-H-0693 ,Fuel Filling,82.83,4
+2026-06-27,CDS Head-Office,Fuel Filling,9.82,1
+2026-06-27,CDS Head-Office,Fuel Theft,12.52,1
+2026-06-27,Ceigall Danapur,Fuel Filling,290.12,6
+2026-06-27,Ceigall Danapur,Fuel Theft,294.15,11
+2026-06-27,Ceigall LBG TM,Fuel Filling,32.5,5
+2026-06-27,Ceigall LBG TM,Fuel Theft,42.760000000000005,4
+2026-06-27,DFCCIL Ambala Tower Wagon,Fuel Filling,720.9599999999999,5
+2026-06-27,DFCCIL Ambala Tower Wagon,Fuel Theft,1022.4300000000001,25
+2026-06-27,GJ-20-AH-8048 Ananta Camper,Fuel Filling,6.13,1
+2026-06-27,Gawar HIM EX-65,Fuel Filling,68.61,1
+2026-06-27,Gawar HIM EX-65,Fuel Theft,5.14,1
+2026-06-27,Gawar HIM SR-YQ14688,Fuel Filling,220.64,2
+2026-06-27,Gawar HIM SR-YQ14688,Fuel Theft,178.45,6
+2026-06-27,Gawar Mum Lifter,Fuel Filling,49.18000000000001,6
+2026-06-27,Gawar Mum Lifter,Fuel Theft,22.28,2
+2026-06-27,JSPL-RailMill-Hydra,Fuel Filling,40.099999999999994,2
+2026-06-27,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Filling,165.37,1
+2026-06-27,Kamdhenu Sohana TM HR-55-AF-6459,Fuel Filling,199.01000000000002,2
+2026-06-27,Krati Tipper,Fuel Filling,11.65,2
+2026-06-27,Krati Tipper,Fuel Theft,179.24999999999997,5
+2026-06-27,MAK-UBL TM,Fuel Filling,907.08,16
+2026-06-27,MAK-UBL TM,Fuel Theft,128.79000000000002,14
+2026-06-27,MP-43-G-2751 Ananta Pickup,Fuel Filling,547.3000000000001,5
+2026-06-27,MP-43-G-2751 Ananta Pickup,Fuel Theft,26.08,2
+2026-06-27,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,1439.96,13
+2026-06-27,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,501.5300000000001,7
+2026-06-27,Prashant RIG CG-13-LA-5259,Fuel Filling,5.82,1
+2026-06-27,RJ-14-GP-7755 Ananta Tipper,Fuel Filling,195.23999999999998,9
+2026-06-27,RJ-14-GP-7755 Ananta Tipper,Fuel Theft,43.79,3
+2026-06-27,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,37.0,2
+2026-06-27,RKC/DG-35Kva-008,Fuel Filling,1392.17,3
+2026-06-27,RKC/DG-35Kva-008,Fuel Theft,38.46,2
+2026-06-27,RKC/TRAILOR/006,Fuel Filling,388.54999999999995,4
+2026-06-27,RKC/TRAILOR/006,Fuel Theft,75.09,5
+2026-06-27,Rise-11-GGN,Fuel Filling,46.14,2
+2026-06-27,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,88.78,3
+2026-06-27,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,920.55,17
+2026-06-27,SK Genset DG-58Kva,Fuel Filling,165.31,3
+2026-06-27,SK Genset DG-58Kva,Fuel Theft,31.83,1
+2026-06-27,SK-220 Ananta Excavator Kob,Fuel Filling,344.68,9
+2026-06-27,SK-220 Ananta Excavator Kob,Fuel Theft,154.13,8
+2026-06-27,SKS Nandurbar Tractor,Fuel Filling,103.83999999999999,7
+2026-06-27,SKS Nandurbar Tractor,Fuel Theft,22.85,3
+2026-06-27,SKS Raebareli Backhoe Loader,Fuel Filling,62.82,1
+2026-06-27,SKS Raebareli Boom Placer,Fuel Filling,135.48,1
+2026-06-27,SKS Raebareli Water Tanker,Fuel Filling,55.43,1
+2026-06-27,Shiva,Fuel Filling,15.31,1
+2026-06-27,Shiva,Fuel Theft,16.2,1
+2026-06-27,Shiva Camper MP-45-G-1878,Fuel Filling,45.7,3
+2026-06-27,Shiva Camper MP-45-G-1878,Fuel Theft,37.17,2
+2026-06-27,Skylark Akot EX05,Fuel Filling,70.11,5
+2026-06-27,Skylark Akot EX05,Fuel Theft,82.85000000000001,6
+2026-06-27,Skylark Akot HB29,Fuel Filling,47.61,1
+2026-06-27,Skylark Banglore TRT05,Fuel Filling,93.54,1
+2026-06-27,Skylark Indore DD06,Fuel Filling,470.38,7
+2026-06-27,Skylark Indore DD06,Fuel Theft,186.27000000000004,6
+2026-06-27,Skylark Indore EX14,Fuel Filling,211.60000000000002,3
+2026-06-27,Skylark Indore EX14,Fuel Theft,22.58,2
+2026-06-27,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,90.67999999999999,3
+2026-06-27,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,1187.1799999999998,9
+2026-06-27,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,134.86,7
+2026-06-28,Ceigall Danapur,Fuel Filling,218.25,1
+2026-06-28,Ceigall Danapur,Fuel Theft,129.77,5
+2026-06-28,Ceigall LBG TIP,Fuel Filling,202.20999999999998,2
+2026-06-28,Ceigall LBG TM,Fuel Filling,157.39000000000001,7
+2026-06-28,Ceigall LBG TM,Fuel Theft,38.35,3
+2026-06-28,GJ-20-AH-8048 Ananta Camper,Fuel Filling,9.03,1
+2026-06-28,Gawar HIM EX-65,Fuel Filling,178.04000000000002,2
+2026-06-28,Gawar HIM EX-65,Fuel Theft,155.18,5
+2026-06-28,Gawar HIM SR-YQ14688,Fuel Filling,73.46,1
+2026-06-28,Gawar Mum,Fuel Filling,51.65,1
+2026-06-28,Gawar Mum Excavator,Fuel Theft,15.5,1
+2026-06-28,Gawar Mum Lifter,Fuel Filling,13.66,2
+2026-06-28,JSPL-RailMill-Hydra,Fuel Filling,44.89,2
+2026-06-28,JWIL Vidisha Hydra,Fuel Filling,25.45,1
+2026-06-28,JWIL-DHL JCB UP-85-ET-6083,Fuel Filling,13.78,2
+2026-06-28,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Filling,14.79,1
+2026-06-28,Kamdhenu Sohana TM HR-55-AF-6459,Fuel Filling,10.47,1
+2026-06-28,Krati Tipper,Fuel Filling,18.39,2
+2026-06-28,Krati Tipper,Fuel Theft,18.27,1
+2026-06-28,MAK-UBL TM,Fuel Filling,2462.15,9
+2026-06-28,MAK-UBL TM,Fuel Theft,51.269999999999996,6
+2026-06-28,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,416.7,2
+2026-06-28,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,456.99,3
+2026-06-28,RJ-14-GP-7755 Ananta Tipper,Fuel Filling,316.0,15
+2026-06-28,RJ-14-GP-7755 Ananta Tipper,Fuel Theft,206.26999999999998,12
+2026-06-28,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,26.96,1
+2026-06-28,RKC/TRAILOR/006,Fuel Filling,3529.8700000000003,9
+2026-06-28,RKC/TRAILOR/006,Fuel Theft,1595.2199999999998,48
+2026-06-28,Rise-11-GGN,Fuel Filling,233.93999999999997,12
+2026-06-28,Rise-11-GGN,Fuel Theft,56.24999999999999,7
+2026-06-28,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,271.85,3
+2026-06-28,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,17.97,2
+2026-06-28,SK Genset DG-58Kva,Fuel Filling,39.52,2
+2026-06-28,SK Genset DG-58Kva,Fuel Theft,12.88,1
+2026-06-28,SK-220 Ananta Excavator Kob,Fuel Filling,1337.6899999999998,24
+2026-06-28,SK-220 Ananta Excavator Kob,Fuel Theft,486.59000000000003,22
+2026-06-28,SKS Raebareli Boom Placer,Fuel Filling,118.69,1
+2026-06-28,SKS Raebareli Trailer,Fuel Filling,8.59,1
+2026-06-28,SKS Raebareli Water Tanker,Fuel Filling,43.4,2
+2026-06-28,Shiva,Fuel Filling,35.77,1
+2026-06-28,Shiva Trailer,Fuel Filling,110.41,4
+2026-06-28,Shiva Trailer,Fuel Theft,52.24,2
+2026-06-28,Skylark Akot EX05,Fuel Filling,319.67,2
+2026-06-28,Skylark Akot EX05,Fuel Theft,62.84,3
+2026-06-28,Skylark Indore DD06,Fuel Filling,218.33000000000004,6
+2026-06-28,Skylark Indore DD06,Fuel Theft,19.23,1
+2026-06-28,Skylark Indore EX14,Fuel Filling,14.84,2
+2026-06-28,Skylark Indore LC03,Fuel Filling,9.68,1
+2026-06-28,Skylark Surat DG19,Fuel Filling,71.75,1
+2026-06-28,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,26.58,1
+2026-06-28,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,96.36,4
+2026-06-28,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,12.78,1
+2026-06-28,VIPL/GTP/HYVA/2025/05,Fuel Filling,26.62,1
+2026-06-29,Ceigall Danapur,Fuel Filling,241.65,6
+2026-06-29,Ceigall Danapur,Fuel Theft,427.84,16
+2026-06-29,Ceigall LBG TIP,Fuel Filling,221.89,3
+2026-06-29,Ceigall LBG TM,Fuel Filling,37.22,6
+2026-06-29,Ceigall LBG TM,Fuel Theft,50.36,5
+2026-06-29,DFCCIL Ambala Tower Wagon,Fuel Filling,1213.63,6
+2026-06-29,DFCCIL Ambala Tower Wagon,Fuel Theft,2350.7099999999996,29
+2026-06-29,GJ-20-AH-8048 Ananta Camper,Fuel Filling,6.38,1
+2026-06-29,Gawar HIM EX-65,Fuel Filling,146.01,2
+2026-06-29,Gawar HIM SR-YQ14688,Fuel Filling,13.93,1
+2026-06-29,Gawar HIM TIP,Fuel Filling,157.81,1
+2026-06-29,Gawar Mum Excavator,Fuel Filling,83.8,4
+2026-06-29,Gawar Mum Excavator,Fuel Theft,16.13,1
+2026-06-29,Gawar Mum Mobile Carne,Fuel Filling,98.14,1
+2026-06-29,JSPL-PlateMill-Trailer,Fuel Filling,148.37,1
+2026-06-29,JSPL-PlateMill-Trailer,Fuel Theft,13.05,1
+2026-06-29,JSPL-RailMill-Hydra,Fuel Filling,48.62,2
+2026-06-29,JWIL BHARATPUR Hydra,Fuel Filling,26.86,1
+2026-06-29,Kamdhenu Sohana TM HR-55-AQ-9083,Fuel Filling,157.25,1
+2026-06-29,Krati JCB Model-770 SS,Fuel Filling,42.33,3
+2026-06-29,Krati JCB Model-770 SS,Fuel Theft,39.29,2
+2026-06-29,MAK-UBL TM,Fuel Filling,847.7999999999998,14
+2026-06-29,MAK-UBL TM,Fuel Theft,24.26,2
+2026-06-29,Modi Jaipur RJ-14-GD-9185 ,Fuel Filling,207.31,1
+2026-06-29,Modi Jaipur RJ-14-GD-9185 ,Fuel Theft,414.14,2
+2026-06-29,Pappu BIA NL-01-AB-9193,Fuel Filling,182.07,2
+2026-06-29,RJ-14-GP-7755 Ananta Tipper,Fuel Filling,176.76999999999998,6
+2026-06-29,RJ-14-GP-7755 Ananta Tipper,Fuel Theft,90.8,5
+2026-06-29,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Filling,46.67,2
+2026-06-29,RJ-14-GR-8448 Bolero Camper Ananta,Fuel Theft,21.52,1
+2026-06-29,RJ-14-GR-8520 Ananta Pickup,Fuel Filling,22.56,1
+2026-06-29,RJ-18-GB-7215 Ananta Trailer,Fuel Filling,101.93,1
+2026-06-29,RKC/TRAILOR/006,Fuel Filling,2873.09,3
+2026-06-29,RKC/TRAILOR/006,Fuel Theft,972.3399999999999,24
+2026-06-29,Rise-11-GGN,Fuel Filling,154.82,6
+2026-06-29,Rise-11-GGN,Fuel Theft,44.01,4
+2026-06-29,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,604.18,1
+2026-06-29,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,59.67,1
+2026-06-29,SK-220 Ananta Excavator Kob,Fuel Filling,325.13,8
+2026-06-29,SK-220 Ananta Excavator Kob,Fuel Theft,383.94000000000005,14
+2026-06-29,SKS Nandurbar Tractor,Fuel Filling,34.44,3
+2026-06-29,SKS Nandurbar Tractor,Fuel Theft,18.07,2
+2026-06-29,SKS Raebareli Backhoe Loader,Fuel Filling,61.18,1
+2026-06-29,SKS Raebareli Boom Placer,Fuel Filling,184.58,1
+2026-06-29,SKS Raebareli Water Tanker,Fuel Filling,29.74,1
+2026-06-29,Shiva,Fuel Filling,48.5,2
+2026-06-29,Shiva,Fuel Theft,11.64,1
+2026-06-29,Skylark Akot EX05,Fuel Filling,97.11,3
+2026-06-29,Skylark Indore DD06,Fuel Filling,543.85,8
+2026-06-29,Skylark Indore DD06,Fuel Theft,22.3,2
+2026-06-29,Skylark Indore EX14,Fuel Filling,318.56,8
+2026-06-29,Skylark Indore EX14,Fuel Theft,26.09,3
+2026-06-29,Skylark Indore LC03,Fuel Filling,64.79,1
+2026-06-29,Skylark Indore LC03,Fuel Theft,9.29,1
+2026-06-29,Skylark Surat DG19,Fuel Filling,70.31,1
+2026-06-29,Snowman LKO DG-400Kva,Fuel Filling,9.5,1
+2026-06-29,Snowman LKO DG-400Kva,Fuel Theft,10.51,1
+2026-06-29,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,47.61,2
+2026-06-29,VIPL/BR3/DG 40KVA/2019/01,Fuel Theft,37.53,2
+2026-06-29,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,657.43,10
+2026-06-29,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,202.87000000000003,14
+2026-06-29,VIPL/GTP/HYVA/2025/05,Fuel Filling,35.75,2
+2026-06-29,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Filling,143.48,1
+2026-06-29,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Theft,6.48,1
+2026-06-30,CDS Head-Office,Fuel Filling,31.15,1
+2026-06-30,Ceigall Danapur,Fuel Filling,633.36,5
+2026-06-30,Ceigall Danapur,Fuel Theft,441.32,16
+2026-06-30,Ceigall LBG TIP,Fuel Filling,542.86,5
+2026-06-30,Ceigall LBG TM,Fuel Filling,21.34,3
+2026-06-30,DFCCIL Ambala Tower Wagon,Fuel Filling,1137.72,5
+2026-06-30,DFCCIL Ambala Tower Wagon,Fuel Theft,1641.3300000000002,30
+2026-06-30,GJ-20-AH-8048 Ananta Camper,Fuel Filling,18.7,1
+2026-06-30,Gawar HIM EX-65,Fuel Filling,67.23,1
+2026-06-30,Gawar HIM SR-YQ14688,Fuel Filling,129.56,1
+2026-06-30,Gawar Mum Excavator,Fuel Filling,416.62,4
+2026-06-30,Gawar Mum Excavator,Fuel Theft,23.060000000000002,2
+2026-06-30,Gawar Mum Lifter,Fuel Filling,36.81,3
+2026-06-30,Gawar Mum Lifter,Fuel Theft,7.63,1
+2026-06-30,JSPL-PlateMill-Trailer,Fuel Theft,21.57,2
+2026-06-30,JSPL-RailMill-Hydra,Fuel Filling,43.66,2
+2026-06-30,JWIL-DHL JCB UP-85-ET-6083,Fuel Filling,20.56,1
+2026-06-30,Kamdhenu Sambhalka TM HR-55-AT-8601,Fuel Filling,13.29,1
+2026-06-30,Kamdhenu Sohana,Fuel Filling,76.24,1
+2026-06-30,Kamdhenu Sohana TM HR-55-AF-6459,Fuel Filling,108.53,1
+2026-06-30,Kamdhenu Sohana TM HR-55-AQ-9083,Fuel Filling,42.82,1
+2026-06-30,Krati JCB Model-770 SS,Fuel Filling,24.51,2
+2026-06-30,Krati JCB Model-770 SS,Fuel Theft,22.9,1
+2026-06-30,MAK-UBL TM,Fuel Filling,71.44999999999999,3
+2026-06-30,MAK-UBL TM,Fuel Theft,65.22,5
+2026-06-30,MP-43-G-2751 Ananta Pickup,Fuel Filling,127.34,8
+2026-06-30,Pappu BIA NL-01-AB-9193,Fuel Filling,179.95999999999998,2
+2026-06-30,Pappu BIA NL-01-AB-9193,Fuel Theft,43.59,1
+2026-06-30,Prashant RIG CG-13-L-9949,Fuel Filling,44.58,1
+2026-06-30,RJ-14-GP-7755 Ananta Tipper,Fuel Filling,419.63,9
+2026-06-30,RJ-14-GP-7755 Ananta Tipper,Fuel Theft,113.63000000000001,7
+2026-06-30,RKC/TRAILOR/006,Fuel Filling,3386.45,5
+2026-06-30,RKC/TRAILOR/006,Fuel Theft,1272.9900000000002,35
+2026-06-30,Rise-11-GGN,Fuel Filling,84.42,4
+2026-06-30,Rise-11-GGN,Fuel Theft,20.01,2
+2026-06-30,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Filling,346.99,3
+2026-06-30,RoyalGen DG-62Kva HR-55-AS-3525,Fuel Theft,123.09,2
+2026-06-30,SCLRCT Hydra UP-32-UN-3114,Fuel Filling,986.08,7
+2026-06-30,SCLRCT Hydra UP-32-UN-3114,Fuel Theft,425.40000000000003,16
+2026-06-30,SK-220 Ananta Excavator Kob,Fuel Filling,751.65,12
+2026-06-30,SK-220 Ananta Excavator Kob,Fuel Theft,287.35,11
+2026-06-30,SKS Nandurbar Tractor,Fuel Filling,34.73,4
+2026-06-30,SKS Nandurbar Tractor,Fuel Theft,10.74,1
+2026-06-30,Shiva,Fuel Filling,113.85,1
+2026-06-30,Shiva Trailer,Fuel Filling,61.47,3
+2026-06-30,Shiva Trailer,Fuel Theft,15.02,2
+2026-06-30,Skylark Akot EX05,Fuel Filling,104.29999999999998,6
+2026-06-30,Skylark Akot EX05,Fuel Theft,80.26,5
+2026-06-30,Skylark Indore DD06,Fuel Filling,123.6,3
+2026-06-30,Skylark Indore EX14,Fuel Filling,162.56,3
+2026-06-30,Skylark Indore HC08,Fuel Filling,24.25,1
+2026-06-30,VIPL/BR3/DG 40KVA/2019/01,Fuel Filling,116.79,2
+2026-06-30,VIPL/BR3/DG 40KVA/2019/01,Fuel Theft,15.12,1
+2026-06-30,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Filling,589.3100000000001,11
+2026-06-30,VIPL/ERS/BACKHOE LOADER/2024/03,Fuel Theft,91.39,7
+2026-06-30,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Filling,2530.06,10
+2026-06-30,VIPL/GTP/TRANSIT MIXER/2018/04,Fuel Theft,591.4899999999998,26
+2026-06-30,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Filling,270.31,3
+2026-06-30,VIPL/GTP/TRANSIT MIXER/2024/07,Fuel Theft,245.84,2

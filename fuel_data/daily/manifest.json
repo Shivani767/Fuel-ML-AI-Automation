@@ -1,0 +1,408 @@
+{
+ "2026-05-10": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 82,
+  "last_attempt": "2026-08-02T16:28:44",
+  "status": "ok"
+ },
+ "2026-05-11": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:28:34",
+  "status": "empty"
+ },
+ "2026-05-12": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:28:32",
+  "status": "empty"
+ },
+ "2026-05-13": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:28:31",
+  "status": "empty"
+ },
+ "2026-05-14": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:28:29",
+  "status": "empty"
+ },
+ "2026-05-15": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:28:27",
+  "status": "empty"
+ },
+ "2026-05-16": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:28:26",
+  "status": "empty"
+ },
+ "2026-05-17": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:28:24",
+  "status": "empty"
+ },
+ "2026-05-18": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:28:23",
+  "status": "empty"
+ },
+ "2026-05-19": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:28:21",
+  "status": "empty"
+ },
+ "2026-05-20": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:28:19",
+  "status": "empty"
+ },
+ "2026-05-21": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:28:18",
+  "status": "empty"
+ },
+ "2026-05-22": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:28:14",
+  "status": "empty"
+ },
+ "2026-05-23": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:28:12",
+  "status": "empty"
+ },
+ "2026-05-24": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:28:11",
+  "status": "empty"
+ },
+ "2026-05-25": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:28:09",
+  "status": "empty"
+ },
+ "2026-05-26": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:28:08",
+  "status": "empty"
+ },
+ "2026-05-27": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 94,
+  "last_attempt": "2026-08-02T16:28:06",
+  "status": "ok"
+ },
+ "2026-05-28": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 93,
+  "last_attempt": "2026-08-02T16:18:04",
+  "status": "ok"
+ },
+ "2026-05-29": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 94,
+  "last_attempt": "2026-08-02T16:17:09",
+  "status": "ok"
+ },
+ "2026-05-30": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 92,
+  "last_attempt": "2026-08-02T16:16:33",
+  "status": "ok"
+ },
+ "2026-05-31": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 90,
+  "last_attempt": "2026-08-02T16:15:40",
+  "status": "ok"
+ },
+ "2026-06-01": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 89,
+  "last_attempt": "2026-08-02T16:14:45",
+  "status": "ok"
+ },
+ "2026-06-02": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:14:33",
+  "status": "empty"
+ },
+ "2026-06-03": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:14:32",
+  "status": "empty"
+ },
+ "2026-06-04": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:13:56",
+  "status": "empty"
+ },
+ "2026-06-05": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:13:55",
+  "status": "empty"
+ },
+ "2026-06-06": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:13:53",
+  "status": "empty"
+ },
+ "2026-06-07": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:13:51",
+  "status": "empty"
+ },
+ "2026-06-08": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:13:50",
+  "status": "empty"
+ },
+ "2026-06-09": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:13:48",
+  "status": "empty"
+ },
+ "2026-06-10": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:13:45",
+  "status": "empty"
+ },
+ "2026-06-11": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:13:40",
+  "status": "empty"
+ },
+ "2026-06-12": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:13:36",
+  "status": "empty"
+ },
+ "2026-06-13": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:13:34",
+  "status": "empty"
+ },
+ "2026-06-14": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:13:33",
+  "status": "empty"
+ },
+ "2026-06-15": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:13:31",
+  "status": "empty"
+ },
+ "2026-06-16": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:12:56",
+  "status": "empty"
+ },
+ "2026-06-17": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:12:54",
+  "status": "empty"
+ },
+ "2026-06-18": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T16:12:50",
+  "status": "empty"
+ },
+ "2026-06-19": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T15:12:51",
+  "status": "empty"
+ },
+ "2026-06-20": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T15:12:49",
+  "status": "empty"
+ },
+ "2026-07-12": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T15:12:48",
+  "status": "empty"
+ },
+ "2026-07-13": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 1,
+  "last_attempt": "2026-08-02T15:12:46",
+  "status": "ok"
+ },
+ "2026-07-14": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T15:12:43",
+  "status": "empty"
+ },
+ "2026-07-15": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T15:12:41",
+  "status": "empty"
+ },
+ "2026-07-16": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T15:12:39",
+  "status": "empty"
+ },
+ "2026-07-17": {
+  "attempts": 1,
+  "devices_fetched": 104,
+  "devices_with_data": 0,
+  "last_attempt": "2026-08-02T15:12:36",
+  "status": "empty"
+ },
+ "2026-07-18": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 1,
+  "last_attempt": "2026-08-02T15:11:59",
+  "status": "ok"
+ },
+ "2026-07-19": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 2,
+  "last_attempt": "2026-08-02T15:11:58",
+  "status": "ok"
+ },
+ "2026-07-20": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 3,
+  "last_attempt": "2026-08-02T15:11:56",
+  "status": "ok"
+ },
+ "2026-07-21": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 1,
+  "last_attempt": "2026-08-02T15:11:55",
+  "status": "ok"
+ },
+ "2026-07-22": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 3,
+  "last_attempt": "2026-08-02T15:11:53",
+  "status": "ok"
+ },
+ "2026-07-23": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 3,
+  "last_attempt": "2026-08-02T15:11:51",
+  "status": "ok"
+ },
+ "2026-07-24": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 2,
+  "last_attempt": "2026-08-02T15:11:50",
+  "status": "ok"
+ },
+ "2026-07-25": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 8,
+  "last_attempt": "2026-08-02T15:11:48",
+  "status": "ok"
+ },
+ "2026-08-01": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 82,
+  "last_attempt": "2026-08-02T16:12:49",
+  "status": "ok"
+ },
+ "2026-08-02": {
+  "attempts": 0,
+  "devices_fetched": 104,
+  "devices_with_data": 80,
+  "last_attempt": "2026-08-02T16:11:59",
+  "status": "ok"
+ }
+}

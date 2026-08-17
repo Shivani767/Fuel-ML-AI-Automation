@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel Live Stream Graph</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <style>
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.45; transform: scale(0.85); }
+        }
+        .live-dot { animation: pulse-dot 1.2s ease-in-out infinite; }
+    </style>
+</head>
+<body class="bg-slate-950 min-h-screen text-slate-100">
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-8">
+            <div>
+                <h1 class="text-3xl font-bold tracking-tight">Fuel Live Stream</h1>
+                <p class="text-slate-400 text-sm mt-1">Analysis in 30-minute slabs (not every second)</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <span id="liveBadge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold bg-red-500/20 text-red-300 border border-red-500/40">
+                    <span class="live-dot w-2.5 h-2.5 rounded-full bg-red-400"></span>
+                    LIVE
+                </span>
+                <a href="/" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white px-4 py-2 rounded-lg">Back to Overview</a>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-slate-900 border border-slate-700 rounded-xl p-6">
+                <h2 class="text-lg font-semibold text-slate-200 mb-4">Select Vehicle</h2>
+                <select id="deviceSelect" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-lg"></select>
+            </div>
+            <div class="bg-slate-900 border border-slate-700 rounded-xl p-6">
+                <h2 class="text-lg font-semibold text-slate-200 mb-4">Stream Controls</h2>
+                <div class="flex flex-wrap gap-3 items-center">
+                    <button id="liveToggleBtn" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-semibold">
+                        Stop Live Stream
+                    </button>
+                    <button id="replayBtn" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-semibold">
+                        Replay History
+                    </button>
+                    <span id="streamStatus" class="text-sm text-emerald-400">Starting live stream…</span>
+                </div>
+                <p id="lastUpdate" class="text-xs text-slate-500 mt-3">Connecting…</p>
+            </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-700 rounded-xl p-6 mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-slate-200">Fuel Level vs Time (30-min slabs)</h2>
+                <span id="pointCounter" class="text-sm text-slate-400">0 slabs streamed</span>
+            </div>
+            <canvas id="fuelChart" height="400"></canvas>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-slate-900 border border-slate-700 rounded-xl p-6">
+                <h3 class="text-sm uppercase tracking-wide text-slate-400 mb-2">Current Fuel Level</h3>
+                <p id="currentFuel" class="text-3xl font-bold text-sky-400">-</p>
+            </div>
+            <div class="bg-slate-900 border border-slate-700 rounded-xl p-6">
+                <h3 class="text-sm uppercase tracking-wide text-slate-400 mb-2">Ignition Status</h3>
+                <p id="ignitionStatus" class="text-3xl font-bold text-slate-300">-</p>
+            </div>
+            <div class="bg-slate-900 border border-slate-700 rounded-xl p-6">
+                <h3 class="text-sm uppercase tracking-wide text-slate-400 mb-2">Streamed Points</h3>
+                <p id="dataPoints" class="text-3xl font-bold text-emerald-400">-</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let fuelChart;
+        let devices = [];
+        let currentDeviceData = [];
+        let currentDeviceName = '';
+        let currentIndex = 0;
+        let streamInterval = null;
+        let liveMode = true;
+        let eventSource = null;
+        let streamedCount = 0;
+        const MAX_POINTS = 120;
+        const SLAB_MINUTES = 30;
+
+        function setStatus(text, ok = true) {
+            const el = document.getElementById('streamStatus');
+            el.textContent = text;
+            el.className = `text-sm ${ok ? 'text-emerald-400' : 'text-amber-400'}`;
+        }
+
+        function setLiveBadge(on) {
+            const badge = document.getElementById('liveBadge');
+            badge.classList.toggle('hidden', !on);
+            badge.classList.toggle('inline-flex', on);
+            const btn = document.getElementById('liveToggleBtn');
+            if (on) {
+                btn.textContent = 'Stop Live Stream';
+                btn.className = 'bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-semibold';
+            } else {
+                btn.textContent = 'Start Live Stream';
+                btn.className = 'bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg font-semibold';
+            }
+        }
+
+        function clearChart() {
+            fuelChart.data.labels = [];
+            fuelChart.data.datasets[0].data = [];
+            fuelChart.update('none');
+            streamedCount = 0;
+            document.getElementById('pointCounter').textContent = '0 slabs streamed';
+        }
+
+        function pointKey(point) {
+            return `${point.time}|${point.fuelInLiter}`;
+        }
+
+        const seenKeys = new Set();
+
+        function appendPoint(point) {
+            const key = pointKey(point);
+            if (seenKeys.has(key)) return false;
+            seenKeys.add(key);
+
+            fuelChart.data.labels.push(new Date(point.time));
+            fuelChart.data.datasets[0].data.push(Number(point.fuelInLiter));
+
+            while (fuelChart.data.labels.length > MAX_POINTS) {
+                fuelChart.data.labels.shift();
+                fuelChart.data.datasets[0].data.shift();
+            }
+
+            fuelChart.update('none');
+            streamedCount += 1;
+            document.getElementById('currentFuel').textContent = Number(point.fuelInLiter).toFixed(2) + ' L';
+            document.getElementById('ignitionStatus').textContent = Number(point.iO_1) === 1 ? 'ON' : 'OFF';
+            document.getElementById('ignitionStatus').className =
+                `text-3xl font-bold ${Number(point.iO_1) === 1 ? 'text-emerald-400' : 'text-red-400'}`;
+            document.getElementById('dataPoints').textContent = fuelChart.data.labels.length;
+            document.getElementById('pointCounter').textContent = `${streamedCount} × ${SLAB_MINUTES}-min slabs`;
+            document.getElementById('lastUpdate').textContent =
+                `Last point ${new Date(point.time).toLocaleString()} · updated ${new Date().toLocaleTimeString()}`;
+            return true;
+        }
+
+        function stopReplay() {
+            if (streamInterval) {
+                clearInterval(streamInterval);
+                streamInterval = null;
+            }
+        }
+
+        function stopSse() {
+            if (eventSource) {
+                eventSource.close();
+                eventSource = null;
+            }
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('fuelChart').getContext('2d');
+            fuelChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Fuel (L) · 30-min slab',
+                        data: [],
+                        borderColor: '#38bdf8',
+                        backgroundColor: 'rgba(56, 189, 248, 0.12)',
+                        borderWidth: 2.5,
+                        fill: true,
+                        tension: 0.15,
+                        pointRadius: 3,
+                        pointHoverRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    animation: false,
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'minute',
+                                stepSize: 30,
+                                displayFormats: { minute: 'HH:mm', hour: 'HH:mm' }
+                            },
+                            ticks: { color: '#94a3b8', maxRotation: 0 },
+                            grid: { color: 'rgba(148,163,184,0.12)' },
+                            title: { display: true, text: 'Time (30-min slabs)', color: '#94a3b8' }
+                        },
+                        y: {
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: 'rgba(148,163,184,0.12)' },
+                            title: { display: true, text: 'Fuel (Liters)', color: '#94a3b8' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#e2e8f0' } }
+                    },
+                    interaction: { intersect: false, mode: 'index' }
+                }
+            });
+        }
+
+        async function loadDevices() {
+            const response = await fetch('/api/devices');
+            devices = await response.json();
+            const select = document.getElementById('deviceSelect');
+            select.innerHTML = '';
+
+            devices.forEach((device) => {
+                const option = document.createElement('option');
+                option.value = device;
+                option.textContent = device;
+                select.appendChild(option);
+            });
+
+            if (devices.length > 0) {
+                currentDeviceName = devices[0];
+                await startLiveStream();
+            } else {
+                setStatus('No devices found', false);
+            }
+        }
+
+        async function loadDeviceData(deviceName, { replay = true } = {}) {
+            stopReplay();
+            stopSse();
+            liveMode = false;
+            setLiveBadge(false);
+            currentDeviceName = deviceName;
+            seenKeys.clear();
+
+            const response = await fetch(`/api/device/${encodeURIComponent(deviceName)}?slab=${SLAB_MINUTES}`);
+            currentDeviceData = await response.json();
+            currentIndex = 0;
+            clearChart();
+            document.getElementById('dataPoints').textContent = currentDeviceData.length;
+            setStatus(replay ? 'Replaying history…' : 'Ready');
+
+            if (!replay) {
+                currentDeviceData.slice(-MAX_POINTS).forEach((p) => appendPoint(p));
+                return;
+            }
+            streamInterval = setInterval(addNextPoint, 350);
+        }
+
+        function addNextPoint() {
+            if (currentIndex >= currentDeviceData.length) {
+                stopReplay();
+                setStatus('Replay complete', false);
+                return;
+            }
+            appendPoint(currentDeviceData[currentIndex]);
+            currentIndex++;
+        }
+
+        function startLiveStream() {
+            stopReplay();
+            stopSse();
+            liveMode = true;
+            setLiveBadge(true);
+            seenKeys.clear();
+            clearChart();
+            setStatus('Connecting to 30-min slab stream…');
+
+            const url = `/api/live/${encodeURIComponent(currentDeviceName)}/sse?hours=48&slab=${SLAB_MINUTES}&interval_ms=350&limit=120`;
+            eventSource = new EventSource(url);
+
+            eventSource.addEventListener('status', (ev) => {
+                try {
+                    const data = JSON.parse(ev.data);
+                    if (data.status === 'streaming') {
+                        setStatus(`Streaming ${data.queued || 0} × ${data.slabMinutes || SLAB_MINUTES}-min slabs…`);
+                    } else if (data.status === 'waiting') {
+                        setStatus(data.message || 'Waiting for next 30-min slab…', false);
+                    } else if (data.status === 'error' || data.status === 'warn') {
+                        setStatus(data.message || 'Stream warning', false);
+                    }
+                } catch (_) {}
+            });
+
+            eventSource.addEventListener('point', (ev) => {
+                try {
+                    const point = JSON.parse(ev.data);
+                    if (appendPoint(point)) {
+                        setStatus(`LIVE — ${SLAB_MINUTES}-min slab analysis`);
+                    }
+                } catch (err) {
+                    setStatus(`Parse error: ${err.message}`, false);
+                }
+            });
+
+            eventSource.addEventListener('heartbeat', (ev) => {
+                try {
+                    const data = JSON.parse(ev.data);
+                    document.getElementById('lastUpdate').textContent =
+                        `Heartbeat ${new Date().toLocaleTimeString()} · latest slab ${data.latestTime || '—'}`;
+                    setStatus('LIVE — waiting for next 30-min slab');
+                } catch (_) {}
+            });
+
+            eventSource.onerror = () => {
+                setStatus('Stream disconnected — retrying…', false);
+            };
+        }
+
+        function stopLiveStream() {
+            stopSse();
+            liveMode = false;
+            setLiveBadge(false);
+            setStatus('Live stopped', false);
+        }
+
+        document.getElementById('deviceSelect').addEventListener('change', (e) => {
+            currentDeviceName = e.target.value;
+            if (liveMode) startLiveStream();
+            else loadDeviceData(currentDeviceName, { replay: true });
+        });
+
+        document.getElementById('liveToggleBtn').addEventListener('click', () => {
+            if (liveMode) stopLiveStream();
+            else startLiveStream();
+        });
+
+        document.getElementById('replayBtn').addEventListener('click', () => {
+            stopLiveStream();
+            loadDeviceData(currentDeviceName || document.getElementById('deviceSelect').value, { replay: true });
+        });
+
+        initChart();
+        loadDevices();
+    </script>
+</body>
+</html>

@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel Monitoring Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #555;
+        }
+        select, input {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            min-width: 220px;
+            transition: border-color 0.3s;
+        }
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+        .stat-content h3 {
+            color: #777;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stat-content p {
+            color: #333;
+            font-size: 26px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            margin-bottom: 20px;
+        }
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .chart-header h2 {
+            color: #333;
+            font-size: 20px;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #0da272;
+        }
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+        .btn-warning:hover {
+            background: #d97706;
+        }
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        .legend {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            margin-bottom: 20px;
+        }
+        .legend h3 {
+            color: #333;
+            margin-bottom: 18px;
+            font-size: 18px;
+        }
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .legend-color {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+        }
+        .legend-text {
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .table-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+        .table-container h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: space-between;
+        }
+        .table-header-right {
+            display: flex;
+            gap: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        th {
+            background: #f8f9fa;
+            color: #555;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-filling {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .badge-theft {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .badge-slope {
+            background: #fef3c7;
+            color: #92400e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-map-marked-alt" style="color:#667eea;"></i>Fuel Monitoring Dashboard</h1>
+            <div class="controls">
+                <div class="control-group">
+                    <label>Select Device</label>
+                    <select id="deviceSelect"></select>
+                </div>
+                <div class="control-group">
+                    <label>From Date</label>
+                    <input type="date" id="fromDate">
+                </div>
+                <div class="control-group">
+                    <label>To Date</label>
+                    <input type="date" id="toDate">
+                </div>
+                <div class="control-group">
+                    <label>&nbsp;</label>
+                    <button class="btn-warning" id="dateSearchBtn">Search Dates</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-grid" id="statsGrid"></div>
+
+        <div class="chart-container">
+            <div class="chart-header">
+                <h2 id="chartTitle">DEVICE GRAPH REPORTS</h2>
+                <div class="buttons">
+                    <button class="btn-primary" id="liveChartBtn">
+                        <i class="fas fa-broadcast-tower"></i><span id="liveChartBtnLabel">Start Live Stream</span>
+                    </button>
+                    <a class="btn-success" href="/graph" style="text-decoration:none;">
+                        <i class="fas fa-chart-line"></i>Open Live Graph
+                    </a>
+                    <span id="liveStatusText" style="align-self:center;font-size:13px;color:#666;"></span>
+                    <button class="btn-warning" id="exportAllCsvBtn">
+                        <i class="fas fa-file-csv"></i>Export All CSV
+                    </button>
+                    <button class="btn-success" id="downloadDayReportBtn">
+                        <i class="fas fa-calendar-day"></i>Download Day Report
+                    </button>
+                    <button class="btn-primary" id="downloadMonthReportBtn">
+                        <i class="fas fa-calendar-alt"></i>Download Month Report
+                    </button>
+                </div>
+            </div>
+            <canvas id="deviceChart" height="400"></canvas>
+        </div>
+
+        <div class="legend">
+            <h3><i class="fas fa-list" style="color:#667eea;"></i> Chart Legend</h3>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-color" style="background:#3b82f6;"></div>
+                    <span class="legend-text">Fuel Level</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background:#10b981;"></div>
+                    <span class="legend-text">Fuel Level EDC</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background:#ef4444;"></div>
+                    <span class="legend-text">Ignition</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background:#10b981; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); border-radius:0;"></div>
+                    <span class="legend-text">Filling Event (ML)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background:#ef4444; clip-path: polygon(50% 100%, 0% 0%, 100% 0%); border-radius:0;"></div>
+                    <span class="legend-text">Theft Event (ML)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ML/AI Detected Events Section -->
+        <div class="table-container" id="mlTableContainer">
+            <h3>
+                <span><i class="fas fa-robot" style="color:#667eea;"></i> AI/ML Detected Events (Theft &amp; Filling)</span>
+                <div class="table-header-right">
+                    <span id="mlSummaryText" style="font-size:13px;color:#777;font-weight:500;align-self:center;"></span>
+                    <button class="btn-primary" id="exportMlCsvBtn">
+                        <i class="fas fa-file-csv"></i>Export CSV
+                    </button>
+                </div>
+            </h3>
+            <table id="mlTable">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Vehicle</th>
+                        <th>Event</th>
+                        <th>Fuel Change (L)</th>
+                        <th>Fuel Level (L)</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+                <tbody id="mlTableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Fuel Filling Events Section -->
+        <div class="table-container" id="fillingTableContainer">
+            <h3>
+                <span><i class="fas fa-gas-pump" style="color:#10b981;"></i> Fuel Filling Events</span>
+                <div class="table-header-right">
+                    <button class="btn-success" id="exportFillingCsvBtn">
+                        <i class="fas fa-file-csv"></i>Export CSV
+                    </button>
+                </div>
+            </h3>
+            <table id="fillingTable">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Fuel Increase (L)</th>
+                        <th>Location</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                    </tr>
+                </thead>
+                <tbody id="fillingTableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Fuel Theft Events Section -->
+        <div class="table-container" id="theftTableContainer">
+            <h3>
+                <span><i class="fas fa-tint-slash" style="color:#ef4444;"></i> Fuel Theft Events</span>
+                <div class="table-header-right">
+                    <button class="btn-danger" id="exportTheftCsvBtn">
+                        <i class="fas fa-file-csv"></i>Export CSV
+                    </button>
+                </div>
+            </h3>
+            <table id="theftTable">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Fuel Decrease (L)</th>
+                        <th>Location</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                    </tr>
+                </thead>
+                <tbody id="theftTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let deviceChart;
+        let streamInterval;
+        let livePollInterval;
+        let liveEventSource = null;
+        let liveMode = false;
+        let lastSeenTime = null;
+        let currentDeviceData;
+        let currentDeviceEvents = [];
+        let currentMlAlerts = [];
+        let currentIndex = 0;
+        let currentDeviceName = '';
+        const MAX_LIVE_POINTS = 120;
+        const LIVE_POLL_MS = 15000;
+        const SLAB_MINUTES = 30;
+        const liveSeenKeys = new Set();
+
+        const icons = {
+            fuel: { icon: 'fa-tint', color: '#3b82f6', bg: '#dbeafe' },
+            ignition: { icon: 'fa-key', color: '#f59e0b', bg: '#fef3c7' },
+            speed: { icon: 'fa-tachometer-alt', color: '#10b981', bg: '#d1fae5' },
+            parking: { icon: 'fa-parking', color: '#8b5cf6', bg: '#ede9fe' },
+            trip: { icon: 'fa-route', color: '#6366f1', bg: '#e0e7ff' },
+            consumption: { icon: 'fa-fire', color: '#ef4444', bg: '#fee2e2' },
+            filling: { icon: 'fa-gas-pump', color: '#10b981', bg: '#d1fae5' },
+            theft: { icon: 'fa-tint-slash', color: '#f97316', bg: '#ffedd5' }
+        };
+
+        function formatTime(seconds) {
+            const days = Math.floor(seconds / 86400);
+            const hours = Math.floor((seconds % 86400) / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            return `${days}D: ${hours}H: ${minutes}M: ${secs}S`;
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('deviceChart').getContext('2d');
+            deviceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        { label: 'Fuel Level', data: [], borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.12)', borderWidth: 2, fill: true, tension: 0.25, yAxisID: 'y' },
+                        { label: 'Fuel EDC', data: [], borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.18)', borderWidth: 3, fill: true, tension: 0.4, yAxisID: 'y1' },
+                        { label: 'EDC', data: [], borderColor: '#047857', backgroundColor: 'rgba(4,120,87,0.18)', borderWidth: 3, fill: false, tension: 0.45, yAxisID: 'y1', pointRadius: 0 },
+                        { label: 'Ignition', data: [], borderColor: 'rgba(239,68,68,0.8)', backgroundColor: 'rgba(239,68,68,0.08)', borderWidth: 2, fill: false, tension: 0.2, yAxisID: 'y2', pointRadius: 0, stepped: 'middle' },
+                        { label: 'IO2', data: [], borderColor: 'rgba(249,115,22,0.45)', backgroundColor: 'rgba(249,115,22,0.08)', borderWidth: 1.5, fill: false, tension: 0.2, yAxisID: 'y3', pointRadius: 0 },
+                        { label: 'Speed', data: [], borderColor: 'rgba(79,70,229,0.35)', backgroundColor: 'rgba(79,70,229,0.08)', borderWidth: 1.5, fill: false, tension: 0.2, yAxisID: 'y4', pointRadius: 0 },
+                        { label: 'External Voltage', data: [], borderColor: 'rgba(6,182,212,0.35)', backgroundColor: 'rgba(6,182,212,0.08)', borderWidth: 1.5, fill: false, tension: 0.2, yAxisID: 'y5', pointRadius: 0 },
+                        { label: 'Internal Voltage', data: [], borderColor: 'rgba(234,179,8,0.35)', backgroundColor: 'rgba(234,179,8,0.08)', borderWidth: 1.5, fill: false, tension: 0.2, yAxisID: 'y6', pointRadius: 0 },
+                        { label: 'Filling Events', data: [], showLine: false, pointStyle: 'triangle', pointRadius: 10, pointBackgroundColor: '#10b981', pointBorderColor: '#065f46', pointBorderWidth: 2, yAxisID: 'y' },
+                        { label: 'Theft Events', data: [], showLine: false, pointStyle: 'triangle', rotation: 180, pointRadius: 10, pointBackgroundColor: '#ef4444', pointBorderColor: '#991b1b', pointBorderWidth: 2, yAxisID: 'y' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    interaction: { mode: 'index', intersect: false },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'minute',
+                                stepSize: 30,
+                                displayFormats: { minute: 'HH:mm', hour: 'HH:mm' }
+                            },
+                            title: { display: true, text: 'Time (30-min slabs)' },
+                            ticks: { source: 'auto', maxRotation: 0, autoSkip: true }
+                        },
+                        y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'Fuel (L)' } },
+                        y1: { type: 'linear', display: true, position: 'right', title: { display: true, text: 'EDC' }, grid: { drawOnChartArea: false } },
+                        y2: { type: 'linear', display: false, min: 0, max: 1.2, position: 'right', offset: true },
+                        y3: { type: 'linear', display: false, position: 'right', offset: true, title: { display: true, text: 'IO2 / Aux' }, grid: { drawOnChartArea: false } },
+                        y4: { type: 'linear', display: false, position: 'right', offset: true, title: { display: true, text: 'Speed (km/h)' }, grid: { drawOnChartArea: false } },
+                        y5: { type: 'linear', display: false, position: 'right', offset: true, title: { display: true, text: 'External Voltage (V)' }, grid: { drawOnChartArea: false } },
+                        y6: { type: 'linear', display: false, position: 'right', offset: true, title: { display: true, text: 'Internal Voltage (V)' }, grid: { drawOnChartArea: false } }
+                    },
+                    plugins: {
+                        annotation: {
+                            annotations: {}
+                        }
+                    }
+                }
+            });
+        }
+
+        function createStatCard(config) {
+            return `
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:${config.bg}; color:${config.color};">
+                        <i class="fas ${config.icon}"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>${config.label}</h3>
+                        <p>${config.value}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderMlTable(alerts) {
+            const tbody = document.getElementById('mlTableBody');
+            tbody.innerHTML = '';
+            const sorted = [...alerts].sort((a,b) => new Date(b.eventTime) - new Date(a.eventTime));
+            sorted.slice(0, 200).forEach(a => {
+                const isTheft = a.eventType === 'Fuel Theft';
+                const badgeClass = isTheft ? 'badge-theft' : 'badge-filling';
+                const label = isTheft ? 'TAKEN OUT' : 'FILLING';
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${new Date(a.eventTime).toLocaleString()}</td>
+                    <td>${a.deviceName || a.imei || 'N/A'}</td>
+                    <td><span class="badge ${badgeClass}">${label}</span></td>
+                    <td>${a.fuelChange}</td>
+                    <td>${a.fuelLevel != null ? a.fuelLevel : 'N/A'}</td>
+                    <td>${a.location || 'N/A'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            const thefts = alerts.filter(a => a.eventType === 'Fuel Theft').length;
+            const fillings = alerts.filter(a => a.eventType === 'Fuel Filling').length;
+            document.getElementById('mlSummaryText').textContent =
+                `${thefts} theft / ${fillings} filling alerts` + (sorted.length > 200 ? ' (showing latest 200)' : '');
+        }
+
+        async function loadMlAlerts(deviceName) {
+            const dateQuery = getDateRangeQuery();
+            const sep = dateQuery ? '&' : '?';
+            const url = `/api/ml_alerts${dateQuery}${deviceName ? `${sep}device=${encodeURIComponent(deviceName)}` : ''}`;
+            currentMlAlerts = await (await fetch(url)).json();
+            renderMlTable(currentMlAlerts);
+        }
+
+        function renderSeparateTables(events) {
+            const fillingEvents = events.filter(e => e.eventType === 'Fuel Filling').sort((a,b) => new Date(b.eventTime) - new Date(a.eventTime));
+            const theftEvents = events.filter(e => e.eventType === 'Fuel Theft').sort((a,b) => new Date(b.eventTime) - new Date(a.eventTime));
+            
+            const fillingTbody = document.getElementById('fillingTableBody');
+            fillingTbody.innerHTML = '';
+            fillingEvents.forEach(event => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${new Date(event.eventTime).toLocaleString()}</td>
+                    <td>${event.fuelIncrease}</td>
+                    <td>${event.location || 'N/A'}</td>
+                    <td>${event.latitude}</td>
+                    <td>${event.longitude}</td>
+                `;
+                fillingTbody.appendChild(tr);
+            });
+            
+            const theftTbody = document.getElementById('theftTableBody');
+            theftTbody.innerHTML = '';
+            theftEvents.forEach(event => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${new Date(event.eventTime).toLocaleString()}</td>
+                    <td>${event.fuelDecrease}</td>
+                    <td>${event.location || 'N/A'}</td>
+                    <td>${event.latitude}</td>
+                    <td>${event.longitude}</td>
+                `;
+                theftTbody.appendChild(tr);
+            });
+        }
+
+        function exportToCsv(events, filename, eventType) {
+            if (events.length === 0) {
+                alert('No data to export!');
+                return;
+            }
+            
+            let headers, csvRows;
+            if (eventType === 'filling') {
+                headers = ['Time', 'Fuel Increase (L)', 'Location', 'Latitude', 'Longitude'];
+                csvRows = events.map(e => [
+                    new Date(e.eventTime).toLocaleString(),
+                    e.fuelIncrease,
+                    e.location || 'N/A',
+                    e.latitude,
+                    e.longitude
+                ]);
+            } else if (eventType === 'theft') {
+                headers = ['Time', 'Fuel Decrease (L)', 'Location', 'Latitude', 'Longitude'];
+                csvRows = events.map(e => [
+                    new Date(e.eventTime).toLocaleString(),
+                    e.fuelDecrease,
+                    e.location || 'N/A',
+                    e.latitude,
+                    e.longitude
+                ]);
+            } else { // all
+                headers = ['Time', 'Event Type', 'Fuel Change', 'Location', 'Latitude', 'Longitude'];
+                csvRows = events.map(e => {
+                    const fuelChange = e.eventType === 'Fuel Filling' ? `+${e.fuelIncrease}` : `-${e.fuelDecrease}`;
+                    return [
+                        new Date(e.eventTime).toLocaleString(),
+                        e.eventType,
+                        fuelChange,
+                        e.location || 'N/A',
+                        e.latitude,
+                        e.longitude
+                    ];
+                });
+            }
+            
+            const csvContent = [headers.join(','), ...csvRows.map(row => row.join(','))].join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function getDateRangeQuery() {
+            const fromDate = document.getElementById('fromDate').value;
+            const toDate = document.getElementById('toDate').value;
+            const params = new URLSearchParams();
+            if (fromDate) params.set('from', fromDate);
+            if (toDate) params.set('to', toDate);
+            return params.toString() ? `?${params.toString()}` : '';
+        }
+
+        async function loadDeviceData(deviceName) {
+            if (streamInterval) clearInterval(streamInterval);
+            if (livePollInterval) {
+                clearInterval(livePollInterval);
+                livePollInterval = null;
+            }
+            if (liveEventSource) {
+                liveEventSource.close();
+                liveEventSource = null;
+            }
+            liveMode = false;
+            lastSeenTime = null;
+            updateLiveButton();
+            currentIndex = 0;
+            currentDeviceName = deviceName;
+            const dateQuery = getDateRangeQuery();
+
+            const summary = await (await fetch(`/api/device/${encodeURIComponent(deviceName)}/summary${dateQuery}`)).json();
+            const slabParam = dateQuery ? `&slab=${SLAB_MINUTES}` : `?slab=${SLAB_MINUTES}`;
+            const data = await (await fetch(`/api/device/${encodeURIComponent(deviceName)}${dateQuery}${slabParam}`)).json();
+            const events = await (await fetch(`/api/device/${encodeURIComponent(deviceName)}/events${dateQuery}`)).json();
+            
+            currentDeviceData = data;
+            currentDeviceEvents = events;
+
+            document.getElementById('chartTitle').textContent = `DEVICE GRAPH REPORTS OF ${summary.deviceName || deviceName} (30-min slabs)`;
+
+            const statsHtml = [
+                createStatCard({ ...icons.fuel, label: 'Fuel', value: (summary.currentFuel || 0).toFixed(2) + ' L' }),
+                createStatCard({ ...icons.ignition, label: 'Ignition', value: summary.ignitionStatus ? 'ON' : 'OFF' }),
+                createStatCard({ ...icons.speed, label: 'Speed', value: (summary.speed || 0).toFixed(0) + ' km/h' }),
+                createStatCard({ ...icons.parking, label: 'Device Status', value: 'Parking' }),
+                createStatCard({ ...icons.trip, label: 'Total Trip', value: summary.totalTrip || 0 }),
+                createStatCard({ ...icons.consumption, label: 'Total Consumption', value: (summary.totalConsumption || 0).toFixed(2) + ' L' }),
+                createStatCard({ ...icons.filling, label: 'Total Filling', value: (summary.totalFilling || 0).toFixed(2) + ' L (' + (summary.fillingCount || 0) + ')' }),
+                createStatCard({ ...icons.theft, label: 'Total Fuel Taken Out', value: (summary.totalFuelTakenOut || 0).toFixed(2) + ' L (' + (summary.theftCount || 0) + ')' })
+            ].join('');
+
+            document.getElementById('statsGrid').innerHTML = statsHtml;
+
+            // Clear existing annotations before adding new ones
+            if (deviceChart.options.plugins && deviceChart.options.plugins.annotation) {
+                deviceChart.options.plugins.annotation.annotations = {};
+            }
+            deviceChart.data.labels = [];
+            deviceChart.data.datasets.forEach((d, i) => { if (i < 8) d.data = []; });
+            deviceChart.data.datasets[8].data = [];
+            deviceChart.data.datasets[9].data = [];
+            deviceChart.update();
+
+            // Render events tables
+            renderSeparateTables(events);
+            loadMlAlerts(deviceName);
+
+            streamInterval = setInterval(addNextPoint, 250);
+        }
+
+        function appendLivePoint(point) {
+            const time = new Date(point.time);
+            const labels = deviceChart.data.labels;
+            if (labels.length && labels[labels.length - 1] instanceof Date) {
+                if (labels[labels.length - 1].getTime() === time.getTime()) return false;
+            }
+
+            deviceChart.data.labels.push(time);
+            deviceChart.data.datasets[0].data.push(point.fuelInLiter);
+            deviceChart.data.datasets[1].data.push(point.fuelEDC);
+            deviceChart.data.datasets[2].data.push(point.iO_9 != null ? point.iO_9 : point.fuelEDC);
+            deviceChart.data.datasets[3].data.push(point.iO_1);
+            deviceChart.data.datasets[4].data.push(point.iO_2);
+            deviceChart.data.datasets[5].data.push(point.speed);
+            deviceChart.data.datasets[6].data.push(point.externalVoltage);
+            deviceChart.data.datasets[7].data.push(point.internalVoltage);
+
+            while (deviceChart.data.labels.length > MAX_LIVE_POINTS) {
+                deviceChart.data.labels.shift();
+                for (let i = 0; i < 8; i++) deviceChart.data.datasets[i].data.shift();
+            }
+            deviceChart.update('none');
+            lastSeenTime = point.time;
+            return true;
+        }
+
+        function updateLiveButton() {
+            const label = document.getElementById('liveChartBtnLabel');
+            const status = document.getElementById('liveStatusText');
+            const btn = document.getElementById('liveChartBtn');
+            if (liveMode) {
+                label.textContent = 'Stop Live Stream';
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-danger');
+                status.textContent = 'LIVE — streaming onto chart…';
+            } else {
+                label.textContent = 'Start Live Stream';
+                btn.classList.add('btn-primary');
+                btn.classList.remove('btn-danger');
+                status.textContent = '';
+            }
+        }
+
+        function startLiveStream() {
+            if (streamInterval) {
+                clearInterval(streamInterval);
+                streamInterval = null;
+            }
+            if (livePollInterval) {
+                clearInterval(livePollInterval);
+                livePollInterval = null;
+            }
+            if (liveEventSource) {
+                liveEventSource.close();
+                liveEventSource = null;
+            }
+
+            liveMode = true;
+            liveSeenKeys.clear();
+            lastSeenTime = null;
+            updateLiveButton();
+            document.getElementById('deviceChart').scrollIntoView({ behavior: 'smooth' });
+
+            deviceChart.data.labels = [];
+            for (let i = 0; i < 8; i++) deviceChart.data.datasets[i].data = [];
+            deviceChart.data.datasets[8].data = [];
+            deviceChart.data.datasets[9].data = [];
+            deviceChart.update('none');
+
+            const status = document.getElementById('liveStatusText');
+            status.textContent = 'LIVE — connecting…';
+
+            const url = `/api/live/${encodeURIComponent(currentDeviceName)}/sse?hours=48&slab=${SLAB_MINUTES}&interval_ms=350&limit=120`;
+            liveEventSource = new EventSource(url);
+
+            liveEventSource.addEventListener('status', (ev) => {
+                try {
+                    const data = JSON.parse(ev.data);
+                    if (data.status === 'streaming') {
+                        status.textContent = `LIVE — ${data.queued || 0} × ${data.slabMinutes || SLAB_MINUTES}-min slabs…`;
+                    } else if (data.message) {
+                        status.textContent = data.message;
+                    }
+                } catch (_) {}
+            });
+
+            liveEventSource.addEventListener('point', (ev) => {
+                try {
+                    const point = JSON.parse(ev.data);
+                    const key = `${point.time}|${point.fuelInLiter}`;
+                    if (liveSeenKeys.has(key)) return;
+                    liveSeenKeys.add(key);
+                    if (appendLivePoint(point)) {
+                        status.textContent = `LIVE — ${deviceChart.data.labels.length} × ${SLAB_MINUTES}-min slabs · ${new Date().toLocaleTimeString()}`;
+                        const fuelCard = document.querySelector('#statsGrid .stat-card .stat-content p');
+                        if (fuelCard) fuelCard.textContent = Number(point.fuelInLiter).toFixed(2) + ' L';
+                    }
+                } catch (err) {
+                    status.textContent = `Live parse error: ${err.message}`;
+                }
+            });
+
+            liveEventSource.addEventListener('heartbeat', () => {
+                status.textContent = `LIVE — waiting for next 30-min slab · ${new Date().toLocaleTimeString()}`;
+            });
+
+            liveEventSource.onerror = () => {
+                status.textContent = 'LIVE — reconnecting…';
+            };
+        }
+
+        function stopLiveStream() {
+            if (livePollInterval) {
+                clearInterval(livePollInterval);
+                livePollInterval = null;
+            }
+            if (liveEventSource) {
+                liveEventSource.close();
+                liveEventSource = null;
+            }
+            liveMode = false;
+            updateLiveButton();
+            document.getElementById('liveStatusText').textContent = 'Live stopped';
+        }
+
+        function addNextPoint() {
+            if (currentIndex >= currentDeviceData.length) {
+                clearInterval(streamInterval);
+                
+                // Add event annotations after all data is loaded
+                addEventAnnotations();
+                return;
+            }
+
+            const point = currentDeviceData[currentIndex];
+            const time = new Date(point.time);
+
+            deviceChart.data.labels.push(time);
+            deviceChart.data.datasets[0].data.push(point.fuelInLiter);
+            deviceChart.data.datasets[1].data.push(point.fuelEDC);
+            deviceChart.data.datasets[2].data.push(point.iO_9);
+            deviceChart.data.datasets[3].data.push(point.iO_1);
+            deviceChart.data.datasets[4].data.push(point.iO_2);
+            deviceChart.data.datasets[5].data.push(point.speed);
+            deviceChart.data.datasets[6].data.push(point.externalVoltage);
+            deviceChart.data.datasets[7].data.push(point.internalVoltage);
+
+            if (deviceChart.data.labels.length > 200) {
+                deviceChart.data.labels.shift();
+                deviceChart.data.datasets.forEach(d => d.data.shift());
+            }
+
+            deviceChart.update('none');
+            currentIndex++;
+        }
+
+        function addEventAnnotations() {
+            deviceChart.options.plugins.annotation.annotations = {};
+            const fillDataset = deviceChart.data.datasets[8];
+            const theftDataset = deviceChart.data.datasets[9];
+            fillDataset.data = [];
+            theftDataset.data = [];
+
+            const allEvents = [...currentDeviceEvents];
+            currentMlAlerts.forEach(a => {
+                if (!allEvents.some(e => e.eventTime === a.eventTime && e.eventType === a.eventType)) {
+                    allEvents.push(a);
+                }
+            });
+
+            allEvents.forEach((event, index) => {
+                const eventTime = new Date(event.eventTime);
+                const isFilling = event.eventType === 'Fuel Filling';
+                const label = isFilling ? `FILL +${event.fuelIncrease || Math.abs(event.fuelChange || 0)}L` : `THEFT ${event.fuelDecrease || Math.abs(event.fuelChange || 0)}L`;
+                const color = isFilling ? '#10b981' : '#ef4444';
+
+                let fuelLevel = null;
+                for (let i = 0; i < currentDeviceData.length; i++) {
+                    const dataTime = new Date(currentDeviceData[i].time);
+                    if (Math.abs(dataTime - eventTime) < 120000) {
+                        fuelLevel = currentDeviceData[i].fuelInLiter;
+                        break;
+                    }
+                }
+
+                if (fuelLevel !== null) {
+                    const marker = { x: eventTime, y: fuelLevel };
+                    if (isFilling) fillDataset.data.push(marker);
+                    else theftDataset.data.push(marker);
+
+                    deviceChart.options.plugins.annotation.annotations[`event-${index}`] = {
+                        type: 'line',
+                        xMin: eventTime,
+                        xMax: eventTime,
+                        borderColor: color,
+                        borderWidth: 3,
+                        borderDash: isFilling ? [6, 3] : [2, 4],
+                        label: {
+                            display: true,
+                            content: label,
+                            position: isFilling ? 'start' : 'end',
+                            backgroundColor: color,
+                            color: 'white',
+                            font: { size: 11, weight: 'bold' },
+                            padding: 5,
+                        },
+                    };
+
+                    deviceChart.options.plugins.annotation.annotations[`box-${index}`] = {
+                        type: 'box',
+                        xMin: new Date(eventTime.getTime() - 7.5 * 60000),
+                        xMax: new Date(eventTime.getTime() + 7.5 * 60000),
+                        backgroundColor: isFilling ? 'rgba(16,185,129,0.08)' : 'rgba(239,68,68,0.08)',
+                        borderColor: 'transparent',
+                    };
+                }
+            });
+
+            deviceChart.update();
+        }
+
+        async function init() {
+            initChart();
+
+            const devices = await (await fetch('/api/devices')).json();
+            const deviceSelect = document.getElementById('deviceSelect');
+            devices.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d;
+                opt.textContent = d;
+                deviceSelect.appendChild(opt);
+            });
+
+            const fromInput = document.getElementById('fromDate');
+            const toInput = document.getElementById('toDate');
+            // Leave date filters empty by default so all available data (e.g. June history) is shown
+
+            if (devices.length > 0) loadDeviceData(devices[0]);
+            deviceSelect.addEventListener('change', (e) => loadDeviceData(e.target.value));
+            document.getElementById('dateSearchBtn').addEventListener('click', () => loadDeviceData(deviceSelect.value));
+            
+            // Button event listeners
+            document.getElementById('liveChartBtn').addEventListener('click', () => {
+                if (liveMode) stopLiveStream();
+                else startLiveStream();
+            });
+            document.getElementById('exportFillingCsvBtn').addEventListener('click', () => {
+                const fillingEvents = currentDeviceEvents.filter(e => e.eventType === 'Fuel Filling' && e.fuelIncrease >= 10);
+                exportToCsv(fillingEvents, `${currentDeviceName.replace(/[^a-zA-Z0-9]/g, '_')}_fuel_filling_above_10l.csv`, 'filling');
+            });
+            document.getElementById('exportTheftCsvBtn').addEventListener('click', () => {
+                const theftEvents = currentDeviceEvents.filter(e => e.eventType === 'Fuel Theft');
+                exportToCsv(theftEvents, `${currentDeviceName.replace(/[^a-zA-Z0-9]/g, '_')}_fuel_theft.csv`, 'theft');
+            });
+            document.getElementById('exportAllCsvBtn').addEventListener('click', () => {
+                exportToCsv(currentDeviceEvents, `${currentDeviceName.replace(/[^a-zA-Z0-9]/g, '_')}_all_events.csv`, 'all');
+            });
+            document.getElementById('exportMlCsvBtn').addEventListener('click', () => {
+                if (currentMlAlerts.length === 0) { alert('No ML alerts to export!'); return; }
+                const headers = ['Time', 'Vehicle', 'Event Type', 'Fuel Change (L)', 'Fuel Level (L)', 'Location'];
+                const rows = currentMlAlerts.map(a => [
+                    new Date(a.eventTime).toLocaleString(),
+                    (a.deviceName || a.imei || 'N/A').replace(/,/g, ' '),
+                    a.eventType,
+                    a.fuelChange,
+                    a.fuelLevel != null ? a.fuelLevel : '',
+                    (a.location || '').replace(/,/g, ' ')
+                ]);
+                const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `${currentDeviceName.replace(/[^a-zA-Z0-9]/g, '_')}_ml_alerts.csv`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+            document.getElementById('downloadDayReportBtn').addEventListener('click', () => {
+                window.location.href = '/api/reports/day-summary';
+            });
+            document.getElementById('downloadMonthReportBtn').addEventListener('click', () => {
+                window.location.href = '/api/reports/month-summary';
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

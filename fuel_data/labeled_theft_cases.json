@@ -1,0 +1,577 @@
+
+[
+  {
+    "sno": 1,
+    "vehicle_name": "Kamdhenu FBD TM HR-55-P-8009",
+    "imei": "357544374929160",
+    "date": "2026-06-01",
+    "qty": 2.34
+  },
+  {
+    "sno": 2,
+    "vehicle_name": "SKS Gorakhpur UP-80-HM-3534",
+    "imei": "353742000000000",
+    "date": "2026-06-02",
+    "qty": 41.95
+  },
+  {
+    "sno": 3,
+    "vehicle_name": "VIPL/BR3/TRAILER/2011/05 BR-26-GC-1447",
+    "imei": "353692000000000",
+    "date": "2026-06-03",
+    "qty": 14.02
+  },
+  {
+    "sno": 4,
+    "vehicle_name": "VIPL/GTP/CAR/2022/06 UP-44-BJ-4486",
+    "imei": "353692000000000",
+    "date": "2026-06-04",
+    "qty": 2.05
+  },
+  {
+    "sno": 5,
+    "vehicle_name": "Ceigall LBG TM PB-10-HH-7081",
+    "imei": "353692000000000",
+    "date": "2026-06-03",
+    "qty": 4.15
+  },
+  {
+    "sno": 6,
+    "vehicle_name": "Gawar HIM L-05 HR-20-AH-7350",
+    "imei": "353692000000000",
+    "date": "2026-06-03",
+    "qty": 3.09
+  },
+  {
+    "sno": 7,
+    "vehicle_name": "Ceigall LBG TM PB-10-HH-7081",
+    "imei": "353692000000000",
+    "date": "2026-06-04",
+    "qty": 7.26
+  },
+  {
+    "sno": 8,
+    "vehicle_name": "Ceigall LBG TM PB-10-HJ-2981",
+    "imei": "350317000000000",
+    "date": "2026-06-03",
+    "qty": 8.15
+  },
+  {
+    "sno": 9,
+    "vehicle_name": "Ceigall LBG TM PB-10-HJ-2981",
+    "imei": "350317000000000",
+    "date": "2026-06-04",
+    "qty": 8.33
+  },
+  {
+    "sno": 10,
+    "vehicle_name": "Ceigall LBG TM PB-10-HJ-2981",
+    "imei": "350317000000000",
+    "date": "2026-06-04",
+    "qty": 7.29
+  },
+  {
+    "sno": 11,
+    "vehicle_name": "Gawar Mum Hydra MH-46-CV-4414",
+    "imei": "353692000000000",
+    "date": "2026-06-03",
+    "qty": 2.02
+  },
+  {
+    "sno": 12,
+    "vehicle_name": "Gawar Mum Paver No 20 (1800-3)",
+    "imei": "353692000000000",
+    "date": "2026-06-05",
+    "qty": 21.27
+  },
+  {
+    "sno": 13,
+    "vehicle_name": "Gawar HIM EX-43 SR-YQ12178",
+    "imei": "353692000000000",
+    "date": "2026-06-05",
+    "qty": 65.96
+  },
+  {
+    "sno": 14,
+    "vehicle_name": "Ceigall LBG TIP HR-65-A-9190",
+    "imei": "353692000000000",
+    "date": "2026-06-05",
+    "qty": 29.22
+  },
+  {
+    "sno": 15,
+    "vehicle_name": "Ceigall LBG TIP PB-10-JT-7834",
+    "imei": "353692000000000",
+    "date": "2026-06-05",
+    "qty": 53.9
+  },
+  {
+    "sno": 16,
+    "vehicle_name": "Excavator-210 Ananta Sany",
+    "imei": "357073000000000",
+    "date": "2026-06-05",
+    "qty": 139.92
+  },
+  {
+    "sno": 17,
+    "vehicle_name": "Kamdhenu Sohana HR-55-AQ-7995 TM",
+    "imei": "352017000000000",
+    "date": "2026-06-05",
+    "qty": 46.5
+  },
+  {
+    "sno": 18,
+    "vehicle_name": "Kamdhenu Sohana TM HR-55-AF-6459",
+    "imei": "352626000000000",
+    "date": "2026-06-06",
+    "qty": 130.78
+  },
+  {
+    "sno": 19,
+    "vehicle_name": "Kamdhenu Sohana TM HR-55-AF-6459",
+    "imei": "352626000000000",
+    "date": "2026-06-06",
+    "qty": 81.51
+  },
+  {
+    "sno": 20,
+    "vehicle_name": "Kamdhenu Sohana TM HR-55-AQ-9083",
+    "imei": "350612000000000",
+    "date": "2026-06-05",
+    "qty": 112.52
+  },
+  {
+    "sno": 21,
+    "vehicle_name": "Kamdhenu Sohana TM HR-55-AQ-9083",
+    "imei": "350612000000000",
+    "date": "2026-06-06",
+    "qty": 30.64
+  },
+  {
+    "sno": 22,
+    "vehicle_name": "RJ-14-GR-2657 Ananta TIP",
+    "imei": "350612000000000",
+    "date": "2026-06-07",
+    "qty": 25.67
+  },
+  {
+    "sno": 23,
+    "vehicle_name": "ION-DevTech DG-100Kva",
+    "imei": "359633000000000",
+    "date": "2026-06-07",
+    "qty": 8.97
+  },
+  {
+    "sno": 24,
+    "vehicle_name": "ION-DevTech DG-100Kva",
+    "imei": "359633000000000",
+    "date": "2026-06-08",
+    "qty": 45.06
+  },
+  {
+    "sno": 25,
+    "vehicle_name": "Shiva Hyva RJ-14-GR-2593",
+    "imei": "350612000000000",
+    "date": "2026-06-07",
+    "qty": 51.6
+  },
+  {
+    "sno": 26,
+    "vehicle_name": "SGI GUNA TM JK-17-A-2962",
+    "imei": "353692000000000",
+    "date": "2026-06-09",
+    "qty": 9.87
+  },
+  {
+    "sno": 27,
+    "vehicle_name": "SGI GUNA DYNAPAC",
+    "imei": "353692000000000",
+    "date": "2026-06-09",
+    "qty": 21.78
+  },
+  {
+    "sno": 28,
+    "vehicle_name": "SGI GUNA DYNAPAC",
+    "imei": "353692000000000",
+    "date": "2026-06-09",
+    "qty": 10.83
+  },
+  {
+    "sno": 29,
+    "vehicle_name": "SGI GUNA Crusher Cone",
+    "imei": "353692000000000",
+    "date": "2026-06-10",
+    "qty": 19.05
+  },
+  {
+    "sno": 30,
+    "vehicle_name": "Gawar Mum Excavator EX-76/YC06538",
+    "imei": "353692000000000",
+    "date": "2026-06-09",
+    "qty": 35.23
+  },
+  {
+    "sno": 31,
+    "vehicle_name": "Gawar Mum HR-39-E-5960",
+    "imei": "353201000000000",
+    "date": "2026-06-09",
+    "qty": 2.66
+  },
+  {
+    "sno": 32,
+    "vehicle_name": "Gawar Mum HR-39-E-5960",
+    "imei": "353201000000000",
+    "date": "2026-06-10",
+    "qty": 5.03
+  },
+  {
+    "sno": 33,
+    "vehicle_name": "Krati Sany 210 C-9",
+    "imei": "352017000000000",
+    "date": "2026-06-09",
+    "qty": 29.76
+  },
+  {
+    "sno": 34,
+    "vehicle_name": "Krati Sany 210 C-9",
+    "imei": "352017000000000",
+    "date": "2026-06-10",
+    "qty": 279.39
+  },
+  {
+    "sno": 35,
+    "vehicle_name": "Krati Tipper MP-45-ZC-8873",
+    "imei": "352593000000000",
+    "date": "2026-06-10",
+    "qty": 28.33
+  },
+  {
+    "sno": 36,
+    "vehicle_name": "Krati Tipper MP-45-ZC-8873",
+    "imei": "352593000000000",
+    "date": "2026-06-10",
+    "qty": 29.13
+  },
+  {
+    "sno": 37,
+    "vehicle_name": "Krati Tipper MP-45-ZC-8873",
+    "imei": "352593000000000",
+    "date": "2026-06-10",
+    "qty": 30.0
+  },
+  {
+    "sno": 38,
+    "vehicle_name": "RKC/TIPPER/103 HR-68-C-3144",
+    "imei": "353692000000000",
+    "date": "2026-06-09",
+    "qty": 3.28
+  },
+  {
+    "sno": 39,
+    "vehicle_name": "Ceigall LBG TM PB-10-HJ-2981",
+    "imei": "350317000000000",
+    "date": "2026-06-11",
+    "qty": 2.09
+  },
+  {
+    "sno": 40,
+    "vehicle_name": "Ceigall LBG TM PB-10-HJ-2981",
+    "imei": "350317000000000",
+    "date": "2026-06-11",
+    "qty": 2.84
+  },
+  {
+    "sno": 41,
+    "vehicle_name": "RJ-14-GR-2655 Ananta Tipper",
+    "imei": "354018000000000",
+    "date": "2026-06-10",
+    "qty": 57.62
+  },
+  {
+    "sno": 42,
+    "vehicle_name": "RJ-18-GB-7215 Ananta Trailer",
+    "imei": "350545000000000",
+    "date": "2026-06-11",
+    "qty": 187.94
+  },
+  {
+    "sno": 43,
+    "vehicle_name": "Skylark Banglore DG51 DG-125kva (BOYD)",
+    "imei": "350545000000000",
+    "date": "2026-06-10",
+    "qty": 29.03
+  },
+  {
+    "sno": 44,
+    "vehicle_name": "SGI GUNA TPR-21 MZ-06-9500",
+    "imei": "353692000000000",
+    "date": "2026-06-11",
+    "qty": 8.49
+  },
+  {
+    "sno": 45,
+    "vehicle_name": "SGI GUNA TPR-21 MZ-06-9500",
+    "imei": "353692000000000",
+    "date": "2026-06-11",
+    "qty": 6.71
+  },
+  {
+    "sno": 46,
+    "vehicle_name": "JSPL SMS Slag CG-13-AW-1214",
+    "imei": "353692000000000",
+    "date": "2026-06-12",
+    "qty": 168.22
+  },
+  {
+    "sno": 47,
+    "vehicle_name": "RJ-14-GR-2655 Ananta Tipper",
+    "imei": "354018000000000",
+    "date": "2026-06-11",
+    "qty": 67.39
+  },
+  {
+    "sno": 48,
+    "vehicle_name": "Skylark Akot HV31 HR-38-AD-4504 (New)",
+    "imei": "353692000000000",
+    "date": "2026-06-12",
+    "qty": 9.32
+  },
+  {
+    "sno": 49,
+    "vehicle_name": "ION-DevTech DG-200Kva",
+    "imei": "359633000000000",
+    "date": "2026-06-13",
+    "qty": 44.22
+  },
+  {
+    "sno": 50,
+    "vehicle_name": "JSPL SMS Slag CG-13-AW-1214",
+    "imei": "353692000000000",
+    "date": "2026-06-13",
+    "qty": 204.37
+  },
+  {
+    "sno": 51,
+    "vehicle_name": "Shiva Hyva RJ 14 GQ 5746",
+    "imei": "352017000000000",
+    "date": "2026-06-12",
+    "qty": 29.08
+  },
+  {
+    "sno": 52,
+    "vehicle_name": "Skylark Akot HB102 MH-30-BD-9131 (New)",
+    "imei": "353692000000000",
+    "date": "2026-06-13",
+    "qty": 33.68
+  },
+  {
+    "sno": 53,
+    "vehicle_name": "Skylark Akot HV37 HR-38-AD-1230 (New)",
+    "imei": "353692000000000",
+    "date": "2026-06-13",
+    "qty": 3.18
+  },
+  {
+    "sno": 54,
+    "vehicle_name": "Gawar HIM EX-75 SR-YQ13720",
+    "imei": "353692000000000",
+    "date": "2026-06-15",
+    "qty": 52.95
+  },
+  {
+    "sno": 55,
+    "vehicle_name": "JSPL SMS Slag CG-13-AW-1214",
+    "imei": "353692000000000",
+    "date": "2026-06-14",
+    "qty": 133.6
+  },
+  {
+    "sno": 56,
+    "vehicle_name": "Krati Tipper RJ-21-GA-9016",
+    "imei": "352593000000000",
+    "date": "2026-06-15",
+    "qty": 59.53
+  },
+  {
+    "sno": 57,
+    "vehicle_name": "Rise-11-Agra Tractor HR-51-CN-2046",
+    "imei": "353201000000000",
+    "date": "2026-06-15",
+    "qty": 1.21
+  },
+  {
+    "sno": 58,
+    "vehicle_name": "Gawar Mum HR-39-E-4702",
+    "imei": "353692000000000",
+    "date": "2026-06-15",
+    "qty": 244.67
+  },
+  {
+    "sno": 59,
+    "vehicle_name": "Skylark Akot A/F-5 MH-30-BD-9254 (New)",
+    "imei": "353692000000000",
+    "date": "2026-06-15",
+    "qty": 10.63
+  },
+  {
+    "sno": 60,
+    "vehicle_name": "ION-DevTech DG-100Kva",
+    "imei": "359633000000000",
+    "date": "2026-06-16",
+    "qty": 37.82
+  },
+  {
+    "sno": 61,
+    "vehicle_name": "RJ-14-GR-2656 Ananta Tipper",
+    "imei": "354017000000000",
+    "date": "2026-06-16",
+    "qty": 33.7
+  },
+  {
+    "sno": 62,
+    "vehicle_name": "ION-DevTech DG-100Kva",
+    "imei": "359633000000000",
+    "date": "2026-06-17",
+    "qty": 12.91
+  },
+  {
+    "sno": 63,
+    "vehicle_name": "ION-DevTech DG-100Kva",
+    "imei": "359633000000000",
+    "date": "2026-06-17",
+    "qty": 44.83
+  },
+  {
+    "sno": 64,
+    "vehicle_name": "Gawar Mum Hydra MH-46-CV-3406",
+    "imei": "353692000000000",
+    "date": "2026-06-19",
+    "qty": 36.63
+  },
+  {
+    "sno": 65,
+    "vehicle_name": "JSPL DRI-1 CG-13-AF-5067",
+    "imei": "353692000000000",
+    "date": "2026-06-19",
+    "qty": 16.78
+  },
+  {
+    "sno": 66,
+    "vehicle_name": "RoyalGen DG-62Kva HR-55-AN-8593",
+    "imei": "358480000000000",
+    "date": "2026-06-20",
+    "qty": 24.96
+  },
+  {
+    "sno": 67,
+    "vehicle_name": "Skylark Akot EX11 YQ15511377 (BYOD)",
+    "imei": "350545000000000",
+    "date": "2026-06-19",
+    "qty": 5.05
+  },
+  {
+    "sno": 68,
+    "vehicle_name": "SKS Raebareli Transit Mixer UP-83-AT-7394",
+    "imei": "353201000000000",
+    "date": "2026-06-22",
+    "qty": 2.02
+  },
+  {
+    "sno": 69,
+    "vehicle_name": "Ceigall LBG TIP PB-10-JX-0618",
+    "imei": "353692000000000",
+    "date": "2026-06-24",
+    "qty": 66.82
+  },
+  {
+    "sno": 70,
+    "vehicle_name": "Ceigall LBG TIP PB-10-JX-0618",
+    "imei": "353692000000000",
+    "date": "2026-06-24",
+    "qty": 26.75
+  },
+  {
+    "sno": 71,
+    "vehicle_name": "Skylark Surat HC09 NL-01-DA-0138 (BOYD)",
+    "imei": "350317000000000",
+    "date": "2026-06-25",
+    "qty": 31.93
+  },
+  {
+    "sno": 72,
+    "vehicle_name": "Gawar Mum EX-45 Excavator",
+    "imei": "353692000000000",
+    "date": "2026-06-25",
+    "qty": 4.71
+  },
+  {
+    "sno": 73,
+    "vehicle_name": "Gawar HIM PTR Roller-26",
+    "imei": "353692000000000",
+    "date": "2026-06-25",
+    "qty": 3.78
+  },
+  {
+    "sno": 74,
+    "vehicle_name": "Ceigall LBG TM PB-10-HH-7081",
+    "imei": "353692000000000",
+    "date": "2026-06-29",
+    "qty": 4.49
+  },
+  {
+    "sno": 75,
+    "vehicle_name": "Ceigall LBG TM HR-65-B-2189",
+    "imei": "353692000000000",
+    "date": "2026-06-27",
+    "qty": 2.13
+  },
+  {
+    "sno": 76,
+    "vehicle_name": "Ceigall LBG TM HR-65-B-2189",
+    "imei": "353692000000000",
+    "date": "2026-06-28",
+    "qty": 1.86
+  },
+  {
+    "sno": 77,
+    "vehicle_name": "DevYash DHL TIP HR-58-E-3944",
+    "imei": "353692000000000",
+    "date": "2026-06-29",
+    "qty": 98.69
+  },
+  {
+    "sno": 78,
+    "vehicle_name": "DevYash Meerut HR-58-E-0738",
+    "imei": "353692000000000",
+    "date": "2026-06-27",
+    "qty": 56.75
+  },
+  {
+    "sno": 79,
+    "vehicle_name": "DevYash Meerut TIP UP-14-GT-9934",
+    "imei": "353692000000000",
+    "date": "2026-06-27",
+    "qty": 19.77
+  },
+  {
+    "sno": 80,
+    "vehicle_name": "Kamdhenu DLI TM HR-55-AL-0751",
+    "imei": "350424000000000",
+    "date": "2026-06-28",
+    "qty": 28.34
+  },
+  {
+    "sno": 81,
+    "vehicle_name": "Kamdhenu DLI TM HR-55-AL-1351",
+    "imei": "350424000000000",
+    "date": "2026-06-28",
+    "qty": 23.67
+  },
+  {
+    "sno": 82,
+    "vehicle_name": "DMR Amritsar Kobelco Excavator 220",
+    "imei": "353692000000000",
+    "date": "2026-06-29",
+    "qty": 1.36
+  }
+]
