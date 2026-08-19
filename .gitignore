@@ -34,6 +34,9 @@ fuel_data/alerts/*.migrated
 !fuel_data/alerts/daily/
 !fuel_data/alerts/daily/*.csv
 
+# Human review sheets are local working copies (rebuild with tools/).
+fuel_data/alerts/reviews/
+
 # Ground truth is small and hand-curated -- always track it.
 # So is the coverage log: it is what distinguishes "no theft" from "no data".
 !fuel_data/ground_truth/

@@ -21,13 +21,14 @@ export default function FleetDashboard() {
   const [updating, setUpdating] = useState(false)
 
   // mode: '0' cache-only (instant), '1' live poll, 'force' bypass rate gate.
+  // Only one of the two fleet endpoints should hit FuelArk — dual refresh=1
+  // stacks behind the same lock and can leave the UI on zeros for minutes.
   const refresh = useCallback(async (mode = '0', silent = false) => {
     if (!silent) setUpdating(true)
     try {
-      const [s, d] = await Promise.all([
-        api.fleetSummary(mode),
-        api.fleetDevices('', mode),
-      ])
+      // Only summary hits FuelArk; devices read the cache that refresh just warmed.
+      const s = await api.fleetSummary(mode)
+      const d = await api.fleetDevices('', '0')
       setSummary(s)
       setDevices(d)
       setError('')
@@ -40,9 +41,9 @@ export default function FleetDashboard() {
 
   useEffect(() => {
     // Paint from cache immediately, then pull live in the background so the
-    // first render never blocks on a fleet-wide fetch.
+    // first render never blocks on a fleet-wide fetch (~2 min after restart).
     refresh('0')
-    const warm = setTimeout(() => refresh('1', true), 1000)
+    const warm = setTimeout(() => refresh('1', true), 500)
     const id = setInterval(() => refresh('1', true), REFRESH_MS)
     return () => {
       clearTimeout(warm)
@@ -68,13 +69,21 @@ export default function FleetDashboard() {
           <p className="topbar-subtitle">
             Total · Active (online now) · Running · Inactive
             {updating ? ' · refreshing…' : ''}
-            {summary?.snapshot?.ageMinutes != null ? (
-              <span style={{ color: summary.snapshot.stale ? '#b91c1c' : 'inherit' }}>
-                {' · data '}
-                {summary.snapshot.ageMinutes < 1
-                  ? 'just now'
-                  : `${summary.snapshot.ageMinutes}m old`}
-                {summary.snapshot.stale
+            {summary?.snapshot ? (
+              <span
+                style={{
+                  color:
+                    summary.snapshot.stale || summary.snapshot.ageMinutes == null
+                      ? '#b91c1c'
+                      : 'inherit',
+                }}
+              >
+                {summary.snapshot.ageMinutes == null
+                  ? ' · waiting for first FuelArk pull (~2 min) — Active/Running stay 0 until then'
+                  : summary.snapshot.ageMinutes < 1
+                    ? ' · data just now'
+                    : ` · data ${summary.snapshot.ageMinutes}m old`}
+                {summary.snapshot.stale && summary.snapshot.ageMinutes != null
                   ? ` — older than the ${summary.snapshot.onlineWindowMinutes}min online window, so Active/Running read 0`
                   : ''}
               </span>

@@ -1061,7 +1061,94 @@ table.live-table th { background: #f8fafc; position: sticky; top: 0; }
 }
 .link-inline:hover { text-decoration: underline; }
 
+.alerts-table .col-actions {
+  width: 220px;
+  white-space: nowrap;
+}
+
+.alert-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.btn-alert {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text, #0f172a);
+  text-decoration: none;
+  cursor: pointer;
+  line-height: 1.2;
+}
+.btn-alert:hover { background: var(--surface-sunken); }
+.btn-alert.is-open {
+  border-color: #93c5fd;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+.btn-alert--primary {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #fff;
+}
+.btn-alert--primary:hover {
+  background: #1d4ed8;
+  color: #fff;
+}
+
+.alert-case-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+.alert-case {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.alert-case--theft { border-left: 4px solid #dc2626; }
+.alert-case--fill { border-left: 4px solid #16a34a; }
+.alert-case:has(.alert-case__graph) {
+  grid-column: 1 / -1;
+}
+.alert-case__top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.alert-case__liters { font-weight: 700; font-size: 16px; }
+.alert-case__name {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.alert-case__graph {
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  grid-column: 1 / -1;
+}
+
 @media (max-width: 900px) {
   .alerts-table .col-reason { width: auto; }
+  .alerts-table .col-actions { width: auto; }
   .alerts-table th, .alerts-table td { padding: 8px; }
+  .alert-case-grid { grid-template-columns: 1fr; }
 }

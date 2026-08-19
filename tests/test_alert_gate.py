@@ -77,12 +77,13 @@ class AlertGateTests(unittest.TestCase):
 
     def test_small_drop_at_crank_suppressed_even_if_persistent(self):
         """A modest persistent step right at crank is still ambiguous."""
-        voltage_profile._cache = {"TESTIMEI": {"swing_liters": 1.0, "coupled": True}}
+        # swing*3 = 9 → crank floor 9 L; volume 6 clears the 5 L theft floor but not crank.
+        voltage_profile._cache = {"TESTIMEI": {"swing_liters": 3.0, "coupled": True}}
         pts = (steady(120, 66, 100.0, ign=False)
-               + [(65, 100.0, False), (64, 96.0, True)]
-               + steady(62, 0, 96.0, ign=True))
+               + [(65, 100.0, False), (64, 94.0, True)]
+               + steady(62, 0, 94.0, ign=True))
         status, reason = alerts.confirm_event(
-            "Test Vehicle", "TESTIMEI", theft_event(4.0, 65, 60), series(pts), now=NOW)
+            "Test Vehicle", "TESTIMEI", theft_event(6.0, 65, 60), series(pts), now=NOW)
         self.assertEqual(status, "suppress")
         self.assertIn("ignition_transient", reason)
 
@@ -136,8 +137,10 @@ class AlertGateTests(unittest.TestCase):
     def test_held_event_releases_once_settled(self):
         """The same event, judged later, is allowed through."""
         pts = steady(180, 66, 100.0, ign=False) + steady(64, 0, 70.0, ign=False)
+        ev = theft_event(30.0, 65, 60)  # 5 min parked drain — not a moving-short spike
+        ev["ignition"] = "off"
         status, reason = alerts.confirm_event(
-            "Test Vehicle", "TESTIMEI", theft_event(30.0, 65, 64), series(pts), now=NOW)
+            "Test Vehicle", "TESTIMEI", ev, series(pts), now=NOW)
         self.assertEqual(status, "release", reason)
 
     # -- fills --------------------------------------------------------------------
@@ -296,6 +299,99 @@ class PipelineOrderTests(unittest.TestCase):
             config.ACTIVE_ONLINE_MINUTES, cadence_min,
             "ACTIVE_ONLINE_MINUTES must exceed the pipeline cadence plus runtime",
         )
+
+
+def fill_event(volume, start_min, end_min=None, **extra):
+    end_min = start_min - 5 if end_min is None else end_min
+    row = {
+        "eventType": "Fuel Filling",
+        "eventTime": (NOW - timedelta(minutes=start_min)).isoformat(),
+        "endTime": (NOW - timedelta(minutes=end_min)).isoformat(),
+        "volume": volume,
+        "decision": "AUTO_CONFIRMED",
+    }
+    row.update(extra)
+    return row
+
+
+class PrecisionGateTests(unittest.TestCase):
+    """Field-level precision gates added for alert-agent precision."""
+
+    def setUp(self):
+        voltage_profile._cache = {}
+
+    def test_theft_below_liter_floor_suppressed(self):
+        pts = steady(120, 40, 100.0, ign=False) + steady(38, 0, 96.0, ign=False)
+        ev = theft_event(4.0, 40, 35)
+        ev["durationMinutes"] = 5.0
+        ev["ignition"] = "off"
+        status, reason = alerts.confirm_event(
+            "Test Vehicle", "TESTIMEI", ev, series(pts), now=NOW)
+        self.assertEqual(status, "suppress")
+        self.assertIn("theft_below", reason)
+
+    def test_spike_drop_suppressed(self):
+        pts = steady(120, 40, 100.0, ign=False) + steady(38, 0, 70.0, ign=False)
+        ev = theft_event(30.0, 40, 39.8)
+        ev["durationMinutes"] = 0.2
+        ev["ignition"] = "off"
+        status, reason = alerts.confirm_event(
+            "Test Vehicle", "TESTIMEI", ev, series(pts), now=NOW)
+        self.assertEqual(status, "suppress")
+        self.assertIn("spike_", reason)
+
+    def test_moving_fill_suppressed(self):
+        pts = steady(120, 0, 100.0, ign=True)
+        ev = fill_event(20.0, 40, 35, speed=40.0, durationMinutes=5.0, ignition="on")
+        status, reason = alerts.confirm_event(
+            "Test Vehicle", "TESTIMEI", ev, series(pts), now=NOW)
+        self.assertEqual(status, "suppress")
+        self.assertIn("moving_fill", reason)
+
+    def test_ml_noise_disagreement_suppressed(self):
+        pts = steady(120, 0, 100.0, ign=False)
+        ev = fill_event(20.0, 40, 35, mlLabel="noise", mlConfidence=0.92, speed=0)
+        status, reason = alerts.confirm_event(
+            "Test Vehicle", "TESTIMEI", ev, series(pts), now=NOW)
+        self.assertEqual(status, "suppress")
+        self.assertIn("ml_noise", reason)
+
+    def test_moving_short_theft_suppressed(self):
+        pts = steady(120, 40, 100.0, ign=True) + steady(38, 0, 90.0, ign=True)
+        ev = theft_event(10.0, 40, 38)
+        ev["durationMinutes"] = 2.0
+        ev["ignition"] = "on"
+        ev["trulyParked"] = False
+        status, reason = alerts.confirm_event(
+            "Test Vehicle", "TESTIMEI", ev, series(pts), now=NOW)
+        self.assertEqual(status, "suppress")
+        self.assertIn("moving_short_theft", reason)
+
+    def test_parked_theft_not_caught_by_moving_short(self):
+        """Ignition-off short drain still reaches persistence / release path."""
+        pts = steady(120, 40, 100.0, ign=False) + steady(38, 0, 90.0, ign=False)
+        ev = theft_event(10.0, 40, 38)
+        ev["durationMinutes"] = 2.0
+        ev["ignition"] = "off"
+        ev["trulyParked"] = True
+        status, reason = alerts.confirm_event(
+            "Test Vehicle", "TESTIMEI", ev, series(pts), now=NOW)
+        self.assertEqual(status, "release", reason)
+        self.assertEqual(alerts.precision_gate_preview(ev), "")
+
+    def test_precision_preview_matches_today_style_rows(self):
+        self.assertIn("moving_short", alerts.precision_gate_preview({
+            "eventType": "Fuel Theft", "volume_L": 8.97, "durationMinutes": 2.2,
+            "ignition": "on", "trulyParked": "False",
+        }))
+        self.assertIn("spike_", alerts.precision_gate_preview({
+            "eventType": "Fuel Theft", "volume_L": 22.72, "durationMinutes": 0.2,
+            "ignition": "on", "trulyParked": "False",
+        }))
+        self.assertEqual(alerts.precision_gate_preview({
+            "eventType": "Fuel Filling", "volume_L": 30.0, "durationMinutes": 6.7,
+            "ignition": "on", "trulyParked": "True", "speed": 0,
+        }), "")
 
 
 if __name__ == "__main__":

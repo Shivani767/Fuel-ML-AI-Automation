@@ -14,7 +14,7 @@ from __future__ import annotations
 import json
 import math
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -26,9 +26,9 @@ from backend.services import session_ml
 from backend.services.metrics import haversine_m as _haversine_m
 from backend.services.vehicle_aliases import names_for_device, spreadsheet_to_device
 
-# Method defaults: noise floor 2L; UI may raise floors via query params
-DEFAULT_THEFT_MIN_L = 2.0
-DEFAULT_FILL_MIN_L = 2.0
+# Method defaults aligned with alert precision (Live Map was too sensitive at 2 L).
+DEFAULT_THEFT_MIN_L = 5.0
+DEFAULT_FILL_MIN_L = 5.0
 
 
 def _ensure_detector_path():
@@ -340,6 +340,126 @@ def _merge_verified_with_detector(events: List[Dict[str, Any]]) -> List[Dict[str
     return out
 
 
+def _suppress_driving_artifacts(events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Drop ignition-on / moving noise that FuelArk would not mark as fill/theft.
+
+    Real siphoning and pump fills happen while stationary. Slope/sloshing while
+    driving produces jagged liter swings that the session detector still sees as
+    short DRAIN/FILL sessions — those must not reach the Live Map markers.
+    """
+    out: List[Dict[str, Any]] = []
+    for e in events:
+        if e.get("decision") == "VERIFIED":
+            out.append(e)
+            continue
+        theft = "theft" in str(e.get("eventType") or "").lower()
+        try:
+            speed = float(e.get("speed") or 0)
+        except (TypeError, ValueError):
+            speed = 0.0
+        try:
+            duration = float(e.get("durationMinutes") or 0)
+        except (TypeError, ValueError):
+            duration = 0.0
+        try:
+            vol = float(e.get("volume") or 0)
+        except (TypeError, ValueError):
+            vol = 0.0
+        ign = str(e.get("ignition") or "").strip().lower()
+        ign_off = ign in ("off", "0", "false")
+        parked = bool(e.get("trulyParked"))
+
+        if not theft:
+            # Highway/site travel "fills" are sensor ghosts.
+            if speed > config.ALERT_FILL_MAX_SPEED_KMH:
+                continue
+            # Small rising blips while rolling — slope rebound, not a pump.
+            if (not ign_off) and (not parked) and speed > 3.0 and vol < 25.0:
+                continue
+            out.append(e)
+            continue
+
+        # Ambiguous small drains while the vehicle is working.
+        if vol < config.ALERT_THEFT_MIN_LITERS:
+            continue
+        if duration > 0 and duration < config.ALERT_SPIKE_MAX_MINUTES and vol >= config.ALERT_SPIKE_MIN_LITERS:
+            continue
+        # Driving / not-parked short drains ≈ terrain slosh, not theft.
+        if speed > 3.0 and not parked:
+            continue
+        if (not ign_off) and (not parked) and duration < max(
+            config.ALERT_THEFT_MIN_DURATION_MOVING_MIN, 5.0
+        ):
+            continue
+        out.append(e)
+    return out
+
+
+def _level_near(points: List[dict], when: datetime, *, ahead: bool = False) -> Optional[float]:
+    """Nearest fuelInLiter at/around `when` (ahead=True → first point at or after)."""
+    best = None
+    best_gap = None
+    for p in points:
+        ts = _event_ts({"eventTime": p.get("time")})
+        if ts is None:
+            continue
+        if ahead and ts < when:
+            continue
+        if not ahead and ts > when:
+            # points are time-ordered; once past, stop if we already have a prior
+            if best is not None:
+                break
+            continue
+        gap = abs((ts - when).total_seconds())
+        if best_gap is None or gap < best_gap:
+            try:
+                best = float(p.get("fuelInLiter") or p.get("fuelLevel") or 0)
+            except (TypeError, ValueError):
+                continue
+            best_gap = gap
+            if ahead and gap < 120:
+                break
+    return best
+
+
+def _suppress_slope_recoveries(
+    points: List[dict],
+    events: List[Dict[str, Any]],
+    *,
+    window_min: float = 40.0,
+    recover_frac: float = 0.65,
+) -> List[Dict[str, Any]]:
+    """Cancel thefts whose fuel comes back within ~40 min (classic slope settle)."""
+    if not points or not events:
+        return events
+    out: List[Dict[str, Any]] = []
+    for e in events:
+        if e.get("decision") == "VERIFIED" or "theft" not in str(e.get("eventType") or "").lower():
+            out.append(e)
+            continue
+        start = _event_ts(e)
+        end = _event_ts({"eventTime": e.get("endTime") or e.get("eventTime")}) or start
+        if start is None:
+            out.append(e)
+            continue
+        vol = float(e.get("volume") or 0)
+        before = _level_near(points, start - timedelta(minutes=2))
+        after = _level_near(
+            points,
+            end + timedelta(minutes=window_min),
+            ahead=True,
+        )
+        if before is None or after is None or vol <= 0:
+            out.append(e)
+            continue
+        still_missing = before - after
+        if still_missing < vol * (1.0 - recover_frac):
+            # Most of the drop came back → slope / slosh, not theft.
+            continue
+        out.append(e)
+    return out
+
+
 def _dedupe(events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     seen = set()
     out = []
@@ -464,13 +584,13 @@ def detect_fill_theft(
         t0 = datetime.fromisoformat(str(points[0]["time"]))
         t1 = datetime.fromisoformat(str(points[-1]["time"]))
     except Exception:
-        return _dedupe(
-            _merge_verified_with_detector(
-                _suppress_tilt_settling(
-                    _suppress_fill_theft_bounces(_suppress_recurring_noise(events))
-                )
+        cleaned = _suppress_driving_artifacts(
+            _suppress_tilt_settling(
+                _suppress_fill_theft_bounces(_suppress_recurring_noise(events))
             )
         )
+        cleaned = _suppress_slope_recoveries(points, cleaned)
+        return _dedupe(_merge_verified_with_detector(cleaned))
 
     allowed_names = {n.lower() for n in names_for_device(device_name)}
     allowed_names.add(device_name.strip().lower())
@@ -530,5 +650,7 @@ def detect_fill_theft(
 
     cleaned = _suppress_fill_theft_bounces(_suppress_recurring_noise(events))
     cleaned = _suppress_tilt_settling(cleaned)
+    cleaned = _suppress_driving_artifacts(cleaned)
+    cleaned = _suppress_slope_recoveries(points, cleaned)
     cleaned = _merge_verified_with_detector(cleaned)
     return _dedupe(cleaned)

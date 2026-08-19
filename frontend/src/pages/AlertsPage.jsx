@@ -137,6 +137,40 @@ function Trace({ deviceName, from, to, emptyNote, events = [] }) {
   )
 }
 
+function liveReportUrl(deviceName, eventTime, endTime, hours = VEHICLE_CONTEXT_HOURS) {
+  const q = new URLSearchParams()
+  q.set('device', String(deviceName || '').trim())
+  const from = shiftHours(eventTime, -hours)
+  const to = shiftHours(endTime || eventTime, hours)
+  if (from) q.set('from', from)
+  if (to) q.set('to', to)
+  return `/live?${q.toString()}`
+}
+
+function AlertActions({ deviceName, eventTime, endTime, expanded, onGraph, allEvents = false }) {
+  const hours = allEvents ? VEHICLE_CONTEXT_HOURS : EVENT_CONTEXT_HOURS
+  const reportTo = liveReportUrl(deviceName, eventTime, endTime, hours)
+  return (
+    <div className="alert-actions" onClick={(e) => e.stopPropagation()}>
+      <button
+        type="button"
+        className={`btn-alert${expanded ? ' is-open' : ''}`}
+        onClick={onGraph}
+        title="Show fuel graph around this case"
+      >
+        {expanded ? 'Hide graph' : 'View graph'}
+      </button>
+      <Link
+        className="btn-alert btn-alert--primary"
+        to={reportTo}
+        title="Open Live Map with this vehicle’s graph and fill/theft reports"
+      >
+        Full report →
+      </Link>
+    </div>
+  )
+}
+
 /** A vehicle from the rollup: click to see its whole day and every event on it. */
 function VehicleRow({ v, events, expanded, onToggle, contextHours = VEHICLE_CONTEXT_HOURS }) {
   // Held steady across renders: the window feeds a fetch, and a `new Date()`
@@ -146,38 +180,49 @@ function VehicleRow({ v, events, expanded, onToggle, contextHours = VEHICLE_CONT
   const anchor = eventAnchor || fallbackAnchor
   const from = shiftHours(anchor, -contextHours)
   const to = shiftHours(anchor, contextHours)
+  const lastEnd = events.reduce((acc, e) => e.endTime || e.eventTime || acc, anchor)
 
   return (
     <>
-      <tr
-        className={`row-clickable${expanded ? ' is-open' : ''}`}
-        onClick={onToggle}
-        tabIndex={0}
-        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), onToggle())}
-        title="Click to see this vehicle's fuel trace"
-      >
-        <td><Caret open={expanded} />{v.deviceName}</td>
-        <td className="num">
+      <tr className={`row-clickable${expanded ? ' is-open' : ''}`}>
+        <td
+          onClick={onToggle}
+          tabIndex={0}
+          onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), onToggle())}
+          title="Click to see this vehicle's fuel trace"
+        >
+          <Caret open={expanded} />{v.deviceName}
+        </td>
+        <td className="num" onClick={onToggle}>
           {v.theftCount ? <span className="qty-theft">{v.theftCount} · {fmtL(v.theftLiters)}</span> : <Dash />}
         </td>
-        <td className="num">
+        <td className="num" onClick={onToggle}>
           {v.fillCount ? <span className="qty-fill">{v.fillCount} · {fmtL(v.fillLiters)}</span> : <Dash />}
+        </td>
+        <td className="col-actions">
+          <AlertActions
+            deviceName={v.deviceName}
+            eventTime={anchor}
+            endTime={lastEnd}
+            expanded={expanded}
+            onGraph={onToggle}
+            allEvents
+          />
         </td>
       </tr>
       {expanded ? (
         <tr>
-          <td className="detail-cell" colSpan={3}>
+          <td className="detail-cell" colSpan={4}>
             <div className="detail-head">
               <span className="detail-title">{v.deviceName}</span>
               <span className="chip">
                 {events.length} event{events.length === 1 ? '' : 's'} this cycle
               </span>
               <Link
-                className="link-inline"
-                to={`/live?device=${encodeURIComponent(v.deviceName)}`}
-                onClick={(e) => e.stopPropagation()}
+                className="btn-alert btn-alert--primary"
+                to={liveReportUrl(v.deviceName, anchor, lastEnd, contextHours)}
               >
-                Open in Live Map →
+                Open full vehicle report →
               </Link>
             </div>
 
@@ -189,6 +234,7 @@ function VehicleRow({ v, events, expanded, onToggle, contextHours = VEHICLE_CONT
                     <th>Type</th>
                     <th className="col-qty num">Litres</th>
                     <th className="col-conf num">Confidence</th>
+                    <th className="col-actions">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -202,6 +248,14 @@ function VehicleRow({ v, events, expanded, onToggle, contextHours = VEHICLE_CONT
                       </td>
                       <td className={`num ${isTheft(e) ? 'qty-theft' : 'qty-fill'}`}>{fmtL(e.volume)}</td>
                       <td className="num">{Number(e.confidence || 0).toFixed(2)}</td>
+                      <td className="col-actions">
+                        <Link
+                          className="btn-alert btn-alert--primary"
+                          to={liveReportUrl(v.deviceName, e.eventTime, e.endTime || e.eventTime)}
+                        >
+                          Full report →
+                        </Link>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -219,7 +273,7 @@ function VehicleRow({ v, events, expanded, onToggle, contextHours = VEHICLE_CONT
   )
 }
 
-/** A single event: click to see the trace tightly around it. */
+/** A single event: buttons to view graph here or open full vehicle report. */
 function EventRow({ ev, expanded, onToggle }) {
   const from = shiftHours(ev.eventTime, -EVENT_CONTEXT_HOURS)
   const to = shiftHours(ev.endTime || ev.eventTime, EVENT_CONTEXT_HOURS)
@@ -228,32 +282,38 @@ function EventRow({ ev, expanded, onToggle }) {
 
   return (
     <>
-      <tr
-        className={`row-clickable${expanded ? ' is-open' : ''}${suppressed ? ' row-suppressed' : ''}`}
-        onClick={onToggle}
-        tabIndex={0}
-        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), onToggle())}
-        title="Click to see the fuel trace around this event"
-      >
-        <td className="col-time"><Caret open={expanded} />{hhmm(ev.eventTime)}</td>
-        <td>{ev.deviceName}</td>
-        <td className={`num col-qty ${theft ? 'qty-theft' : 'qty-fill'}`}>{fmtL(ev.volume)}</td>
+      <tr className={`row-clickable${expanded ? ' is-open' : ''}${suppressed ? ' row-suppressed' : ''}`}>
+        <td className="col-time" onClick={onToggle}>
+          <Caret open={expanded} />{hhmm(ev.eventTime)}
+        </td>
+        <td onClick={onToggle}>{ev.deviceName}</td>
+        <td className={`num col-qty ${theft ? 'qty-theft' : 'qty-fill'}`} onClick={onToggle}>
+          {fmtL(ev.volume)}
+        </td>
         {suppressed
-          ? <td className="col-reason">{pretty(ev.suppressedReason)}</td>
-          : <td className="num col-conf">{Number(ev.confidence || 0).toFixed(2)}</td>}
+          ? <td className="col-reason" onClick={onToggle}>{pretty(ev.suppressedReason)}</td>
+          : <td className="num col-conf" onClick={onToggle}>{Number(ev.confidence || 0).toFixed(2)}</td>}
+        <td className="col-actions">
+          <AlertActions
+            deviceName={ev.deviceName}
+            eventTime={ev.eventTime}
+            endTime={ev.endTime || ev.eventTime}
+            expanded={expanded}
+            onGraph={onToggle}
+          />
+        </td>
       </tr>
       {expanded ? (
         <tr>
-          <td className="detail-cell" colSpan={4}>
+          <td className="detail-cell" colSpan={5}>
             <div className="detail-head">
               <span className={`chip ${theft ? 'chip--critical' : 'chip--good'}`}>{ev.eventType}</span>
               <span className="detail-title">{ev.deviceName}</span>
               <Link
-                className="link-inline"
-                to={`/live?device=${encodeURIComponent(ev.deviceName)}`}
-                onClick={(e) => e.stopPropagation()}
+                className="btn-alert btn-alert--primary"
+                to={liveReportUrl(ev.deviceName, ev.eventTime, ev.endTime || ev.eventTime)}
               >
-                Open in Live Map →
+                Open full vehicle report →
               </Link>
             </div>
             <div className="detail-meta" style={{ marginBottom: 10 }}>
@@ -362,6 +422,7 @@ function DayRow({ d, expanded, onToggle }) {
                       <th>Vehicle</th>
                       <th className="col-qty num">Litres</th>
                       <th className="col-conf num">Confidence / reason</th>
+                      <th className="col-actions">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -591,11 +652,59 @@ export default function AlertsPage() {
           </div>
         </div>
 
+        {allEvents.length ? (
+          <div className="panel">
+            <h3>Cases this cycle</h3>
+            <p className="alerts-hint">
+              Every confirmed fill or theft — open the graph here, or jump to the full vehicle report
+              (chart + all fill/theft predictions for that window).
+            </p>
+            <div className="alert-case-grid">
+              {allEvents.map((ev, i) => {
+                const theft = isTheft(ev)
+                const key = `case-${ev.deviceName}-${ev.eventTime}-${i}`
+                return (
+                  <div key={key} className={`alert-case${theft ? ' alert-case--theft' : ' alert-case--fill'}`}>
+                    <div className="alert-case__top">
+                      <span className={`chip ${theft ? 'chip--critical' : 'chip--good'}`}>
+                        {theft ? 'Theft' : 'Fill'}
+                      </span>
+                      <span className={`alert-case__liters ${theft ? 'qty-theft' : 'qty-fill'}`}>
+                        {fmtL(ev.volume)}
+                      </span>
+                      <span className="muted" style={{ fontSize: 12 }}>{hhmm(ev.eventTime)}</span>
+                    </div>
+                    <div className="alert-case__name" title={ev.deviceName}>{ev.deviceName}</div>
+                    <AlertActions
+                      deviceName={ev.deviceName}
+                      eventTime={ev.eventTime}
+                      endTime={ev.endTime || ev.eventTime}
+                      expanded={openEvent === key}
+                      onGraph={() => setOpenEvent(openEvent === key ? null : key)}
+                    />
+                    {openEvent === key ? (
+                      <div className="alert-case__graph">
+                        <Trace
+                          deviceName={ev.deviceName}
+                          from={shiftHours(ev.eventTime, -EVENT_CONTEXT_HOURS)}
+                          to={shiftHours(ev.endTime || ev.eventTime, EVENT_CONTEXT_HOURS)}
+                          events={[ev]}
+                          emptyNote="No telemetry in this window."
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        ) : null}
+
         {view?.byVehicle?.length ? (
           <div className="panel">
             <h3>By vehicle</h3>
             <p className="alerts-hint">
-              Click a vehicle to see its fuel trace with every event from this cycle.
+              View graph for all cases on a vehicle, or open the full Live Map report.
             </p>
             <table className="alerts-table">
               <thead>
@@ -603,6 +712,7 @@ export default function AlertsPage() {
                   <th>Vehicle</th>
                   <th className="col-qty num">Theft</th>
                   <th className="col-qty num">Fill</th>
+                  <th className="col-actions">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -639,7 +749,8 @@ export default function AlertsPage() {
             ))}
           </div>
           <p className="alerts-hint">
-            Click any row for the trace ±{EVENT_CONTEXT_HOURS}h around that event.
+            Use <strong>View graph</strong> for a quick trace, or <strong>Full report</strong> for Live Map
+            with chart + all fill/theft detections for that vehicle.
           </p>
           {rows.length ? (
             <table className="alerts-table">
@@ -651,6 +762,7 @@ export default function AlertsPage() {
                   {tab === 'suppressed'
                     ? <th className="col-reason">Filtered because</th>
                     : <th className="col-conf num">Confidence</th>}
+                  <th className="col-actions">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -726,9 +838,9 @@ export default function AlertsPage() {
                     <td className="num">{Number(p.corr).toFixed(2)}</td>
                     <td className="num">{fmtL(p.swing_liters)}</td>
                     <td>
-                      <Link className="link-inline"
-                            to={`/live?device=${encodeURIComponent(p.vehicle || '')}`}>
-                        view →
+                      <Link className="btn-alert btn-alert--primary"
+                            to={liveReportUrl(p.vehicle || '', new Date().toISOString(), new Date().toISOString(), 12)}>
+                        Full report →
                       </Link>
                     </td>
                   </tr>

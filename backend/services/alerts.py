@@ -53,7 +53,7 @@ SLAB_CONTEXT_HOURS = 1.0
 CSV_FIELDS = [
     "confirmedAt", "deviceName", "imei", "eventType", "eventTime", "endTime",
     "volume_L", "confidence", "decision", "ignition", "trulyParked", "tamper",
-    "durationMinutes", "latitude", "longitude",
+    "durationMinutes", "speed", "mlLabel", "mlConfidence", "latitude", "longitude",
 ]
 # Filtered events keep the same shape plus the reason, so the two files can be
 # compared column-for-column when auditing why something never alerted.
@@ -402,6 +402,53 @@ def _latest_ts(series: List[dict]) -> Optional[datetime]:
 
 # ---------------------------------------------------------------- confirmation gate
 
+def precision_gate_preview(ev: dict) -> str:
+    """Suppress reason from field-only precision gates, else "".
+
+    Used by the review sheet to mark which already-released rows the tighter
+    alert gates would drop (without replaying telemetry).
+    """
+    volume = abs(float(ev.get("volume") or ev.get("volume_L") or 0))
+    is_theft = "theft" in str(ev.get("eventType", "")).lower()
+    speed = float(ev.get("speed") or 0)
+    duration = float(ev.get("durationMinutes") or 0)
+    if duration <= 0:
+        start = _parse_ts(ev.get("eventTime"))
+        end = _parse_ts(ev.get("endTime")) or start
+        if start is not None and end is not None and end >= start:
+            duration = (end - start).total_seconds() / 60.0
+    truly_parked = str(ev.get("trulyParked") or "").strip().lower() in ("true", "1", "yes")
+    if isinstance(ev.get("trulyParked"), bool):
+        truly_parked = bool(ev.get("trulyParked"))
+    ign = str(ev.get("ignition") or "").strip().lower()
+    ign_off = ign in ("off", "0", "false")
+    ml_label = str(ev.get("mlLabel") or "").strip().lower()
+    try:
+        ml_conf = float(ev.get("mlConfidence") or 0)
+    except (TypeError, ValueError):
+        ml_conf = 0.0
+
+    if ml_label in ("noise", "sensor_fault") and ml_conf >= config.ALERT_ML_DISAGREE_MIN:
+        return f"ml_{ml_label}_{ml_conf:.2f}"
+    if not is_theft:
+        if speed > config.ALERT_FILL_MAX_SPEED_KMH:
+            return f"moving_fill_{speed:.0f}kmh"
+        return ""
+    if volume < config.ALERT_THEFT_MIN_LITERS:
+        return f"theft_below_{config.ALERT_THEFT_MIN_LITERS:.0f}L"
+    if duration > 0 and duration < config.ALERT_SPIKE_MAX_MINUTES and volume >= config.ALERT_SPIKE_MIN_LITERS:
+        return f"spike_{duration:.1f}min_{volume:.0f}L"
+    # duration must be known: missing/0 means "unknown", not "instant".
+    if (
+        duration > 0
+        and (not ign_off)
+        and (not truly_parked)
+        and duration < config.ALERT_THEFT_MIN_DURATION_MOVING_MIN
+    ):
+        return f"moving_short_theft_{duration:.1f}min"
+    return ""
+
+
 def confirm_event(device: str, imei: str, ev: dict, series: List[dict],
                   now: Optional[datetime] = None,
                   require_reporting: bool = True) -> Tuple[str, str]:
@@ -444,11 +491,16 @@ def confirm_event(device: str, imei: str, ev: dict, series: List[dict],
     if gap > config.ALERT_MAX_GAP_MINUTES:
         return "suppress", f"unobserved_gap_{gap:.0f}min"
 
-    # Fills need no persistence test: fuel that appeared is not a safety concern and
-    # a phantom fill costs nothing. Everything below is about drains.
+    # Session RF / moving-fill / small-theft / spike / moving-short — shared with
+    # the review-sheet preview so already-released rows can be annotated the same way.
+    precision_hit = precision_gate_preview(ev)
+    if precision_hit:
+        return "suppress", precision_hit
     if not is_theft:
+        # Fills need no persistence test: fuel that appeared is not a safety concern.
         return "release", ""
 
+    # --- theft-only persistence / voltage / park gates ---------------------------
     # 4. Voltage coupling can manufacture litres. Require a real margin over it.
     swing = voltage_profile.swing_liters(imei)
     if swing > 0 and volume < swing * config.VOLTAGE_SWING_MULTIPLE:

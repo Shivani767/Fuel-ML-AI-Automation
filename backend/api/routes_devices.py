@@ -137,10 +137,10 @@ def device_summary(device_name):
         return jsonify(compute_device_summary(resolved, data, events=[]))
     # Use session detector (+ RF) for fill/theft KPIs — not noisy fuel_events.json
     try:
-        theft_min = float(request.args.get("theft_min", "2"))
-        fill_min = float(request.args.get("fill_min", "2"))
+        theft_min = float(request.args.get("theft_min", "5"))
+        fill_min = float(request.args.get("fill_min", "5"))
     except ValueError:
-        theft_min, fill_min = 2.0, 2.0
+        theft_min, fill_min = 5.0, 5.0
     events = detect_fill_theft(
         resolved, data, theft_min=theft_min, fill_min=fill_min
     )
@@ -254,17 +254,17 @@ def device_fill_theft_events(device_name):
     # detect_fill_theft() already processes multi-day ranges day-by-day.
 
     try:
-        min_liters = float(request.args.get("min_liters", "2"))
+        min_liters = float(request.args.get("min_liters", "5"))
     except ValueError:
-        min_liters = 2.0
+        min_liters = 5.0
     try:
-        theft_min = float(request.args.get("theft_min", str(max(min_liters, 2))))
+        theft_min = float(request.args.get("theft_min", str(max(min_liters, 5))))
     except ValueError:
-        theft_min = 2.0
+        theft_min = 5.0
     try:
-        fill_min = float(request.args.get("fill_min", "2"))
+        fill_min = float(request.args.get("fill_min", "5"))
     except ValueError:
-        fill_min = 2.0
+        fill_min = 5.0
 
     include_noise = str(request.args.get("include_stored", "0")).lower() in (
         "1",

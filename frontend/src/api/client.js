@@ -76,8 +76,8 @@ export const api = {
         from,
         to,
         fetch: opts.fetch ?? '0',
-        theft_min: opts.theftMin ?? 2,
-        fill_min: opts.fillMin ?? 2,
+        theft_min: opts.theftMin ?? 5,
+        fill_min: opts.fillMin ?? 5,
         include_stored: opts.includeStored ? '1' : '0',
       })}`
     ),

@@ -60,7 +60,12 @@ const MAX_CHART_POINTS = 2500
 export default function LiveMap() {
   const [searchParams] = useSearchParams()
   const preset = searchParams.get('device') || ''
-  const defaults = useMemo(() => defaultRange(), [])
+  const presetFrom = (searchParams.get('from') || '').replace(' ', 'T')
+  const presetTo = (searchParams.get('to') || '').replace(' ', 'T')
+  const defaults = useMemo(() => {
+    if (presetFrom && presetTo) return { from: presetFrom, to: presetTo }
+    return defaultRange()
+  }, [presetFrom, presetTo])
 
   const [names, setNames] = useState([])
   const [device, setDevice] = useState(preset)
@@ -170,7 +175,7 @@ export default function LiveMap() {
           setStreamStatus('Range complete')
           if (selected && fromIso && toIso) {
             api
-              .deviceEvents(selected, fromIso, toIso, { theftMin: 2, fillMin: 2, fetch: '0' })
+              .deviceEvents(selected, fromIso, toIso, { theftMin: 5, fillMin: 5, fetch: '0' })
               .then((evPayload) => setEventStats(evPayload))
               .catch(() => {})
           }
@@ -200,8 +205,8 @@ export default function LiveMap() {
     setEventsLoading(true)
     try {
       const ev = await api.deviceEvents(selected, fromIso, toIso, {
-        theftMin: 2,
-        fillMin: 2,
+        theftMin: 5,
+        fillMin: 5,
         includeStored: false,
         fetch: '0',
       })
@@ -285,10 +290,19 @@ export default function LiveMap() {
   }
 
   useEffect(() => {
-    if (device) runSearch(device)
+    if (presetFrom) setFrom(presetFrom)
+    if (presetTo) setTo(presetTo)
+  }, [presetFrom, presetTo])
+
+  useEffect(() => {
+    if (!device) return
+    runSearch(device, {
+      from: presetFrom || undefined,
+      to: presetTo || undefined,
+    })
     return () => stopStream()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [device])
+  }, [device, presetFrom, presetTo])
 
   useEffect(() => {
     if (!streaming) stopStream()
@@ -330,11 +344,20 @@ export default function LiveMap() {
       <div className="content">
         <div className="admin-banner">
           <span>
-            Add or manage vehicles by IMEI in Admin (saved for lifetime).
+            {preset
+              ? `Opened from Alerts for ${preset}${presetFrom ? ` · ${String(presetFrom).replace('T', ' ').slice(0, 16)} → ${String(presetTo).replace('T', ' ').slice(11, 16)}` : ''}. Chart + fill/theft reports load for this window.`
+              : 'Add or manage vehicles by IMEI in Admin (saved for lifetime).'}
           </span>
-          <Link to="/admin" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: 13 }}>
-            Open Admin
-          </Link>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {preset ? (
+              <Link to="/alerts" className="btn btn-ghost" style={{ padding: '6px 12px', fontSize: 13 }}>
+                ← Back to Alerts
+              </Link>
+            ) : null}
+            <Link to="/admin" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: 13 }}>
+              Open Admin
+            </Link>
+          </div>
         </div>
 
         <LiveSummaryCards

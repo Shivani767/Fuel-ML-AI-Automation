@@ -22,13 +22,14 @@ ChartJS.register(
 )
 
 const SERIES = [
-  { key: 'fuelLevel', name: 'Fuel Level', color: '#7dd3fc' },
-  { key: 'fuelLevelEDC', name: 'Fuel Level EDC', color: '#6366f1' },
-  { key: 'ignition', name: 'Ignition', color: '#16a34a' },
-  { key: 'movement', name: 'Movement', color: '#f97316' },
-  { key: 'speed', name: 'Speed', color: '#1d4ed8' },
-  { key: 'powerEx', name: 'Power Ex', color: '#c026d3' },
-  { key: 'powerIn', name: 'Power In', color: '#0d9488' },
+  // FuelArk-style: liters on the primary axis. Raw EDC/power drown that scale
+  // (thousands / tens of thousands) so they sit on y1 and stay legend-hidden.
+  { key: 'fuelLevel', name: 'Fuel Level (L)', color: '#4f46e5', yAxisID: 'y', hidden: false, width: 2.25 },
+  { key: 'fuelLevelEDC', name: 'Fuel Level EDC', color: '#7dd3fc', yAxisID: 'y1', hidden: true, width: 1.25 },
+  { key: 'speed', name: 'Speed', color: '#1d4ed8', yAxisID: 'y1', hidden: true, width: 1 },
+  { key: 'movement', name: 'Movement', color: '#f97316', yAxisID: 'y1', hidden: true, width: 1 },
+  { key: 'powerEx', name: 'Power Ex', color: '#c026d3', yAxisID: 'y1', hidden: true, width: 1 },
+  { key: 'powerIn', name: 'Power In', color: '#0d9488', yAxisID: 'y1', hidden: true, width: 1 },
 ]
 
 const IGNITION_ON_FILL = 'rgba(34, 197, 94, 0.28)'
@@ -303,12 +304,14 @@ export default function DeviceChart({
             data: rows.map((p) => Number(p[s.key] ?? 0)),
             borderColor: s.color,
             backgroundColor: s.color,
-            borderWidth: 1.5,
+            borderWidth: s.width ?? 1.5,
             pointRadius: 0,
             pointHoverRadius: 3,
             tension: 0.05,
+            yAxisID: s.yAxisID || 'y',
+            hidden: Boolean(s.hidden),
           })),
-          ...markerDatasets,
+          ...markerDatasets.map((ds) => ({ ...ds, yAxisID: 'y' })),
         ],
       },
       options: {
@@ -369,8 +372,19 @@ export default function DeviceChart({
             },
           },
           y: {
-            title: { display: true, text: 'Device Data' },
+            type: 'linear',
+            position: 'left',
+            title: { display: true, text: 'Fuel (liters)' },
+            beginAtZero: false,
+            grace: '8%',
+          },
+          y1: {
+            type: 'linear',
+            position: 'right',
+            title: { display: true, text: 'EDC / power / speed' },
             beginAtZero: true,
+            grid: { drawOnChartArea: false },
+            display: 'auto',
           },
         },
       },
@@ -392,13 +406,14 @@ export default function DeviceChart({
           <span className="muted" style={{ fontSize: 12 }}>
             <span className="ign-legend-on" /> Ignition ON (green) ·{' '}
             <span className="ign-legend-off" /> Ignition OFF (white)
+            {' · Fuel (L) primary — click legend for EDC/power'}
             {markerCount ? (
               <>
                 {' · '}
                 <span style={{ color: THEFT_COLOR, fontWeight: 600 }}>▼ theft</span>
                 {' / '}
                 <span style={{ color: FILL_COLOR, fontWeight: 600 }}>▲ fill</span>
-                {' marked on the trace'}
+                {' marked on the fuel trace'}
               </>
             ) : null}
             {streaming

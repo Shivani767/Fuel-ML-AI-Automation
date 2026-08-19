@@ -86,6 +86,22 @@ ALERT_MAX_GAP_MINUTES = float(os.environ.get("ALERT_MAX_GAP_MINUTES", "20"))
 # Never imply "no theft" for a device that simply stopped reporting.
 ALERT_STALE_DEVICE_MINUTES = float(os.environ.get("ALERT_STALE_DEVICE_MINUTES", "60"))
 ALERT_MIN_DECISION = os.environ.get("ALERT_MIN_DECISION", "AUTO_CONFIRMED")
+# --- precision gates (alert agent only; Live Map detection can stay more sensitive) ---
+# Floor for theft alerts. Detection may still find 2–5 L sessions for review, but the
+# 30-min agent should not page humans for ambiguous small drains.
+ALERT_THEFT_MIN_LITERS = float(os.environ.get("ALERT_THEFT_MIN_LITERS", "5.0"))
+# A huge liter jump in a few seconds is almost always a sensor spike, not siphoning.
+ALERT_SPIKE_MAX_MINUTES = float(os.environ.get("ALERT_SPIKE_MAX_MINUTES", "0.5"))
+ALERT_SPIKE_MIN_LITERS = float(os.environ.get("ALERT_SPIKE_MIN_LITERS", "8.0"))
+# Filling while driving at highway/site travel speed is not a pump event.
+ALERT_FILL_MAX_SPEED_KMH = float(os.environ.get("ALERT_FILL_MAX_SPEED_KMH", "15.0"))
+# Ignition-ON + moving short drains are the noisiest false thefts on this fleet.
+# Require parked or ignition-off, or a longer observed session.
+ALERT_THEFT_MIN_DURATION_MOVING_MIN = float(
+    os.environ.get("ALERT_THEFT_MIN_DURATION_MOVING_MIN", "3.0")
+)
+# If session RF strongly says noise/fault, do not alert even if rules said AUTO.
+ALERT_ML_DISAGREE_MIN = float(os.environ.get("ALERT_ML_DISAGREE_MIN", "0.70"))
 
 # RETIRED as an independent timer -- the fetch now runs inside the pipeline (see
 # PIPELINE_INTERVAL_SECONDS). Kept only for callers that still start a standalone
