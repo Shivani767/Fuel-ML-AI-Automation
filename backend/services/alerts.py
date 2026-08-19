@@ -47,6 +47,8 @@ DAILY_DIR = ALERT_DIR / "daily"
 LEDGER_RETENTION_DAYS = 7
 # Per-cycle digests kept on disk (~2 days at a 30-minute cadence).
 DIGEST_KEEP = 96
+# Context read either side of an ad-hoc slab scan (see scan_window).
+SLAB_CONTEXT_HOURS = 1.0
 
 CSV_FIELDS = [
     "confirmedAt", "deviceName", "imei", "eventType", "eventTime", "endTime",
@@ -401,8 +403,15 @@ def _latest_ts(series: List[dict]) -> Optional[datetime]:
 # ---------------------------------------------------------------- confirmation gate
 
 def confirm_event(device: str, imei: str, ev: dict, series: List[dict],
-                  now: Optional[datetime] = None) -> Tuple[str, str]:
-    """Return (status, reason) where status is release | hold | suppress."""
+                  now: Optional[datetime] = None,
+                  require_reporting: bool = True) -> Tuple[str, str]:
+    """Return (status, reason) where status is release | hold | suppress.
+
+    `require_reporting` guards the live sweep's rule that a silent device proves
+    nothing. A retrospective scan of a past window is asking a different question --
+    the telemetry for that window is in hand -- so it turns the rule off rather than
+    suppress every event on a vehicle that happens to be offline right now.
+    """
     now = now or datetime.now()
     start = _parse_ts(ev.get("eventTime"))
     end = _parse_ts(ev.get("endTime")) or start
@@ -420,9 +429,10 @@ def confirm_event(device: str, imei: str, ev: dict, series: List[dict],
         return "release", ""
 
     # 1. Device must still be reporting -- silence is not evidence of anything.
-    last = _latest_ts(series)
-    if last is None or (now - last).total_seconds() / 60.0 > config.ALERT_STALE_DEVICE_MINUTES:
-        return "suppress", "device_not_reporting"
+    if require_reporting:
+        last = _latest_ts(series)
+        if last is None or (now - last).total_seconds() / 60.0 > config.ALERT_STALE_DEVICE_MINUTES:
+            return "suppress", "device_not_reporting"
 
     # 2. Too young to judge -- revisit next cycle rather than discard.
     settle = timedelta(minutes=config.ALERT_SETTLE_MINUTES)
@@ -585,7 +595,10 @@ def _run_cycle_locked(now: Optional[datetime], devices: Optional[List[str]]) -> 
     return digest
 
 
-def _write_digest(now, released, suppressed, held, skipped, n_devices, took) -> dict:
+def _build_digest(now, released, suppressed, held, skipped, n_devices, took) -> dict:
+    """Shape a digest without persisting it. Split out from `_write_digest` so a
+    read-only scan (see `scan_window`) returns the same structure the UI already
+    renders, while touching nothing on disk."""
     thefts = [e for e in released if "theft" in str(e.get("eventType", "")).lower()]
     fills = [e for e in released if e not in thefts]
 
@@ -629,6 +642,12 @@ def _write_digest(now, released, suppressed, held, skipped, n_devices, took) -> 
         "suppressed": suppressed,
         "tookSeconds": round(took, 1),
     }
+    return digest
+
+
+def _write_digest(now, released, suppressed, held, skipped, n_devices, took) -> dict:
+    digest = _build_digest(now, released, suppressed, held, skipped, n_devices, took)
+    reasons = digest["suppressedByReason"]
 
     ALERT_DIR.mkdir(parents=True, exist_ok=True)
     LATEST_PATH.write_text(json.dumps(digest, indent=1, default=str), encoding="utf-8")
@@ -652,6 +671,104 @@ def _write_digest(now, released, suppressed, held, skipped, n_devices, took) -> 
           f"{held} held, {len(suppressed)} suppressed {reasons or ''}; "
           f"{n_devices - skipped} devices in {digest['tookSeconds']}s"
           + (f"; csv -> {', '.join(days)}" if days else ""))
+    return digest
+
+
+def scan_window(window_from: datetime, window_to: datetime,
+                devices: Optional[List[str]] = None) -> dict:
+    """Detect fills and thefts inside one explicit window. Read-only.
+
+    Deliberately NOT `run_cycle` with a different clock. Two things make the live
+    cycle wrong for answering "what happened between 12:00 and 12:30":
+
+      * it consults the ledger, whose whole job is to stop an event being reported
+        twice -- so any slab the agent has already swept would come back empty,
+        which is exactly the slab someone goes looking for; and
+      * it writes: the ledger, the digest files and the day-wise CSVs. Inspecting a
+        past window must not rewrite the record of it.
+
+    So this shares the detector and the confirmation gate but keeps no state.
+    """
+    from backend.services.detection import detect_fill_theft
+
+    started = time.time()
+    now = datetime.now()
+    min_rank = DECISION_RANK.get(config.ALERT_MIN_DECISION, 2)
+
+    # Read wider than the slab. A session that opens before it or closes after it is
+    # still the slab's event, and 30 minutes of points on their own rarely give the
+    # detector enough to establish a baseline. Events are narrowed to the slab below.
+    #
+    # An hour either side puts a 30-minute slab in a 2.5h window -- about what the live
+    # cycle detects over (ALERT_WINDOW_HOURS = 3), so findings stay comparable. Padding
+    # by the full window instead would more than double the points fed to the detector
+    # on every device, and this runs while someone waits on a button.
+    pad = timedelta(hours=SLAB_CONTEXT_HOURS)
+    read_from, read_to = window_from - pad, window_to + pad
+
+    released: List[dict] = []
+    suppressed: List[dict] = []
+    held = 0
+    skipped_devices = 0
+
+    names = devices if devices is not None else sorted(data_store.device_data_dict.keys())
+    for device in names:
+        series = _series_for(device)
+        if len(series) < 10:
+            skipped_devices += 1
+            continue
+        context = [
+            p for p in series
+            if read_from <= (_parse_ts(p.get("time")) or datetime.min) <= read_to
+        ]
+        if len(context) < 10:
+            skipped_devices += 1
+            continue
+
+        imei = str(context[-1].get("imei") or "")
+        try:
+            events = detect_fill_theft(device, context)
+        except Exception as e:
+            print(f"[alerts] slab {device}: detection failed: {e}")
+            continue
+
+        for ev in events:
+            start = _parse_ts(ev.get("eventTime"))
+            if start is None or not (window_from <= start < window_to):
+                continue  # context only -- not in the slab that was asked for
+
+            row = dict(ev)
+            row["deviceName"] = device
+            row["imei"] = imei
+
+            # Kept rather than dropped: on an inspection screen a near miss is worth
+            # seeing, so it lands in Filtered with the reason instead of vanishing.
+            if DECISION_RANK.get(str(ev.get("decision")), 0) < min_rank:
+                row["suppressedReason"] = f"below_{config.ALERT_MIN_DECISION}"
+                suppressed.append(row)
+                continue
+
+            status, reason = confirm_event(device, imei, ev, series, now=now,
+                                           require_reporting=False)
+            if status == "hold":
+                held += 1
+                continue
+            if status == "suppress":
+                row["suppressedReason"] = reason
+                suppressed.append(row)
+                continue
+            released.append(row)
+
+    digest = _build_digest(now, released, suppressed, held, skipped_devices,
+                           len(names), time.time() - started)
+    digest["slab"] = {
+        "from": window_from.isoformat(timespec="seconds"),
+        "to": window_to.isoformat(timespec="seconds"),
+        "minutes": round((window_to - window_from).total_seconds() / 60.0, 1),
+    }
+    print(f"[alerts] slab {window_from:%Y-%m-%d %H:%M}-{window_to:%H:%M}: "
+          f"{digest['theftCount']} theft / {digest['fillCount']} fill, "
+          f"{held} held, {len(suppressed)} filtered in {digest['tookSeconds']}s")
     return digest
 
 

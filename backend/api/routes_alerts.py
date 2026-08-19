@@ -3,12 +3,16 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime, timedelta
 
 from flask import Blueprint, jsonify, request, send_file
 
 from backend.services import alerts, voltage_profile
 
 bp = Blueprint("alerts", __name__)
+
+# Upper bound on an ad-hoc slab scan (see alerts_slab).
+MAX_SLAB_HOURS = 6
 
 
 @bp.get("/api/alerts/latest")
@@ -100,6 +104,44 @@ def alerts_run_now():
     """Force a cycle immediately instead of waiting for the timer."""
     try:
         return jsonify(alerts.run_cycle())
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@bp.get("/api/alerts/slab")
+def alerts_slab():
+    """Fills and thefts inside one explicit window, e.g. 12:00 to 12:30.
+
+    A GET because it changes nothing: `alerts.scan_window` runs the detector and the
+    confirmation gate but writes no ledger, digest or CSV, so the same slab can be
+    asked for repeatedly and answers the same way.
+    """
+    raw_from = (request.args.get("from") or "").strip()
+    raw_to = (request.args.get("to") or "").strip()
+    if not raw_from or not raw_to:
+        return jsonify({"error": "from and to are required (ISO local time)"}), 400
+
+    def _parse(value: str):
+        try:
+            return datetime.fromisoformat(value.replace(" ", "T").replace("Z", ""))
+        except ValueError:
+            return None
+
+    start, end = _parse(raw_from), _parse(raw_to)
+    if start is None or end is None:
+        return jsonify({"error": "from/to must be ISO like 2026-08-17T12:00:00"}), 400
+    if end <= start:
+        return jsonify({"error": "to must be after from"}), 400
+    # A slab is meant to be a slice of a day. Without a ceiling this becomes an
+    # unbounded fleet-wide rescan, which is what the 30-minute agent is for.
+    if (end - start) > timedelta(hours=MAX_SLAB_HOURS):
+        return jsonify({
+            "error": f"window too large: max {MAX_SLAB_HOURS}h, got "
+                     f"{(end - start).total_seconds() / 3600:.1f}h"
+        }), 400
+
+    try:
+        return jsonify(alerts.scan_window(start, end))
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
 

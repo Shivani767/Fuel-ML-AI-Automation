@@ -445,6 +445,7 @@ export default function LiveMap() {
           <DeviceChart
             deviceName={device}
             points={points}
+            events={eventStats?.events || []}
             streaming={streaming}
             onPauseStreaming={pauseStreamingForChart}
           />

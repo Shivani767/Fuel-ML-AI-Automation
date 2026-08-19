@@ -9,47 +9,116 @@ const POLL_MS = 60000
 const EVENT_CONTEXT_HOURS = 2
 // Clicking a vehicle shows a wider view so all of its events sit in one picture.
 const VEHICLE_CONTEXT_HOURS = 12
+// Ad-hoc slab check: same length as the agent's cadence, over the last day.
+const SLAB_MINUTES = 30
+const SLAB_HOURS_BACK = 24
+// Trace framing for a slab result — tight enough that 30 minutes fills the chart.
+const SLAB_TRACE_CONTEXT_HOURS = 1.5
+const SLAB_FIELD = {
+  padding: '3px 8px',
+  fontSize: 13,
+  borderRadius: 6,
+  border: '1px solid var(--border, #cbd5e1)',
+}
 
 const fmtL = (v) => `${Number(v || 0).toFixed(1)} L`
 const hhmm = (ts) => (ts ? String(ts).slice(11, 16) : '—')
 const pretty = (r) => String(r || '').replace(/_/g, ' ')
 const isTheft = (e) => /theft/i.test(e?.eventType || '')
 
+const p2 = (n) => String(n).padStart(2, '0')
+
+/** Local wall-clock ISO — the backend compares against naive local timestamps. */
+function toLocalIso(d) {
+  return (
+    `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}` +
+    `T${p2(d.getHours())}:${p2(d.getMinutes())}:${p2(d.getSeconds())}`
+  )
+}
+
 function shiftHours(ts, h) {
   const d = new Date(String(ts).replace(' ', 'T'))
   if (Number.isNaN(d.getTime())) return null
   d.setHours(d.getHours() + h)
-  const p = (n) => String(n).padStart(2, '0')
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`
+  return toLocalIso(d)
+}
+
+const ymd = (d) => `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}`
+const hhmmOf = (d) => `${p2(d.getHours())}:${p2(d.getMinutes())}`
+
+/** The two calendar days the last 24 hours can fall on. */
+function dayOptions(nowMs) {
+  const today = new Date(nowMs)
+  const yesterday = new Date(nowMs - 86400000)
+  const nice = (d) =>
+    `${d.getDate()} ${d.toLocaleString(undefined, { month: 'short' })}`
+  return [
+    { value: ymd(today), label: `Today · ${nice(today)}` },
+    { value: ymd(yesterday), label: `Yesterday · ${nice(yesterday)}` },
+  ]
+}
+
+/** Start of the half-hour slab in progress, as HH:MM. */
+function currentSlabStart(nowMs) {
+  const stepMs = SLAB_MINUTES * 60000
+  return hhmmOf(new Date(Math.floor(nowMs / stepMs) * stepMs))
 }
 
 function Caret({ open }) {
   return <span className="row-caret">{open ? '▾' : '▸'}</span>
 }
 
+const asNum = (v) => (v === '' || v == null ? null : Number(v))
+// CSV round-trips every field as text, so "False" arrives truthy.
+const asBool = (v) => v === true || String(v).toLowerCase() === 'true'
+
+/**
+ * Rows read back from a day's CSV are all strings, and the volume column is
+ * written as `volume_L` (see alerts.py). Bring them back to the shape the live
+ * digest uses so the tables and the chart markers read one kind of event.
+ */
+function normalizeStoredEvent(r) {
+  return {
+    ...r,
+    volume: asNum(r.volume ?? r.volume_L) ?? 0,
+    confidence: asNum(r.confidence),
+    durationMinutes: asNum(r.durationMinutes),
+    mlConfidence: asNum(r.mlConfidence),
+    tamper: asBool(r.tamper),
+    trulyParked: asBool(r.trulyParked),
+  }
+}
+
 function Dash() {
   return <span className="dash">—</span>
 }
 
-/** Load telemetry for a device/window once, when first shown. */
+/**
+ * Load telemetry for a device/window once, when first shown.
+ *
+ * The dependency list is deliberately only the inputs. Including the hook's own
+ * `loading`/`points` made setting `loading: true` re-run the effect, which fired
+ * the previous run's cleanup and marked the in-flight request dead before it
+ * resolved -- the trace then sat on "Loading trace…" for good.
+ */
 function useSeries(deviceName, from, to, enabled) {
   const [state, setState] = useState({ points: null, loading: false, error: '' })
 
   useEffect(() => {
-    if (!enabled || !deviceName || state.points || state.loading) return
+    if (!enabled || !deviceName || !from || !to) return undefined
     let alive = true
-    setState((s) => ({ ...s, loading: true }))
+    setState({ points: null, loading: true, error: '' })
     api
       .deviceSeries(deviceName, from, to, { downsample: 1, limit: 5000 })
       .then((d) => alive && setState({ points: d.points || [], loading: false, error: '' }))
       .catch((e) => alive && setState({ points: [], loading: false, error: e.message }))
     return () => { alive = false }
-  }, [enabled, deviceName, from, to, state.points, state.loading])
+  }, [enabled, deviceName, from, to])
 
   return state
 }
 
-function Trace({ deviceName, from, to, emptyNote }) {
+function Trace({ deviceName, from, to, emptyNote, events = [] }) {
   const { points, loading, error } = useSeries(deviceName, from, to, true)
   if (loading) return <p className="alerts-hint">Loading trace…</p>
   if (error) return <p className="error">{error}</p>
@@ -59,17 +128,24 @@ function Trace({ deviceName, from, to, emptyNote }) {
     <>
       <p className="alerts-hint">
         {points.length} readings · {String(from).replace('T', ' ')} → {String(to).replace('T', ' ')}
+        {events.length
+          ? ` · ${events.length} event${events.length === 1 ? '' : 's'} marked on the graph`
+          : ''}
       </p>
-      <DeviceChart deviceName={deviceName} points={points} />
+      <DeviceChart deviceName={deviceName} points={points} events={events} />
     </>
   )
 }
 
 /** A vehicle from the rollup: click to see its whole day and every event on it. */
-function VehicleRow({ v, events, expanded, onToggle }) {
-  const anchor = events[0]?.eventTime || new Date().toISOString()
-  const from = shiftHours(anchor, -VEHICLE_CONTEXT_HOURS)
-  const to = shiftHours(anchor, VEHICLE_CONTEXT_HOURS)
+function VehicleRow({ v, events, expanded, onToggle, contextHours = VEHICLE_CONTEXT_HOURS }) {
+  // Held steady across renders: the window feeds a fetch, and a `new Date()`
+  // recomputed each render would re-request the series every time.
+  const eventAnchor = events[0]?.eventTime
+  const [fallbackAnchor] = useState(() => new Date().toISOString())
+  const anchor = eventAnchor || fallbackAnchor
+  const from = shiftHours(anchor, -contextHours)
+  const to = shiftHours(anchor, contextHours)
 
   return (
     <>
@@ -133,7 +209,7 @@ function VehicleRow({ v, events, expanded, onToggle }) {
             ) : null}
 
             <Trace
-              deviceName={v.deviceName} from={from} to={to}
+              deviceName={v.deviceName} from={from} to={to} events={events}
               emptyNote="No telemetry in this window — the vehicle was not reporting."
             />
           </td>
@@ -197,9 +273,113 @@ function EventRow({ ev, expanded, onToggle }) {
                 : null}
             </div>
             <Trace
-              deviceName={ev.deviceName} from={from} to={to}
+              deviceName={ev.deviceName} from={from} to={to} events={[ev]}
               emptyNote="No telemetry in this window — the change was never observed."
             />
+          </td>
+        </tr>
+      ) : null}
+    </>
+  )
+}
+
+/** A past day's stored alerts, fetched the first time the day is opened. */
+function useDayAlerts(day, enabled) {
+  const [state, setState] = useState({ rows: null, loading: false, error: '' })
+
+  useEffect(() => {
+    if (!enabled || !day) return undefined
+    let alive = true
+    setState({ rows: null, loading: true, error: '' })
+    api
+      .alertsHistory(day, 500, true)
+      .then((d) => {
+        if (!alive) return
+        const rows = (d.alerts || []).map(normalizeStoredEvent)
+        setState({ rows, loading: false, error: '' })
+      })
+      .catch((e) => alive && setState({ rows: [], loading: false, error: e.message }))
+    return () => { alive = false }
+  }, [day, enabled])
+
+  return state
+}
+
+/** A day from the history: open it to reach every event it recorded, on the graph. */
+function DayRow({ d, expanded, onToggle }) {
+  const { rows, loading, error } = useDayAlerts(d.day, expanded)
+  const [openEvent, setOpenEvent] = useState(null)
+
+  return (
+    <>
+      <tr
+        className={`row-clickable${expanded ? ' is-open' : ''}`}
+        onClick={onToggle}
+        tabIndex={0}
+        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), onToggle())}
+        title="Click to see this day's events"
+      >
+        <td className="col-time"><Caret open={expanded} />{d.day}</td>
+        <td className="num">
+          {d.theftCount
+            ? <span className="qty-theft">{d.theftCount} · {fmtL(d.theftLiters)}</span>
+            : <Dash />}
+        </td>
+        <td className="num">
+          {d.fillCount
+            ? <span className="qty-fill">{d.fillCount} · {fmtL(d.fillLiters)}</span>
+            : <Dash />}
+        </td>
+        <td className="num">{d.filteredCount || <Dash />}</td>
+        <td className="num">{d.vehicles}</td>
+        <td>
+          <a className="link-inline" href={api.alertsCsvUrl(d.day)}
+             onClick={(e) => e.stopPropagation()}>alerts ↓</a>
+          {d.filteredCount ? (
+            <>
+              {' · '}
+              <a className="link-inline" href={api.alertsCsvUrl(d.day, 'filtered')}
+                 onClick={(e) => e.stopPropagation()}>filtered ↓</a>
+            </>
+          ) : null}
+        </td>
+      </tr>
+      {expanded ? (
+        <tr>
+          <td className="detail-cell" colSpan={6}>
+            {loading ? <p className="alerts-hint">Loading {d.day}…</p> : null}
+            {error ? <p className="error">{error}</p> : null}
+            {rows?.length ? (
+              <>
+                <p className="alerts-hint">
+                  {rows.length} recorded event{rows.length === 1 ? '' : 's'} ·
+                  {' '}click one for its trace with the event marked.
+                </p>
+                <table className="alerts-table">
+                  <thead>
+                    <tr>
+                      <th className="col-time">Time</th>
+                      <th>Vehicle</th>
+                      <th className="col-qty num">Litres</th>
+                      <th className="col-conf num">Confidence / reason</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows.map((ev, i) => {
+                      const key = `${d.day}-${i}`
+                      return (
+                        <EventRow key={key} ev={ev}
+                                  expanded={openEvent === key}
+                                  onToggle={() => setOpenEvent(openEvent === key ? null : key)} />
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </>
+            ) : null}
+            {rows && !rows.length && !loading
+              ? <p className="alerts-hint">No events stored for this day.</p>
+              : null}
           </td>
         </tr>
       ) : null}
@@ -223,8 +403,15 @@ export default function AlertsPage() {
   const [tab, setTab] = useState('theft')
   const [openEvent, setOpenEvent] = useState(null)
   const [openVehicle, setOpenVehicle] = useState(null)
+  const [openDay, setOpenDay] = useState(null)
   const [profiles, setProfiles] = useState(null)
   const [history, setHistory] = useState(null)
+  const [slabResult, setSlabResult] = useState(null)
+  const [slabRunning, setSlabRunning] = useState(false)
+  const [slabClock, setSlabClock] = useState(() => Date.now())
+  // Only the start is chosen; the end follows it by SLAB_MINUTES.
+  const [slabDay, setSlabDay] = useState(() => ymd(new Date()))
+  const [slabStart, setSlabStart] = useState(() => currentSlabStart(Date.now()))
 
   const load = useCallback(async () => {
     try {
@@ -239,19 +426,64 @@ export default function AlertsPage() {
     return () => clearInterval(id)
   }, [load])
 
+  useEffect(() => {
+    const id = setInterval(() => setSlabClock(Date.now()), POLL_MS)
+    return () => clearInterval(id)
+  }, [])
+
   useEffect(() => { api.voltageProfiles().then(setProfiles).catch(() => {}) }, [])
   useEffect(() => { api.alertsDays().then(setHistory).catch(() => {}) }, [digest])
 
   const runNow = async () => {
     setRunning(true)
-    try { setDigest(await api.alertsRun()) }
-    catch (e) { setError(e.message) }
+    try {
+      setDigest(await api.alertsRun())
+      setSlabResult(null) // a fresh cycle supersedes whatever slab was on screen
+    } catch (e) { setError(e.message) }
     finally { setRunning(false) }
   }
 
+  const slabDays = useMemo(() => dayOptions(slabClock), [slabClock])
+
+  // One choice drives the window: the end is always SLAB_MINUTES after the start.
+  const slab = useMemo(() => {
+    if (!slabDay || !slabStart) return null
+    const from = new Date(`${slabDay}T${slabStart}:00`)
+    if (Number.isNaN(from.getTime())) return null
+    const to = new Date(from.getTime() + SLAB_MINUTES * 60000)
+    const ageMs = slabClock - from.getTime()
+    return {
+      from: toLocalIso(from),
+      to: toLocalIso(to),
+      endLabel: hhmmOf(to),
+      label: `${slabStart}–${hhmmOf(to)}`,
+      future: ageMs < 0,
+      tooOld: ageMs > SLAB_HOURS_BACK * 3600000,
+    }
+  }, [slabDay, slabStart, slabClock])
+
+  const slabReady = Boolean(slab && !slab.future && !slab.tooOld)
+
+  const checkSlab = async () => {
+    if (!slabReady) return
+    setSlabRunning(true)
+    setError('')
+    try {
+      const d = await api.alertsSlab(slab.from, slab.to)
+      setSlabResult({ ...d, slabLabel: slab.label })
+      setOpenEvent(null)
+      setOpenVehicle(null)
+    } catch (e) { setError(e.message) }
+    finally { setSlabRunning(false) }
+  }
+
+  // Everything below the header renders whichever result is on screen: the agent's
+  // latest cycle, or the slab someone asked about.
+  const view = slabResult || digest
+
   const allEvents = useMemo(
-    () => [...(digest?.thefts || []), ...(digest?.fills || [])],
-    [digest]
+    () => [...(view?.thefts || []), ...(view?.fills || [])],
+    [view]
   )
   const eventsFor = useCallback(
     (name) => allEvents.filter((e) => e.deviceName === name),
@@ -259,14 +491,14 @@ export default function AlertsPage() {
   )
 
   const rows = useMemo(() => {
-    if (!digest) return []
-    if (tab === 'theft') return digest.thefts || []
-    if (tab === 'fill') return digest.fills || []
-    return digest.suppressed || []
-  }, [digest, tab])
+    if (!view) return []
+    if (tab === 'theft') return view.thefts || []
+    if (tab === 'fill') return view.fills || []
+    return view.suppressed || []
+  }, [view, tab])
 
   const needsCal = profiles?.needsRecalibration || []
-  const scanned = digest ? (digest.devicesScanned || 0) - (digest.devicesSkipped || 0) : 0
+  const scanned = view ? (view.devicesScanned || 0) - (view.devicesSkipped || 0) : 0
   const days = history?.days || []
 
   return (
@@ -285,27 +517,81 @@ export default function AlertsPage() {
               {running ? 'Scanning…' : 'Scan now'}
             </button>
           </p>
+          <p className="topbar-subtitle" style={{ marginTop: 6 }}>
+            Or check a 30-minute slab — pick when it starts{' '}
+            <select
+              value={slabDay}
+              onChange={(e) => setSlabDay(e.target.value)}
+              style={SLAB_FIELD}
+            >
+              {slabDays.map((d) => (
+                <option key={d.value} value={d.value}>{d.label}</option>
+              ))}
+            </select>{' '}
+            <input
+              type="time"
+              value={slabStart}
+              step={300}
+              onChange={(e) => setSlabStart(e.target.value)}
+              style={SLAB_FIELD}
+              aria-label="Slab start time"
+            />{' '}
+            <span className="chip" title="Set automatically, 30 minutes after the start">
+              → {slab?.endLabel || '—'} · {SLAB_MINUTES} min
+            </span>{' '}
+            <button type="button" className="btn btn-ghost"
+                    style={{ padding: '2px 10px', fontSize: 13 }}
+                    onClick={checkSlab} disabled={!slabReady || slabRunning}>
+              {slabRunning ? 'Checking…' : 'Check slab'}
+            </button>
+            {slab?.future
+              ? <span className="muted" style={{ fontSize: 12 }}> · that slab has not happened yet</span>
+              : null}
+            {slab?.tooOld
+              ? <span className="muted" style={{ fontSize: 12 }}> · older than 24 hours</span>
+              : null}
+          </p>
         </div>
       </header>
 
       <div className="content">
         {error ? <p className="error">{error}</p> : null}
-        {digest?.pending ? <div className="panel"><p>No alert cycle has completed yet.</p></div> : null}
+        {digest?.pending && !slabResult
+          ? <div className="panel"><p>No alert cycle has completed yet.</p></div> : null}
+
+        {slabResult ? (
+          <div className="panel" style={{ borderLeft: '4px solid #2563eb' }}>
+            <div className="detail-head">
+              <span className="chip">Slab</span>
+              <span className="detail-title">{slabResult.slabLabel}</span>
+              <span className="muted" style={{ fontSize: 13 }}>
+                {String(slabResult.slab?.from).replace('T', ' ')} →{' '}
+                {String(slabResult.slab?.to).slice(11, 16)} · scanned in{' '}
+                {slabResult.tookSeconds}s · nothing was written
+              </span>
+              <button type="button" className="btn btn-ghost"
+                      style={{ padding: '2px 10px', fontSize: 13 }}
+                      onClick={() => { setSlabResult(null); setOpenEvent(null); setOpenVehicle(null) }}>
+                Back to latest cycle
+              </button>
+            </div>
+          </div>
+        ) : null}
 
         <div className="panel">
           <div className="alert-stats">
-            <Stat variant="theft" value={digest?.theftCount ?? 0}
-                  label={`Theft · ${fmtL(digest?.theftLiters)}`} />
-            <Stat variant="fill" value={digest?.fillCount ?? 0}
-                  label={`Fill · ${fmtL(digest?.fillLiters)}`} />
-            <Stat variant="held" value={digest?.heldAwaitingSettle ?? 0}
+            <Stat variant="theft" value={view?.theftCount ?? 0}
+                  label={`Theft · ${fmtL(view?.theftLiters)}`} />
+            <Stat variant="fill" value={view?.fillCount ?? 0}
+                  label={`Fill · ${fmtL(view?.fillLiters)}`} />
+            <Stat variant="held" value={view?.heldAwaitingSettle ?? 0}
                   label="Awaiting confirmation" />
-            <Stat value={digest?.suppressedCount ?? 0} label="Filtered as artifacts" />
+            <Stat value={view?.suppressedCount ?? 0} label="Filtered as artifacts" />
             <div className="alert-stat__scanned">{scanned} vehicles scanned</div>
           </div>
         </div>
 
-        {digest?.byVehicle?.length ? (
+        {view?.byVehicle?.length ? (
           <div className="panel">
             <h3>By vehicle</h3>
             <p className="alerts-hint">
@@ -320,11 +606,14 @@ export default function AlertsPage() {
                 </tr>
               </thead>
               <tbody>
-                {digest.byVehicle.map((v) => (
+                {view.byVehicle.map((v) => (
                   <VehicleRow
                     key={v.deviceName}
                     v={v}
                     events={eventsFor(v.deviceName)}
+                    // A slab is 30 minutes; framing it in the 24h view used for a
+                    // whole cycle squeezes every event against one edge.
+                    contextHours={slabResult ? SLAB_TRACE_CONTEXT_HOURS : VEHICLE_CONTEXT_HOURS}
                     expanded={openVehicle === v.deviceName}
                     onToggle={() =>
                       setOpenVehicle(openVehicle === v.deviceName ? null : v.deviceName)}
@@ -338,9 +627,9 @@ export default function AlertsPage() {
         <div className="panel">
           <div className="alert-tabs">
             {[
-              ['theft', `Thefts (${digest?.theftCount ?? 0})`],
-              ['fill', `Fills (${digest?.fillCount ?? 0})`],
-              ['suppressed', `Filtered (${digest?.suppressedCount ?? 0})`],
+              ['theft', `Thefts (${view?.theftCount ?? 0})`],
+              ['fill', `Fills (${view?.fillCount ?? 0})`],
+              ['suppressed', `Filtered (${view?.suppressedCount ?? 0})`],
             ].map(([k, label]) => (
               <button key={k} type="button"
                       className={`alert-tab${tab === k ? ' is-active' : ''}`}
@@ -383,7 +672,8 @@ export default function AlertsPage() {
             <h3>Daily history</h3>
             <p className="alerts-hint">
               Every alert is written to its own day&rsquo;s CSV, filed by when the event
-              happened rather than when the agent noticed it.
+              happened rather than when the agent noticed it. Click a day to open its
+              events and see any of them on the fuel trace.
             </p>
             <table className="alerts-table">
               <thead>
@@ -398,32 +688,12 @@ export default function AlertsPage() {
               </thead>
               <tbody>
                 {days.map((d) => (
-                  <tr key={d.day}>
-                    <td className="col-time">{d.day}</td>
-                    <td className="num">
-                      {d.theftCount
-                        ? <span className="qty-theft">{d.theftCount} · {fmtL(d.theftLiters)}</span>
-                        : <Dash />}
-                    </td>
-                    <td className="num">
-                      {d.fillCount
-                        ? <span className="qty-fill">{d.fillCount} · {fmtL(d.fillLiters)}</span>
-                        : <Dash />}
-                    </td>
-                    <td className="num">{d.filteredCount || <Dash />}</td>
-                    <td className="num">{d.vehicles}</td>
-                    <td>
-                      <a className="link-inline" href={api.alertsCsvUrl(d.day)}>alerts ↓</a>
-                      {d.filteredCount ? (
-                        <>
-                          {' · '}
-                          <a className="link-inline" href={api.alertsCsvUrl(d.day, 'filtered')}>
-                            filtered ↓
-                          </a>
-                        </>
-                      ) : null}
-                    </td>
-                  </tr>
+                  <DayRow
+                    key={d.day}
+                    d={d}
+                    expanded={openDay === d.day}
+                    onToggle={() => setOpenDay(openDay === d.day ? null : d.day)}
+                  />
                 ))}
               </tbody>
             </table>

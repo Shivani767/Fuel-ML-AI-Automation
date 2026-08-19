@@ -84,6 +84,9 @@ export const api = {
   mlStatus: () => get('/api/ml/status'),
   alertsLatest: () => get('/api/alerts/latest'),
   alertsRun: () => post('/api/alerts/run'),
+  // Read-only scan of one explicit window ("what happened 12:00-12:30"). Writes
+  // nothing, so unlike alertsRun it can be asked for the same slab repeatedly.
+  alertsSlab: (from, to) => get(`/api/alerts/slab${qs({ from, to })}`),
   alertsHistory: (day = '', limit = 500, filtered = false) =>
     get(`/api/alerts${qs({ day, limit, filtered: filtered ? 1 : 0 })}`),
   alertsDays: () => get('/api/alerts/days'),
