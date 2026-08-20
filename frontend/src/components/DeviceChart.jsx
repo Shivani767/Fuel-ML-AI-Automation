@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,8 +8,11 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
+import zoomPlugin from 'chartjs-plugin-zoom'
+import 'hammerjs'
 
 ChartJS.register(
   CategoryScale,
@@ -18,26 +21,81 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler,
+  zoomPlugin
 )
 
+// FuelArk Device Data legend — same params & palette as FuelArk / legacy live graph.
 const SERIES = [
-  // FuelArk-style: liters on the primary axis. Raw EDC/power drown that scale
-  // (thousands / tens of thousands) so they sit on y1 and stay legend-hidden.
-  { key: 'fuelLevel', name: 'Fuel Level (L)', color: '#4f46e5', yAxisID: 'y', hidden: false, width: 2.25 },
-  { key: 'fuelLevelEDC', name: 'Fuel Level EDC', color: '#7dd3fc', yAxisID: 'y1', hidden: true, width: 1.25 },
-  { key: 'speed', name: 'Speed', color: '#1d4ed8', yAxisID: 'y1', hidden: true, width: 1 },
-  { key: 'movement', name: 'Movement', color: '#f97316', yAxisID: 'y1', hidden: true, width: 1 },
-  { key: 'powerEx', name: 'Power Ex', color: '#c026d3', yAxisID: 'y1', hidden: true, width: 1 },
-  { key: 'powerIn', name: 'Power In', color: '#0d9488', yAxisID: 'y1', hidden: true, width: 1 },
+  {
+    key: 'fuelLevelEDC',
+    name: 'Fuel Level EDC',
+    color: '#10b981',
+    fill: 'rgba(16, 185, 129, 0.18)',
+    yAxisID: 'y',
+    hidden: false,
+    width: 2.5,
+    showPoints: true,
+    fillArea: true,
+  },
+  {
+    key: 'movement',
+    name: 'Movement',
+    color: '#f59e0b',
+    yAxisID: 'y1',
+    hidden: true,
+    width: 1.5,
+  },
+  {
+    key: 'speed',
+    name: 'Speed',
+    color: '#3b82f6',
+    yAxisID: 'y1',
+    hidden: true,
+    width: 1.5,
+  },
+  {
+    key: 'powerEx',
+    name: 'Power Ex',
+    color: '#ef4444',
+    yAxisID: 'y1',
+    hidden: true,
+    width: 1.25,
+  },
+  {
+    key: 'powerIn',
+    name: 'Power In',
+    color: '#8b5cf6',
+    yAxisID: 'y1',
+    hidden: true,
+    width: 1.25,
+  },
+  // Liters available via legend (hidden) — FuelArk primary view is EDC.
+  {
+    key: 'fuelLevel',
+    name: 'Fuel Level (L)',
+    color: '#2563eb',
+    fill: 'rgba(37, 99, 235, 0.12)',
+    yAxisID: 'y',
+    hidden: true,
+    width: 2,
+    fillArea: true,
+  },
 ]
 
-const IGNITION_ON_FILL = 'rgba(34, 197, 94, 0.28)'
+const IGNITION_LEGEND = {
+  name: 'Ignition',
+  color: '#22c55e',
+  fill: 'rgba(16, 185, 129, 0.32)',
+}
+
+const IGNITION_ON_FILL = 'rgba(16, 185, 129, 0.28)'
 const IGNITION_OFF_FILL = '#ffffff'
 
 // Same palette the alert tables use, so a red row and a red band read as one thing.
-const THEFT_COLOR = '#dc2626'
-const FILL_COLOR = '#16a34a'
+const THEFT_COLOR = '#ef4444'
+const FILL_COLOR = '#10b981'
 const SUPPRESSED_COLOR = '#94a3b8'
 // An event whose timestamp falls this far outside the loaded window belongs to a
 // different range and is not drawn, rather than being clamped onto the edge.
@@ -106,7 +164,10 @@ function buildMarkers(rows, events) {
       reason: e.suppressedReason,
       decision: e.decision,
       eventTime: e.eventTime,
-      value: Number(row.fuelLevel ?? row.fuelInLiter ?? 0),
+      // Pin markers to the visible FuelArk primary (EDC), fall back to liters.
+      value: Number(
+        row.fuelLevelEDC ?? row.fuelLevel ?? row.fuelInLiter ?? 0
+      ),
     })
   }
   return markers.sort((a, b) => a.startIdx - b.startIdx)
@@ -216,18 +277,23 @@ function ignitionOnRanges(rows) {
   return ranges
 }
 
-/** Paint full chart height green while ignition is ON; white when OFF. */
+/** Paint full chart height green while ignition is ON; white when OFF (FuelArk). */
 const ignitionBackgroundPlugin = {
   id: 'ignitionBackground',
   beforeDraw(chart) {
     const { ctx, chartArea, scales } = chart
     if (!chartArea) return
+    // Respect legend toggle on the Ignition entry (same as FuelArk).
+    const ignIdx = chart.data.datasets.findIndex((d) => d._isIgnition)
+    if (ignIdx >= 0) {
+      const meta = chart.getDatasetMeta(ignIdx)
+      if (meta?.hidden) return
+    }
     const rows = chart.options.plugins?.ignitionBackground?.points || []
     const xScale = scales.x
     if (!xScale || !rows.length) return
 
     ctx.save()
-    // Base: ignition OFF = white
     ctx.fillStyle = IGNITION_OFF_FILL
     ctx.fillRect(chartArea.left, chartArea.top, chartArea.width, chartArea.height)
 
@@ -235,7 +301,6 @@ const ignitionBackgroundPlugin = {
     ctx.fillStyle = IGNITION_ON_FILL
     for (const [from, to] of ranges) {
       const x0 = xScale.getPixelForValue(from)
-      // extend to next index so the band covers that segment
       const x1 = xScale.getPixelForValue(Math.min(to + 1, rows.length - 1))
       const left = Math.max(chartArea.left, Math.min(x0, x1))
       const right = Math.min(chartArea.right, Math.max(x0, x1))
@@ -249,6 +314,74 @@ const ignitionBackgroundPlugin = {
 
 ChartJS.register(ignitionBackgroundPlugin)
 
+function getChartInstance(ref) {
+  return ref?.current || null
+}
+
+function GraphNavControls({ chartRef, navMode, setNavMode, onInteract }) {
+  const chart = () => getChartInstance(chartRef)
+
+  return (
+    <div className="chart-nav" onMouseDown={(e) => e.stopPropagation()}>
+      <button
+        type="button"
+        className={`btn-alert${navMode === 'pan' ? ' is-open' : ''}`}
+        title="Drag to move the graph"
+        onClick={() => {
+          onInteract?.()
+          setNavMode('pan')
+        }}
+      >
+        Move
+      </button>
+      <button
+        type="button"
+        className={`btn-alert${navMode === 'box' ? ' is-open' : ''}`}
+        title="Drag a box to zoom into a region"
+        onClick={() => {
+          onInteract?.()
+          setNavMode('box')
+        }}
+      >
+        Box zoom
+      </button>
+      <button
+        type="button"
+        className="btn-alert"
+        title="Zoom in"
+        onClick={() => {
+          onInteract?.()
+          chart()?.zoom(1.2)
+        }}
+      >
+        Zoom +
+      </button>
+      <button
+        type="button"
+        className="btn-alert"
+        title="Zoom out"
+        onClick={() => {
+          onInteract?.()
+          chart()?.zoom(0.8)
+        }}
+      >
+        Zoom −
+      </button>
+      <button
+        type="button"
+        className="btn-alert btn-alert--primary"
+        title="Reset zoom and pan"
+        onClick={() => {
+          onInteract?.()
+          chart()?.resetZoom()
+        }}
+      >
+        Reset
+      </button>
+    </div>
+  )
+}
+
 export default function DeviceChart({
   deviceName,
   points,
@@ -257,6 +390,9 @@ export default function DeviceChart({
   onPauseStreaming,
 }) {
   const [expanded, setExpanded] = useState(false)
+  const [navMode, setNavMode] = useState('pan') // pan = drag move · box = drag zoom
+  const mainRef = useRef(null)
+  const expandRef = useRef(null)
 
   function pauseForInspect() {
     if (streaming && onPauseStreaming) {
@@ -269,8 +405,6 @@ export default function DeviceChart({
     const labels = rows.map((p) => p.time)
     const markers = buildMarkers(rows, events)
 
-    // Marker points ride on the fuel-level trace, which is what puts each event
-    // legibly in the legend and the hover tooltip as well as on the canvas.
     const markerSet = (name, color, pick, rotation) => {
       const hits = markers.filter(pick)
       if (!hits.length) return null
@@ -294,23 +428,48 @@ export default function DeviceChart({
       markerSet('Filtered as artifact', SUPPRESSED_COLOR, (m) => m.suppressed, 90),
     ].filter(Boolean)
 
+    const pointRadius = rows.length <= 900 ? 2.5 : 0
+
+    const seriesDatasets = SERIES.map((s) => ({
+      label: s.name,
+      data: rows.map((p) => Number(p[s.key] ?? 0)),
+      borderColor: s.color,
+      backgroundColor: s.fillArea ? (s.fill || rgba(s.color, 0.18)) : s.color,
+      borderWidth: s.width ?? 1.5,
+      pointRadius: s.showPoints ? pointRadius : 0,
+      pointHoverRadius: 4,
+      pointBackgroundColor: s.color,
+      pointBorderColor: '#fff',
+      pointBorderWidth: s.showPoints ? 1 : 0,
+      pointStyle: s.showPoints ? 'circle' : 'circle',
+      tension: 0.15,
+      fill: Boolean(s.fillArea),
+      yAxisID: s.yAxisID || 'y',
+      hidden: Boolean(s.hidden),
+    }))
+
+    // FuelArk Ignition legend entry — toggles green ON bands (no line drawn).
+    const ignitionDataset = {
+      label: IGNITION_LEGEND.name,
+      data: rows.map(() => null),
+      borderColor: IGNITION_LEGEND.color,
+      backgroundColor: IGNITION_LEGEND.fill,
+      pointStyle: 'rect',
+      showLine: false,
+      pointRadius: 0,
+      yAxisID: 'y',
+      hidden: false,
+      _isIgnition: true,
+    }
+
     return {
       markers,
       data: {
         labels,
         datasets: [
-          ...SERIES.map((s) => ({
-            label: s.name,
-            data: rows.map((p) => Number(p[s.key] ?? 0)),
-            borderColor: s.color,
-            backgroundColor: s.color,
-            borderWidth: s.width ?? 1.5,
-            pointRadius: 0,
-            pointHoverRadius: 3,
-            tension: 0.05,
-            yAxisID: s.yAxisID || 'y',
-            hidden: Boolean(s.hidden),
-          })),
+          seriesDatasets[0], // Fuel Level EDC first
+          ignitionDataset,
+          ...seriesDatasets.slice(1),
           ...markerDatasets.map((ds) => ({ ...ds, yAxisID: 'y' })),
         ],
       },
@@ -318,7 +477,7 @@ export default function DeviceChart({
         responsive: true,
         maintainAspectRatio: false,
         animation: false,
-        interaction: { mode: 'index', intersect: false },
+        interaction: { mode: 'nearest', intersect: false, axis: 'x' },
         onClick() {
           pauseForInspect()
         },
@@ -326,14 +485,44 @@ export default function DeviceChart({
           title: {
             display: true,
             text: deviceName
-              ? `Device graph reports of ${deviceName}`
-              : 'Device graph reports',
-            font: { size: 16, weight: '600' },
+              ? `Device Data · ${deviceName}`
+              : 'Device Data',
+            color: '#065f46',
+            font: { size: 15, weight: '700' },
+            padding: { bottom: 8 },
           },
-          legend: { position: 'bottom' },
+          legend: {
+            position: 'bottom',
+            labels: {
+              usePointStyle: true,
+              boxWidth: 10,
+              padding: 14,
+              color: '#334155',
+              font: { size: 11, weight: '600' },
+            },
+            onClick(e, legendItem, legend) {
+              const chartInst = legend.chart
+              const idx = legendItem.datasetIndex
+              const meta = chartInst.getDatasetMeta(idx)
+              meta.hidden =
+                meta.hidden === null
+                  ? !chartInst.data.datasets[idx].hidden
+                  : !meta.hidden
+              chartInst.update()
+            },
+          },
           ignitionBackground: { points: rows },
           fuelEventMarkers: { markers },
           tooltip: {
+            backgroundColor: 'rgba(15, 23, 42, 0.92)',
+            titleColor: '#fff',
+            bodyColor: '#e2e8f0',
+            borderColor: '#10b981',
+            borderWidth: 1,
+            padding: 10,
+            filter(item) {
+              return !item.dataset?._isIgnition
+            },
             callbacks: {
               afterBody(items) {
                 const idx = items?.[0]?.dataIndex
@@ -355,13 +544,49 @@ export default function DeviceChart({
               },
             },
           },
+          zoom: {
+            limits: {
+              x: { min: 'original', max: 'original' },
+              y: { min: 'original', max: 'original' },
+              y1: { min: 'original', max: 'original' },
+            },
+            pan: {
+              enabled: navMode === 'pan',
+              mode: 'xy',
+              threshold: 6,
+              onPanStart: () => {
+                pauseForInspect()
+                return true
+              },
+            },
+            zoom: {
+              wheel: { enabled: true, speed: 0.12 },
+              pinch: { enabled: true },
+              drag:
+                navMode === 'box'
+                  ? {
+                      enabled: true,
+                      backgroundColor: 'rgba(16, 185, 129, 0.12)',
+                      borderColor: '#10b981',
+                      borderWidth: 1,
+                    }
+                  : { enabled: false },
+              mode: 'xy',
+              onZoomStart: () => {
+                pauseForInspect()
+                return true
+              },
+            },
+          },
         },
         scales: {
           x: {
+            grid: { color: '#f1f5f9' },
             ticks: {
               maxRotation: 45,
               autoSkip: true,
               maxTicksLimit: expanded ? 16 : 10,
+              color: '#64748b',
               callback(value) {
                 const label = labels[value]
                 if (!label) return ''
@@ -374,66 +599,89 @@ export default function DeviceChart({
           y: {
             type: 'linear',
             position: 'left',
-            title: { display: true, text: 'Fuel (liters)' },
-            beginAtZero: false,
-            grace: '8%',
+            title: {
+              display: true,
+              text: 'Device Data (EDC)',
+              color: '#065f46',
+              font: { weight: '700', size: 12 },
+            },
+            beginAtZero: true,
+            grace: '5%',
+            grid: { color: '#e2e8f0' },
+            ticks: { color: '#065f46' },
           },
           y1: {
             type: 'linear',
             position: 'right',
-            title: { display: true, text: 'EDC / power / speed' },
+            title: {
+              display: true,
+              text: 'Speed / Power / Aux',
+              color: '#64748b',
+              font: { weight: '600', size: 11 },
+            },
             beginAtZero: true,
+            grace: '8%',
             grid: { drawOnChartArea: false },
             display: 'auto',
+            ticks: { color: '#64748b' },
           },
         },
       },
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deviceName, points, events, expanded, streaming, onPauseStreaming])
+  }, [deviceName, points, events, expanded, streaming, onPauseStreaming, navMode])
 
   const markerCount = chart.markers.length
 
   return (
     <>
       <div
-        className="panel chart-panel"
-        style={{ height: 480 }}
+        className="panel chart-panel fuelark-chart"
+        style={{ height: 500 }}
         onMouseDown={pauseForInspect}
         onTouchStart={pauseForInspect}
       >
-        <div className="chart-toolbar">
-          <span className="muted" style={{ fontSize: 12 }}>
-            <span className="ign-legend-on" /> Ignition ON (green) ·{' '}
-            <span className="ign-legend-off" /> Ignition OFF (white)
-            {' · Fuel (L) primary — click legend for EDC/power'}
+        <div className="chart-toolbar fuelark-chart__toolbar">
+          <div className="fuelark-chart__legend-hint">
+            <span className="fuelark-chip fuelark-chip--edc">Fuel Level EDC</span>
+            <span className="fuelark-chip fuelark-chip--ign">Ignition</span>
+            <span className="fuelark-chip">Movement</span>
+            <span className="fuelark-chip fuelark-chip--speed">Speed</span>
+            <span className="fuelark-chip fuelark-chip--pex">Power Ex</span>
+            <span className="fuelark-chip fuelark-chip--pin">Power In</span>
             {markerCount ? (
               <>
-                {' · '}
-                <span style={{ color: THEFT_COLOR, fontWeight: 600 }}>▼ theft</span>
-                {' / '}
-                <span style={{ color: FILL_COLOR, fontWeight: 600 }}>▲ fill</span>
-                {' marked on the fuel trace'}
+                <span className="fuelark-chip fuelark-chip--theft">▼ theft</span>
+                <span className="fuelark-chip fuelark-chip--fill">▲ fill</span>
               </>
             ) : null}
-            {streaming
-              ? ' · Click graph to pause streaming'
-              : ' · Streaming paused'}
-          </span>
-          <button
-            type="button"
-            className="btn btn-ghost"
-            onClick={(e) => {
-              e.stopPropagation()
-              pauseForInspect()
-              setExpanded(true)
-            }}
-          >
-            Expand graph
-          </button>
+            {streaming ? <span className="fuelark-chip fuelark-chip--live">LIVE</span> : null}
+          </div>
+          <div className="chart-toolbar-actions">
+            <GraphNavControls
+              chartRef={mainRef}
+              navMode={navMode}
+              setNavMode={setNavMode}
+              onInteract={pauseForInspect}
+            />
+            <button
+              type="button"
+              className="btn btn-sm btn-ghost"
+              onClick={(e) => {
+                e.stopPropagation()
+                pauseForInspect()
+                setExpanded(true)
+              }}
+            >
+              Expand
+            </button>
+          </div>
         </div>
-        <div style={{ height: 'calc(100% - 36px)' }}>
-          <Line data={chart.data} options={chart.options} />
+        <p className="fuelark-chart__hint">
+          Same as FuelArk Device Data · click legend to show/hide · green bands = Ignition ON · scroll to zoom
+        </p>
+        <div style={{ height: 'calc(100% - 64px)' }}>
+          <Line ref={mainRef} data={chart.data} options={chart.options} />
         </div>
       </div>
 
@@ -450,22 +698,30 @@ export default function DeviceChart({
               <div>
                 <strong>{deviceName || 'Live Chart'}</strong>
                 <div className="muted" style={{ fontSize: 12, marginTop: 2 }}>
-                  Green background = Ignition ON · White = Ignition OFF
+                  Scroll to zoom · Move / Box zoom · Reset
                   {markerCount
                     ? ` · ${markerCount} fill/theft event${markerCount === 1 ? '' : 's'} marked`
                     : ''}
                 </div>
               </div>
-              <button
-                type="button"
-                className="btn btn-ghost"
-                onClick={() => setExpanded(false)}
-              >
-                Close
-              </button>
+              <div className="chart-toolbar-actions">
+                <GraphNavControls
+                  chartRef={expandRef}
+                  navMode={navMode}
+                  setNavMode={setNavMode}
+                  onInteract={pauseForInspect}
+                />
+                <button
+                  type="button"
+                  className="btn btn-ghost"
+                  onClick={() => setExpanded(false)}
+                >
+                  Close
+                </button>
+              </div>
             </div>
             <div className="chart-expand-body">
-              <Line data={chart.data} options={chart.options} />
+              <Line ref={expandRef} data={chart.data} options={chart.options} />
             </div>
           </div>
         </div>

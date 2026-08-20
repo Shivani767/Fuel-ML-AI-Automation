@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+import gzip
 import json
 import sys
 import threading
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -17,6 +18,32 @@ _lock = threading.Lock()
 device_data_dict: Dict[str, List[dict]] = defaultdict(list)
 device_imei_map: Dict[str, str] = {}
 _loaded = False
+_loading = False
+_load_error: Optional[str] = None
+_load_started_at: Optional[float] = None
+
+
+def is_ready() -> bool:
+    return _loaded
+
+
+def is_loading() -> bool:
+    return _loading and not _loaded
+
+
+def load_status() -> dict:
+    import time
+
+    return {
+        "ready": _loaded,
+        "loading": is_loading(),
+        "error": _load_error,
+        "devices": len(device_data_dict) if _loaded else 0,
+        "points": sum(len(v) for v in device_data_dict.values()) if _loaded else 0,
+        "elapsedSec": (
+            round(time.time() - _load_started_at, 1) if _load_started_at else None
+        ),
+    }
 
 
 def _project_root_on_path():
@@ -25,25 +52,108 @@ def _project_root_on_path():
         sys.path.insert(0, root)
 
 
-def load_raw_fuel_data() -> list:
-    candidates = [
-        config.JUNE_DATA_PATH,
-        config.LIVE_DATA_PATH,
-        config.FUEL_DATA_DIR / "all_fuel_data_combined.json",
-    ]
-    data_path = next((p for p in candidates if p.exists()), None)
-    if not data_path:
-        raise FileNotFoundError(
-            f"No fuel data under {config.FUEL_DATA_DIR}. Run fetch tools first."
-        )
-    print(f"[backend] Loading fuel data from {data_path}")
-    with open(data_path, "r", encoding="utf-8") as f:
+def _read_json_list(path: Path) -> list:
+    print(f"[backend] Loading {path.name}…", flush=True)
+    with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
+    if not isinstance(data, list):
+        raise ValueError(f"{path} must be a JSON array")
+    print(f"[backend]   → {len(data):,} rows from {path.name}", flush=True)
+    return data
 
-    if data_path != config.LIVE_DATA_PATH and config.LIVE_DATA_PATH.exists():
-        print(f"[backend] Merging live overlay from {config.LIVE_DATA_PATH}")
-        with open(config.LIVE_DATA_PATH, "r", encoding="utf-8") as f:
-            data.extend(json.load(f))
+
+def _month_dump_path(stem: str) -> Path:
+    """Map 'may' / 'june' → fuel_data/may_2026_data.json etc."""
+    stem = stem.strip().lower()
+    known = {
+        "may": getattr(config, "MAY_DATA_PATH", config.FUEL_DATA_DIR / "may_2026_data.json"),
+        "june": config.JUNE_DATA_PATH,
+    }
+    if stem in known:
+        return known[stem]
+    return config.FUEL_DATA_DIR / f"{stem}_2026_data.json"
+
+
+def load_daily_days(start: date, end: date) -> list:
+    """Load capture store days (*.json.gz / *.json). IMEI comes from filename when missing."""
+    daily_dir = getattr(config, "DAILY_DIR", config.FUEL_DATA_DIR / "daily")
+    if not daily_dir.is_dir():
+        return []
+    out: list = []
+    day = start
+    while day <= end:
+        day_dir = daily_dir / day.isoformat()
+        day += timedelta(days=1)
+        if not day_dir.is_dir():
+            continue
+        files = list(day_dir.glob("*.json.gz"))
+        seen_imeis = {p.name.replace(".json.gz", "") for p in files}
+        for path in day_dir.glob("*.json"):
+            if path.stem not in seen_imeis:
+                files.append(path)
+        files = sorted(files, key=lambda p: p.name)
+        for path in files:
+            imei = path.name.replace(".json.gz", "").replace(".json", "")
+            opener = gzip.open if path.name.endswith(".json.gz") else open
+            try:
+                with opener(path, "rt", encoding="utf-8") as f:
+                    rows = json.load(f)
+            except (OSError, ValueError, json.JSONDecodeError) as exc:
+                print(f"[backend] skip {path.name}: {exc}", flush=True)
+                continue
+            if not isinstance(rows, list):
+                continue
+            for row in rows:
+                if not row.get("imei"):
+                    row["imei"] = imei
+            out.extend(rows)
+    print(
+        f"[backend] Daily {start.isoformat()}→{end.isoformat()}: {len(out):,} rows",
+        flush=True,
+    )
+    return out
+
+
+def load_raw_fuel_data() -> list:
+    """
+    Merge May + June dumps, early-July daily captures, and the live overlay
+    so Live Map / Alerts can chart May–July (and current) for all vehicles.
+    """
+    data: list = []
+    loaded_any = False
+
+    for stem in getattr(config, "LOAD_MONTH_DUMPS", ["may", "june"]):
+        path = _month_dump_path(stem)
+        if path.exists():
+            data.extend(_read_json_list(path))
+            loaded_any = True
+        else:
+            print(f"[backend] Month dump missing (skip): {path.name}", flush=True)
+
+    # Live overlay starts ~Jul 18; fill Jul 1–17 from nightly daily/ store.
+    july_gap = load_daily_days(date(2026, 7, 1), date(2026, 7, 17))
+    if july_gap:
+        data.extend(july_gap)
+        loaded_any = True
+
+    live = config.LIVE_DATA_PATH
+    if live.exists():
+        print(f"[backend] Merging live overlay from {live.name}", flush=True)
+        data.extend(_read_json_list(live))
+        loaded_any = True
+
+    if not loaded_any:
+        combined = config.FUEL_DATA_DIR / "all_fuel_data_combined.json"
+        if combined.exists():
+            data.extend(_read_json_list(combined))
+            loaded_any = True
+
+    if not data:
+        raise FileNotFoundError(
+            f"No fuel data under {config.FUEL_DATA_DIR}. "
+            "Need may/june dumps, daily/, or live_fuel_data.json."
+        )
+    print(f"[backend] Raw merge total: {len(data):,} rows", flush=True)
     return data
 
 
@@ -99,26 +209,56 @@ def load_imei_map_file():
 
 
 def ensure_loaded(force: bool = False):
-    global _loaded
+    global _loaded, _loading, _load_error, _load_started_at
+    import time
+
     with _lock:
         if _loaded and not force:
             return
-        device_data_dict.clear()
-        raw = load_raw_fuel_data()
-        parsed = parse_data(raw)
-        for entry in parsed:
-            device_data_dict[entry["deviceName"]].append(entry)
-            if entry.get("imei") and entry.get("deviceName"):
-                device_imei_map[entry["deviceName"]] = str(entry["imei"])
-        for name in device_data_dict:
-            device_data_dict[name].sort(key=lambda x: x["time"])
-        load_imei_map_file()
-        _loaded = True
-        print(
-            f"[backend] Ready: {len(device_data_dict)} devices, "
-            f"{sum(len(v) for v in device_data_dict.values())} points, "
-            f"{len(device_imei_map)} IMEI mappings"
-        )
+        _loading = True
+        _load_error = None
+        _load_started_at = time.time()
+        try:
+            device_data_dict.clear()
+            raw = load_raw_fuel_data()
+            parsed = parse_data(raw)
+            for entry in parsed:
+                device_data_dict[entry["deviceName"]].append(entry)
+                if entry.get("imei") and entry.get("deviceName"):
+                    device_imei_map[entry["deviceName"]] = str(entry["imei"])
+            for name in device_data_dict:
+                device_data_dict[name].sort(key=lambda x: x["time"])
+            load_imei_map_file()
+            _loaded = True
+            print(
+                f"[backend] Ready: {len(device_data_dict)} devices, "
+                f"{sum(len(v) for v in device_data_dict.values())} points, "
+                f"{len(device_imei_map)} IMEI mappings",
+                flush=True,
+            )
+        except Exception as e:
+            _load_error = str(e)
+            _loaded = False
+            print(f"[backend] Load failed: {e}", flush=True)
+            raise
+        finally:
+            _loading = False
+
+
+def start_background_load(on_ready=None):
+    """Load May–July dumps without blocking Flask bind (avoids Vite 502)."""
+    if _loaded or _loading:
+        return
+
+    def _run():
+        try:
+            ensure_loaded()
+            if on_ready:
+                on_ready()
+        except Exception:
+            pass
+
+    threading.Thread(target=_run, name="fuel-data-load", daemon=True).start()
 
 
 def load_events() -> list:
@@ -280,13 +420,15 @@ def fleet_device_cards(inactive_hours: float = None, today_only: bool = True) ->
 
     Total: Fuelark roster when present, else IMEI map ∪ devices with data.
     Active: last telemetry within ACTIVE_ONLINE_MINUTES and not battery-disconnected.
-    Running: Active + ignition ON (speed not required).
-    Inactive: not Active and not battery-disconnected (soft-alert battery counted separately).
+    Running: Active + ignition ON + moving (speed or movement IO) — matches FuelArk
+    Vehicle Summary (idle ignition-on excavators/gensets are Active, not Running).
+    Inactive: Total − Active (includes battery-disconnected soft-alert units).
     """
     ensure_loaded()
     inactive_hours = inactive_hours if inactive_hours is not None else config.INACTIVE_HOURS
     online_min = float(getattr(config, "ACTIVE_ONLINE_MINUTES", 15))
     batt_mv = float(getattr(config, "BATTERY_DISCONNECT_MV", 11000))
+    run_speed = float(getattr(config, "RUNNING_SPEED_KMH", 1.0))
     try:
         from zoneinfo import ZoneInfo
 
@@ -312,6 +454,7 @@ def fleet_device_cards(inactive_hours: float = None, today_only: bool = True) ->
             imei = series[-1].get("imei")
 
         io66 = 0
+        movement = False
         if latest:
             try:
                 last_seen = datetime.fromisoformat(str(latest["time"]))
@@ -327,6 +470,7 @@ def fleet_device_cards(inactive_hours: float = None, today_only: bool = True) ->
                 seen_today = False
             ignition = int(latest.get("iO_1", 0) or 0)
             speed = float(latest.get("speed", 0) or 0)
+            movement = bool(int(latest.get("iO_2", 0) or latest.get("iO_6", 0) or 0))
             fuel = round(float(latest.get("fuelInLiter", 0) or 0), 2)
             lat, lon = latest.get("latitude"), latest.get("longitude")
             last_seen_s = latest.get("time")
@@ -353,7 +497,12 @@ def fleet_device_cards(inactive_hours: float = None, today_only: bool = True) ->
             active = bool(online and not battery_disconnected)
         else:
             active = bool(age_h <= inactive_hours and not (io66 < batt_mv))
-        running = bool(active and ignition == 1)
+        # FuelArk Running = reporting speed > floor (default 0). Ignition not required.
+        if run_speed <= 0:
+            moving = speed > 0 or bool(movement)
+        else:
+            moving = speed > run_speed or bool(movement)
+        running = bool(active and moving)
 
         card = {
             "deviceName": name,
@@ -363,6 +512,7 @@ def fleet_device_cards(inactive_hours: float = None, today_only: bool = True) ->
             "speed": round(speed, 2),
             "ignition": "On" if ignition else "Off",
             "ignitionStatus": ignition,
+            "movement": movement,
             "auxIgnition": "Off",
             "externalVoltage": round(io66 / 1000.0, 2) if io66 else 0,
             "batteryDisconnected": battery_disconnected,
@@ -414,7 +564,11 @@ def fleet_device_cards(inactive_hours: float = None, today_only: bool = True) ->
     return cards
 
 
-def fleet_summary(cards: Optional[List[dict]] = None) -> dict:
+def fleet_summary(
+    cards: Optional[List[dict]] = None,
+    *,
+    fuelark_kpis: Optional[dict] = None,
+) -> dict:
     try:
         from zoneinfo import ZoneInfo
 
@@ -425,12 +579,35 @@ def fleet_summary(cards: Optional[List[dict]] = None) -> dict:
     battery_n = sum(1 for c in cards if c.get("batteryDisconnected"))
     active_n = sum(1 for c in cards if c["active"])
     running_n = sum(1 for c in cards if c["running"])
-    # Inactive excludes Active and Battery Disconnected soft-alert bucket
-    inactive_n = sum(
-        1 for c in cards if (not c["active"]) and (not c.get("batteryDisconnected"))
-    )
+    # FuelArk-style: every vehicle is Active or Inactive. Battery-disconnected is a
+    # soft-alert on top (those units are still "not active"), not a third KPI bucket
+    # that disappears from Inactive and makes the card look wrong.
+    inactive_n = sum(1 for c in cards if not c["active"])
     total_n = len(cards)
-    online_min = float(getattr(config, "ACTIVE_ONLINE_MINUTES", 30))
+    kpi_source = "local_telemetry"
+
+    # Prefer FuelArk Helper/DeviceStatus — same counters as web1 Home / Vehicle Summary.
+    if fuelark_kpis and fuelark_kpis.get("totalDevices"):
+        total_n = int(fuelark_kpis["totalDevices"])
+        active_n = int(fuelark_kpis["active"])
+        running_n = int(fuelark_kpis["running"])
+        battery_n = int(fuelark_kpis.get("batteryRemove") or battery_n)
+        # Match FuelArk Home: InActive is offline-without-battery; battery is separate.
+        # Prefer official inActive; fall back to Total − Active − Battery.
+        if fuelark_kpis.get("inActive") is not None:
+            inactive_n = int(fuelark_kpis["inActive"])
+        else:
+            inactive_n = max(0, total_n - active_n - battery_n)
+        kpi_source = str(fuelark_kpis.get("source") or "fuelark_device_status")
+
+    offline_n = inactive_n
+    online_min = float(getattr(config, "ACTIVE_ONLINE_MINUTES", 5))
+    run_speed = float(getattr(config, "RUNNING_SPEED_KMH", 0))
+    run_rule = (
+        "speed > 0 km/h (FuelArk Live)"
+        if run_speed <= 0
+        else f"speed > {run_speed:g} km/h or movement IO"
+    )
     return {
         "asOfDate": now.strftime("%Y-%m-%d"),
         "asOfTime": now.strftime("%H:%M:%S"),
@@ -442,42 +619,47 @@ def fleet_summary(cards: Optional[List[dict]] = None) -> dict:
         "inactiveVehicle": inactive_n,
         "batteryDisconnected": battery_n,
         "idleVehicle": max(0, active_n - running_n),
+        "kpiSource": kpi_source,
+        "fuelarkInActive": (fuelark_kpis or {}).get("inActive"),
         "chart": {
             "labels": ["Active", "Running", "Inactive", "Battery"],
             "values": [active_n, running_n, inactive_n, battery_n],
-            # stacked view for donut: running is subset of active — show Idle+Running+Inactive(+Batt)
             "segments": [
-                {"key": "running", "label": "Running", "value": running_n, "color": "#16a34a"},
+                {"key": "running", "label": "Running", "value": running_n, "color": "#22c55e"},
                 {
                     "key": "idle",
                     "label": "Active (idle)",
                     "value": max(0, active_n - running_n),
-                    "color": "#2563eb",
+                    "color": "#0ea5e9",
                 },
-                {"key": "inactive", "label": "Inactive", "value": inactive_n, "color": "#94a3b8"},
+                {"key": "inactive", "label": "Inactive", "value": offline_n, "color": "#f97316"},
                 {
                     "key": "battery",
                     "label": "Battery disconnected",
                     "value": battery_n,
-                    "color": "#dc2626",
+                    "color": "#7c3aed",
                 },
             ],
         },
         "definitions": {
             "totalVehicle": (
-                "Unique vehicles (one per IMEI) on the fleet roster / IMEI map."
+                "Unique vehicles on the FuelArk account roster (same as Home)."
             ),
             "activeVehicle": (
-                f"Vehicles with telemetry in the last {online_min:.0f} minutes "
-                "(online now), excluding battery-disconnected."
+                f"Online now — last live update within {online_min:.0f} minutes, "
+                "excluding battery-remove (FuelArk Active)."
             ),
-            "runningVehicle": "Active vehicles with ignition ON on the latest reading.",
+            "runningVehicle": (
+                f"Active and moving ({run_rule}) — FuelArk Running."
+            ),
             "inactiveVehicle": (
-                "Not currently online and not in the battery-disconnected soft alert."
+                "Offline on FuelArk (InActive). Battery-remove is counted separately, "
+                "same as FuelArk Home."
             ),
             "identityCheck": (
-                f"total ({total_n}) = active ({active_n}) + inactive ({inactive_n}) "
-                f"+ battery ({battery_n})"
+                f"FuelArk: total {total_n} ≈ active {active_n} + inactive {inactive_n} "
+                f"+ battery {battery_n}"
+                f" · running {running_n} ⊂ active · source {kpi_source}"
             ),
         },
     }

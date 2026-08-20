@@ -11,15 +11,17 @@ export default function ImeiRoster({ onSelect, onAdded, selectedImei }) {
   const [imei, setImei] = useState('')
   const [days, setDays] = useState(30)
   const [busy, setBusy] = useState(false)
+  const [syncing, setSyncing] = useState(false)
   const [msg, setMsg] = useState('')
   const [err, setErr] = useState('')
-  const [open, setOpen] = useState(true)
+  const [lastSync, setLastSync] = useState(null)
 
   const refresh = useCallback(async () => {
     setLoadingList(true)
     try {
       const res = await api.imeiList()
       setDevices(res.devices || [])
+      if (res.lastFuelarkSync) setLastSync(res.lastFuelarkSync)
     } catch (e) {
       setErr(e.message)
     } finally {
@@ -44,6 +46,41 @@ export default function ImeiRoster({ onSelect, onAdded, selectedImei }) {
           .includes(needle)
     )
   }, [devices, q])
+
+  const stats = useMemo(() => {
+    const total = devices.length
+    const withData = devices.filter((d) => (d.points ?? 0) > 0).length
+    const empty = total - withData
+    const fuelark = lastSync?.fuelarkCount
+    return { total, withData, empty, fuelark }
+  }, [devices, lastSync])
+
+  async function syncFromFuelark() {
+    setSyncing(true)
+    setErr('')
+    setMsg('Syncing vehicle list from FuelArk…')
+    try {
+      const res = await api.syncFuelark({ fetchNew: true, days: 3 })
+      setLastSync(res)
+      if (!res.ok) {
+        setErr(res.error || 'FuelArk sync failed')
+        setMsg('')
+        return
+      }
+      const n = res.addedCount || 0
+      setMsg(
+        n
+          ? `FuelArk sync: ${res.fuelarkCount} on account · added ${n} new vehicle(s)`
+          : `FuelArk sync: ${res.fuelarkCount} on account · already up to date`
+      )
+      await refresh()
+    } catch (ex) {
+      setErr(ex.message || 'Sync failed')
+      setMsg('')
+    } finally {
+      setSyncing(false)
+    }
+  }
 
   async function submit(e) {
     e?.preventDefault?.()
@@ -77,118 +114,182 @@ export default function ImeiRoster({ onSelect, onAdded, selectedImei }) {
   }
 
   return (
-    <div className="imei-roster panel">
-      <div className="imei-roster-head">
-        <div>
-          <h2 style={{ margin: 0, fontSize: 16 }}>IMEI roster (lifetime)</h2>
-          <p className="muted" style={{ margin: '4px 0 0', fontSize: 12 }}>
-            Existing IMEIs stay as stored. New ones are saved permanently to the map.
-          </p>
+    <div className="imei-roster">
+      <div className="fleet-status-grid fleet-status-grid-4 admin-kpi-grid">
+        <div className="fleet-stat fleet-stat-total">
+          <div className="fleet-stat-value">{loadingList ? '—' : stats.total}</div>
+          <div className="fleet-stat-label">Total IMEIs</div>
         </div>
-        <button type="button" className="btn btn-ghost" onClick={() => setOpen((v) => !v)}>
-          {open ? 'Hide' : 'Show'}
-        </button>
+        <div className="fleet-stat fleet-stat-running">
+          <div className="fleet-stat-value">{loadingList ? '—' : stats.withData}</div>
+          <div className="fleet-stat-label">With data</div>
+        </div>
+        <div className="fleet-stat fleet-stat-inactive">
+          <div className="fleet-stat-value">{loadingList ? '—' : stats.empty}</div>
+          <div className="fleet-stat-label">No points yet</div>
+        </div>
+        <div className="fleet-stat fleet-stat-active">
+          <div className="fleet-stat-value">
+            {stats.fuelark != null ? stats.fuelark : '—'}
+          </div>
+          <div className="fleet-stat-label">On FuelArk</div>
+        </div>
       </div>
 
-      {open ? (
-        <>
-          <form className="add-imei" style={{ marginBottom: 10, border: 'none', padding: 0 }} onSubmit={submit}>
-            <div className="add-imei-row">
-              <label className="add-imei-field">
-                Add new IMEI
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  placeholder="e.g. 353691846962883"
-                  value={imei}
-                  onChange={(e) => setImei(e.target.value.trim())}
-                  disabled={busy}
-                  maxLength={16}
-                />
-              </label>
-              <label className="add-imei-field add-imei-days">
-                History days
-                <select
-                  value={days}
-                  onChange={(e) => setDays(Number(e.target.value))}
-                  disabled={busy}
-                >
-                  <option value={7}>7</option>
-                  <option value={14}>14</option>
-                  <option value={30}>30 (lifetime pull)</option>
-                  <option value={60}>60</option>
-                </select>
-              </label>
-              <button type="submit" className="btn btn-primary" disabled={busy}>
-                {busy ? 'Adding…' : 'Add for lifetime'}
-              </button>
-            </div>
-            {msg ? <p className="add-imei-msg ok">{msg}</p> : null}
-            {err ? <p className="add-imei-msg error">{err}</p> : null}
-          </form>
+      <div className="alerts-actions alerts-actions--split">
+        <div className="alerts-action-card admin-action--sync">
+          <div className="alerts-action-card__head">
+            <h3 className="alerts-action-card__title">Sync from FuelArk</h3>
+            <button
+              type="button"
+              className="btn btn-sm btn-scan"
+              disabled={syncing || busy}
+              onClick={syncFromFuelark}
+            >
+              {syncing ? 'Syncing…' : 'Sync now'}
+            </button>
+          </div>
+          <p className="alerts-action-card__meta">
+            Pull the account vehicle list and auto-add any new IMEIs. Also runs every 30 min.
+          </p>
+          {lastSync?.syncedAt ? (
+            <p className="admin-sync-meta">
+              Last sync {String(lastSync.syncedAt).replace('T', ' ').slice(0, 19)}
+              {lastSync.fuelarkCount != null ? ` · ${lastSync.fuelarkCount} on FuelArk` : ''}
+              {lastSync.addedCount ? ` · +${lastSync.addedCount} new` : ''}
+            </p>
+          ) : (
+            <p className="admin-sync-meta">No sync yet — press Sync now to pull from FuelArk.</p>
+          )}
+        </div>
 
-          <div className="imei-roster-tools">
+        <form
+          className="alerts-action-card alerts-action-card--custom"
+          onSubmit={submit}
+        >
+          <div className="alerts-action-card__head">
+            <h3 className="alerts-action-card__title">Add by IMEI</h3>
+            <button
+              type="submit"
+              className="btn btn-sm btn-custom"
+              disabled={busy || syncing}
+            >
+              {busy ? 'Adding…' : 'Add'}
+            </button>
+          </div>
+          <p className="alerts-action-card__meta">
+            Paste a 14–16 digit FuelArk IMEI. Saved permanently to the roster.
+          </p>
+          <div className="alerts-field-grid alerts-field-grid--2">
+            <label className="alerts-field">
+              <span>IMEI</span>
+              <input
+                type="text"
+                inputMode="numeric"
+                placeholder="e.g. 353691846962883"
+                value={imei}
+                onChange={(e) => setImei(e.target.value.trim())}
+                disabled={busy || syncing}
+                maxLength={16}
+              />
+            </label>
+            <label className="alerts-field">
+              <span>History days</span>
+              <select
+                value={days}
+                onChange={(e) => setDays(Number(e.target.value))}
+                disabled={busy || syncing}
+              >
+                <option value={7}>7</option>
+                <option value={14}>14</option>
+                <option value={30}>30 (lifetime pull)</option>
+                <option value={60}>60</option>
+              </select>
+            </label>
+          </div>
+        </form>
+      </div>
+
+      {msg ? <p className="admin-toast admin-toast--ok">{msg}</p> : null}
+      {err ? <p className="admin-toast admin-toast--err">{err}</p> : null}
+
+      <div className="panel admin-roster-panel">
+        <div className="admin-roster-head">
+          <div>
+            <h2>IMEI roster</h2>
+            <p className="admin-roster-sub">Lifetime map — click Go Live to open tracking</p>
+          </div>
+          <div className="admin-roster-tools">
             <input
               type="search"
-              placeholder="Search existing name or IMEI…"
+              placeholder="Search name or IMEI…"
               value={q}
               onChange={(e) => setQ(e.target.value)}
             />
-            <span className="muted" style={{ fontSize: 12 }}>
-              {loadingList ? 'Loading…' : `${filtered.length} / ${devices.length} IMEIs`}
+            <span className="admin-roster-count">
+              {loadingList ? 'Loading…' : `${filtered.length} / ${devices.length}`}
             </span>
           </div>
+        </div>
 
-          <div className="table-wrap imei-table-wrap">
-            <table className="live-table">
-              <thead>
-                <tr>
-                  <th>Device name</th>
-                  <th>IMEI</th>
-                  <th>Points</th>
-                  <th>Latest</th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((d) => {
-                  const active = selectedImei && String(d.imei) === String(selectedImei)
-                  return (
-                    <tr key={`${d.deviceName}-${d.imei}`} className={active ? 'imei-row-active' : ''}>
-                      <td>{d.deviceName}</td>
-                      <td className="mono">{d.imei || '—'}</td>
-                      <td>{d.points ?? 0}</td>
-                      <td style={{ fontSize: 12 }}>
-                        {d.latestTime
-                          ? String(d.latestTime).replace('T', ' ').slice(0, 19)
-                          : '—'}
-                      </td>
-                      <td>
-                        <button
-                          type="button"
-                          className="btn btn-ghost"
-                          style={{ padding: '4px 10px', fontSize: 12 }}
-                          onClick={() => onSelect?.(d)}
-                          disabled={!d.deviceName}
-                        >
-                          Open lifetime
-                        </button>
-                      </td>
-                    </tr>
-                  )
-                })}
-                {!loadingList && !filtered.length ? (
-                  <tr>
-                    <td colSpan={5} className="muted">
-                      No IMEIs match
+        <div className="table-wrap imei-table-wrap">
+          <table className="live-table admin-imei-table">
+            <thead>
+              <tr>
+                <th>Device name</th>
+                <th>IMEI</th>
+                <th>Points</th>
+                <th>Latest</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((d) => {
+                const active = selectedImei && String(d.imei) === String(selectedImei)
+                const hasPts = (d.points ?? 0) > 0
+                return (
+                  <tr
+                    key={`${d.deviceName}-${d.imei}`}
+                    className={active ? 'imei-row-active' : ''}
+                  >
+                    <td>
+                      <span className="admin-device-name">{d.deviceName}</span>
+                    </td>
+                    <td className="mono">{d.imei || '—'}</td>
+                    <td>
+                      <span className={`admin-pts-chip${hasPts ? ' is-ok' : ''}`}>
+                        {d.points ?? 0}
+                      </span>
+                    </td>
+                    <td className="admin-latest">
+                      {d.latestTime
+                        ? String(d.latestTime).replace('T', ' ').slice(0, 19)
+                        : '—'}
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-scan"
+                        onClick={() => onSelect?.(d)}
+                        disabled={!d.deviceName}
+                      >
+                        Go Live
+                      </button>
                     </td>
                   </tr>
-                ) : null}
-              </tbody>
-            </table>
-          </div>
-        </>
-      ) : null}
+                )
+              })}
+              {!loadingList && !filtered.length ? (
+                <tr>
+                  <td colSpan={5} className="muted">
+                    No IMEIs match — sync from FuelArk or add one above.
+                  </td>
+                </tr>
+              ) : null}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   )
 }

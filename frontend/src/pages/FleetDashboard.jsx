@@ -13,6 +13,16 @@ import MapView from '../components/MapView'
 // the documented >=5 min fleet policy.
 const REFRESH_MS = 5 * 60 * 1000
 
+function dataAgeLabel(snapshot) {
+  if (!snapshot) return null
+  if (snapshot.ageMinutes == null) return { text: 'Waiting for first pull', stale: true }
+  if (snapshot.ageMinutes < 1) return { text: 'Just now', stale: false }
+  return {
+    text: `${snapshot.ageMinutes}m ago`,
+    stale: Boolean(snapshot.stale),
+  }
+}
+
 export default function FleetDashboard() {
   const [summary, setSummary] = useState(null)
   const [devices, setDevices] = useState([])
@@ -61,49 +71,36 @@ export default function FleetDashboard() {
     )
   }, [devices, search])
 
+  const age = dataAgeLabel(summary?.snapshot)
+
   return (
-    <>
-      <header className="topbar topbar-center">
+    <div className="fleet-page">
+      <header className="topbar topbar-center fleet-topbar">
         <div className="topbar-center-block">
           <h1>Fleet Live Monitor</h1>
-          <p className="topbar-subtitle">
-            Total · Active (online now) · Running · Inactive
-            {updating ? ' · refreshing…' : ''}
-            {summary?.snapshot ? (
-              <span
-                style={{
-                  color:
-                    summary.snapshot.stale || summary.snapshot.ageMinutes == null
-                      ? '#b91c1c'
-                      : 'inherit',
-                }}
-              >
-                {summary.snapshot.ageMinutes == null
-                  ? ' · waiting for first FuelArk pull (~2 min) — Active/Running stay 0 until then'
-                  : summary.snapshot.ageMinutes < 1
-                    ? ' · data just now'
-                    : ` · data ${summary.snapshot.ageMinutes}m old`}
-                {summary.snapshot.stale && summary.snapshot.ageMinutes != null
-                  ? ` — older than the ${summary.snapshot.onlineWindowMinutes}min online window, so Active/Running read 0`
-                  : ''}
+          <div className="fleet-top-actions">
+            {age ? (
+              <span className={`fleet-age-chip${age.stale ? ' is-stale' : ''}`}>
+                Data · {age.text}
               </span>
             ) : null}
-            {' · '}
+            {updating ? <span className="fleet-age-chip">Refreshing…</span> : null}
             <button
               type="button"
-              className="btn btn-ghost"
-              style={{ padding: '2px 10px', fontSize: 13 }}
+              className="btn btn-sm btn-custom"
               onClick={() => refresh('force')}
               disabled={updating}
               title="Re-poll every vehicle from FuelArk (takes ~2 minutes)"
             >
-              {updating ? 'Refreshing…' : 'Refresh now'}
+              Refresh
             </button>
-            {' · '}
-            <Link to="/alerts">Fuel Alerts</Link>
-            {' · '}
-            <Link to="/admin">Admin: add vehicle by IMEI</Link>
-          </p>
+            <Link to="/alerts" className="btn btn-sm btn-scan">
+              Fuel Alerts
+            </Link>
+            <Link to="/admin" className="btn btn-sm btn-slab">
+              Add vehicle
+            </Link>
+          </div>
         </div>
       </header>
       <div className="content">
@@ -112,11 +109,11 @@ export default function FleetDashboard() {
         {error ? <p className="error">{error}</p> : null}
         <div className="fleet-layout">
           <DeviceList devices={filtered} search={search} onSearch={setSearch} />
-          <div className="panel" style={{ padding: 0 }}>
+          <div className="panel fleet-map-panel">
             <MapView devices={filtered} />
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }

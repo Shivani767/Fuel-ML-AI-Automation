@@ -2,8 +2,16 @@ const BASE = import.meta.env.VITE_API_BASE || ''
 
 async function get(path) {
   const res = await fetch(`${BASE}${path}`)
-  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
-  return res.json()
+  const data = await res.json().catch(() => ({}))
+  if (!res.ok) {
+    const err = new Error(
+      data.error || `${res.status} ${res.statusText || 'request failed'}`
+    )
+    err.payload = data
+    err.status = res.status
+    throw err
+  }
+  return data
 }
 
 async function post(path, body) {
@@ -50,6 +58,12 @@ export const api = {
     return { ok: Boolean(data.ok), ...data, httpStatus: res.status }
   },
   imeiList: () => get('/api/imei/list'),
+  syncFuelark: (opts = {}) =>
+    post('/api/imei/sync-fuelark', {
+      fetchNew: opts.fetchNew !== false,
+      days: opts.days ?? 3,
+    }),
+  syncFuelarkStatus: () => get('/api/imei/sync-fuelark'),
   deviceSeries: (name, from, to, opts = {}) =>
     get(
       `/api/devices/${encodeURIComponent(name)}/series${qs({
@@ -87,9 +101,21 @@ export const api = {
   // Read-only scan of one explicit window ("what happened 12:00-12:30"). Writes
   // nothing, so unlike alertsRun it can be asked for the same slab repeatedly.
   alertsSlab: (from, to) => get(`/api/alerts/slab${qs({ from, to })}`),
-  alertsHistory: (day = '', limit = 500, filtered = false) =>
-    get(`/api/alerts${qs({ day, limit, filtered: filtered ? 1 : 0 })}`),
+  // alertsHistory({ from, to, q, day, limit, filtered })
+  alertsHistory: (opts = {}) => {
+    const o = opts || {}
+    return get(`/api/alerts${qs({
+      day: o.day || '',
+      from: o.from || o.since || '',
+      to: o.to || o.until || '',
+      q: o.q || o.vehicle || '',
+      limit: o.limit ?? 1000,
+      filtered: o.filtered ? 1 : 0,
+    })}`)
+  },
   alertsDays: () => get('/api/alerts/days'),
+  alertsBackfill: (day, persist = true) =>
+    post('/api/alerts/backfill', { day, persist }),
   alertsCsvUrl: (day, kind = 'alerts') =>
     `/api/alerts/download/${encodeURIComponent(day)}?kind=${kind}`,
   voltageProfiles: () => get('/api/alerts/voltage-profiles'),

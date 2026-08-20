@@ -11,8 +11,8 @@ from backend.services import alerts, voltage_profile
 
 bp = Blueprint("alerts", __name__)
 
-# Upper bound on an ad-hoc slab scan (see alerts_slab).
-MAX_SLAB_HOURS = 6
+# Upper bound on an ad-hoc slab / custom window scan (see alerts_slab).
+MAX_SLAB_HOURS = 12
 
 
 @bp.get("/api/alerts/latest")
@@ -35,27 +35,67 @@ def alerts_history():
     """Alerts from the day-wise CSVs, newest first.
 
     `day=YYYY-MM-DD` reads one day; omit it to span every day on disk.
+    `from` / `to` (ISO date or datetime) filter on eventTime.
+    `q` filters by vehicle name or IMEI substring.
     `filtered=1` also returns events the confirmation gate suppressed.
-    `since` filters on eventTime; `limit` caps the response.
+    `since` is an alias for `from` (kept for older clients).
+    `limit` caps the response.
     """
     day = (request.args.get("day") or "").strip() or None
-    since = (request.args.get("since") or "").strip()
+    since = (request.args.get("since") or request.args.get("from") or "").strip()
+    until = (request.args.get("until") or request.args.get("to") or "").strip()
+    q = (request.args.get("q") or request.args.get("vehicle") or "").strip().lower()
     include_filtered = str(request.args.get("filtered", "0")).lower() in ("1", "true", "yes")
     try:
-        limit = int(request.args.get("limit", "200"))
+        limit = int(request.args.get("limit", "500"))
     except ValueError:
-        limit = 200
+        limit = 500
+    limit = max(1, min(limit, 5000))
 
     rows = alerts.read_daily_alerts(day=day, include_filtered=include_filtered)
     if since:
         rows = [r for r in rows if str(r.get("eventTime", "")) >= since]
+    if until:
+        # Allow bare YYYY-MM-DD to mean end of that day.
+        until_key = until if len(until) > 10 else f"{until}T23:59:59"
+        rows = [r for r in rows if str(r.get("eventTime", "")) <= until_key]
+    if q:
+        rows = [
+            r for r in rows
+            if q in str(r.get("deviceName") or "").lower()
+            or q in str(r.get("imei") or "").lower()
+        ]
     rows.sort(key=lambda r: str(r.get("eventTime", "")), reverse=True)
     return jsonify({
         "count": len(rows),
         "day": day,
+        "from": since or None,
+        "to": until or None,
+        "q": q or None,
         "availableDays": alerts.available_days(),
         "alerts": rows[:limit],
     })
+
+
+@bp.post("/api/alerts/backfill")
+def alerts_backfill():
+    """Scan one calendar day of stored telemetry and save fill/theft cases.
+
+    Body: {"day": "2026-06-15", "persist": true}
+    Uses in-memory June + live data (no FuelArk round-trip). Use this to build
+    past history so the fleet browser can show fills/thefts before the agent ran.
+    """
+    body = request.get_json(silent=True) or {}
+    day = str(body.get("day") or request.args.get("day") or "").strip()
+    if not day:
+        return jsonify({"error": "day is required (YYYY-MM-DD)"}), 400
+    persist = str(body.get("persist", "1")).lower() not in ("0", "false", "no")
+    try:
+        return jsonify(alerts.backfill_day(day, persist=persist))
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
 
 
 @bp.get("/api/alerts/days")

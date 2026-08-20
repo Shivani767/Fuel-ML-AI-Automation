@@ -7,7 +7,7 @@ import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta
-from typing import Optional, Tuple
+from typing import List, Optional, Tuple
 
 from backend import config
 from backend.services import data_store
@@ -17,6 +17,12 @@ _fleet_refresh_lock = threading.Lock()
 _fleet_refresh_at = 0.0
 _fleet_refresh_result = {"ok": False, "fetched": 0, "devices": 0, "error": None}
 _bg_thread = None
+_last_roster_sync: Optional[dict] = None
+_roster_sync_lock = threading.Lock()
+_kpi_cache_at = 0.0
+_kpi_cache: Optional[dict] = None
+_kpi_lock = threading.Lock()
+KPI_CACHE_SECONDS = 45.0
 
 # Delta-refresh tuning. The old refresh re-pulled the whole day from all 104 devices
 # every cycle; these keep each call to the few minutes that are actually new.
@@ -372,6 +378,295 @@ def add_imei_to_fleet(imei: str, days: int = 3) -> dict:
         "mapped": len(data_store.device_imei_map),
         "error": None if stamped else "No telemetry returned for this IMEI in the lookback window",
     }
+
+
+def fetch_fuelark_live_kpis(force: bool = False) -> Optional[dict]:
+    """Official FuelArk Home counters via Helper/DeviceStatus (cached ~45s)."""
+    global _kpi_cache_at, _kpi_cache
+    if not getattr(config, "FUELARK_KPI_LIVE", True):
+        return None
+    now = time.time()
+    with _kpi_lock:
+        if (
+            not force
+            and _kpi_cache is not None
+            and (now - _kpi_cache_at) < KPI_CACHE_SECONDS
+        ):
+            return dict(_kpi_cache)
+    _ensure_root()
+    from fuel_api import fetch_device_status, fetch_live_track, login_and_get_token
+
+    try:
+        token = login_and_get_token()
+        status = fetch_device_status(token=token)
+        track = fetch_live_track(token=token) if status else []
+    except Exception as exc:
+        print(f"[kpi] FuelArk DeviceStatus failed: {exc}", flush=True)
+        with _kpi_lock:
+            return dict(_kpi_cache) if _kpi_cache else None
+
+    if not status:
+        with _kpi_lock:
+            return dict(_kpi_cache) if _kpi_cache else None
+
+    out = {
+        "source": "fuelark_device_status",
+        "totalDevices": status["totalDevices"],
+        "active": status["active"],
+        "inActive": status["inActive"],
+        "running": status["running"],
+        "batteryRemove": status["batteryRemove"],
+        "sensorRemove": status.get("sensorRemove") or 0,
+        # Dashboard identity: Total = Active + Inactive (battery counted in Inactive).
+        "inactiveCombined": max(
+            0, int(status["totalDevices"]) - int(status["active"])
+        ),
+        "trackCount": len(track) if isinstance(track, list) else 0,
+        "track": track if isinstance(track, list) else [],
+        "fetchedAt": datetime.now().isoformat(timespec="seconds"),
+    }
+    with _kpi_lock:
+        _kpi_cache = dict(out)
+        _kpi_cache_at = time.time()
+    return out
+
+
+def _norm_name(value: str) -> str:
+    return " ".join(str(value or "").lower().replace("$", " ").split())
+
+
+def apply_livetrack_to_cards(cards: List[dict], track: Optional[list] = None) -> List[dict]:
+    """Stamp FuelArk LiveTrack last-seen / speed / battery onto fleet cards."""
+    if track is None:
+        kpis = fetch_fuelark_live_kpis()
+        track = (kpis or {}).get("track") or []
+    if not track or not cards:
+        return cards
+
+    online_min = float(getattr(config, "ACTIVE_ONLINE_MINUTES", 5))
+    run_speed = float(getattr(config, "RUNNING_SPEED_KMH", 0))
+    by_name = {_norm_name(r.get("deviceName")): r for r in track if r.get("deviceName")}
+
+    def _fnum(v):
+        try:
+            return float(str(v).strip() or 0)
+        except (TypeError, ValueError):
+            return 0.0
+
+    now_utc = datetime.utcnow()
+    for card in cards:
+        row = by_name.get(_norm_name(card.get("deviceName")))
+        if not row:
+            want = _norm_name(card.get("deviceName"))
+            for key, cand in by_name.items():
+                if want.startswith(key) or key.startswith(want) or key in want or want in key:
+                    row = cand
+                    break
+        if not row:
+            continue
+
+        spd = max(
+            _fnum(row.get("gprs_Speed")),
+            _fnum(row.get("vehicel_Speed")),
+            _fnum(row.get("vehicle_speed")),
+        )
+        bat = _fnum(row.get("vehicelBattery"))
+        eng = str(row.get("engineStatus") or "").strip().lower()
+        ignition_on = eng in ("on", "1", "true")
+        ts_raw = row.get("lastUpdatedDateUTC")
+        age_m = 9999.0
+        last_seen_s = card.get("lastSeen")
+        try:
+            ts = datetime.fromisoformat(str(ts_raw).replace("Z", ""))
+            age_m = (now_utc - ts).total_seconds() / 60.0
+            last_seen_s = ts.isoformat(timespec="seconds")
+        except Exception:
+            pass
+
+        battery_disconnected = bat <= 0
+        online = age_m <= online_min
+        active = bool(online and not battery_disconnected)
+        moving = spd > run_speed if run_speed > 0 else spd > 0
+        running = bool(active and moving)
+
+        card["speed"] = round(spd, 2)
+        card["ignition"] = "On" if ignition_on else "Off"
+        card["ignitionStatus"] = 1 if ignition_on else 0
+        card["lastSeen"] = last_seen_s
+        card["batteryDisconnected"] = battery_disconnected
+        card["active"] = active
+        card["running"] = running
+        card["online"] = online
+        if bat:
+            card["externalVoltage"] = round(bat, 2)
+        card["signal"] = (
+            "battery" if battery_disconnected else ("ok" if active else "weak")
+        )
+        card["status"] = (
+            "battery"
+            if battery_disconnected
+            else ("running" if running else ("active" if active else "inactive"))
+        )
+        card["source"] = "fuelark_livetrack"
+    return cards
+
+
+def last_roster_sync() -> Optional[dict]:
+    return dict(_last_roster_sync) if _last_roster_sync else None
+
+
+def sync_fleet_from_fuelark(
+    *,
+    fetch_new: bool = True,
+    days: Optional[int] = None,
+    max_new: Optional[int] = None,
+) -> dict:
+    """Pull the FuelArk account vehicle list and register any new IMEIs.
+
+    Source of truth: api1 `/api/Helper/GetDevices` (same account as web1.fuelark.com)
+    joined to live IMEIs via `deviceInfoId`. New vehicles are appended to
+    `fleet_imeis.txt` + `device_imei_map.json` and optionally history-fetched.
+    """
+    global _last_roster_sync
+    with _roster_sync_lock:
+        return _sync_fleet_from_fuelark_locked(
+            fetch_new=fetch_new, days=days, max_new=max_new
+        )
+
+
+def _sync_fleet_from_fuelark_locked(
+    *,
+    fetch_new: bool,
+    days: Optional[int],
+    max_new: Optional[int],
+) -> dict:
+    global _last_roster_sync
+    _ensure_root()
+    from fuel_api import fetch_account_vehicles_with_imei, login_and_get_token
+
+    started = time.time()
+    days = max(1, min(int(days if days is not None else config.FUELARK_SYNC_FETCH_DAYS), 14))
+    max_new = max(0, int(max_new if max_new is not None else config.FUELARK_SYNC_MAX_NEW))
+
+    data_store.ensure_loaded()
+    token = login_and_get_token()
+    try:
+        remote = fetch_account_vehicles_with_imei(token=token)
+    except Exception as exc:
+        out = {
+            "ok": False,
+            "error": str(exc),
+            "tookSeconds": round(time.time() - started, 1),
+        }
+        _last_roster_sync = out
+        return out
+
+    if not remote:
+        out = {
+            "ok": False,
+            "error": "FuelArk returned no account devices (check login / API key)",
+            "fuelarkCount": 0,
+            "tookSeconds": round(time.time() - started, 1),
+        }
+        _last_roster_sync = out
+        return out
+
+    # Persist display-name roster for Fleet Total KPI.
+    try:
+        import json
+
+        names = sorted({v["deviceName"] for v in remote if v.get("deviceName")})
+        config.ROSTER_PATH.parent.mkdir(parents=True, exist_ok=True)
+        config.ROSTER_PATH.write_text(
+            json.dumps(names, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+    except OSError as exc:
+        print(f"[sync] roster file write skipped: {exc}", flush=True)
+
+    known = set(fleet_imei_list())
+    local_before = len(known)
+    added_rows = []
+    updated_names = 0
+    skipped_fetch = 0
+
+    for row in remote:
+        imei = str(row["imei"]).strip()
+        raw_name = str(row.get("deviceName") or "").strip() or f"IMEI-{imei}"
+        device_name = to_display_name(raw_name, imei)
+
+        # Refresh name mapping even for existing IMEIs.
+        stale = [n for n, i in list(data_store.device_imei_map.items()) if str(i) == imei]
+        if device_name not in data_store.device_imei_map or any(n != device_name for n in stale):
+            for n in stale:
+                if n != device_name:
+                    data_store.device_imei_map.pop(n, None)
+            if data_store.device_imei_map.get(device_name) != imei:
+                data_store.device_imei_map[device_name] = imei
+                updated_names += 1
+
+        if imei in known:
+            continue
+
+        # Register new IMEI on the local fleet list.
+        path = config.FLEET_IMEIS_PATH
+        lines = []
+        if path.exists():
+            lines = [
+                ln.strip()
+                for ln in path.read_text(encoding="utf-8").splitlines()
+                if ln.strip() and not ln.strip().startswith("#")
+            ]
+        if imei not in lines:
+            lines.append(imei)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("\n".join(sorted(set(lines))) + "\n", encoding="utf-8")
+        known.add(imei)
+        data_store.device_imei_map[device_name] = imei
+
+        entry = {
+            "imei": imei,
+            "deviceName": device_name,
+            "deviceInfoId": row.get("deviceInfoId"),
+            "fetched": False,
+            "pointsFetched": 0,
+        }
+        if fetch_new and len(added_rows) < max_new:
+            try:
+                res = add_imei_to_fleet(imei, days=days)
+                entry["fetched"] = bool(res.get("ok"))
+                entry["pointsFetched"] = int(res.get("pointsFetched") or 0)
+                if res.get("deviceName"):
+                    entry["deviceName"] = res["deviceName"]
+            except Exception as exc:
+                entry["error"] = str(exc)
+        elif fetch_new:
+            skipped_fetch += 1
+        added_rows.append(entry)
+
+    data_store.persist_imei_map()
+
+    out = {
+        "ok": True,
+        "fuelarkCount": len(remote),
+        "localBefore": local_before,
+        "localAfter": len(fleet_imei_list()),
+        "addedCount": len(added_rows),
+        "added": added_rows,
+        "namesUpdated": updated_names,
+        "fetchNew": fetch_new,
+        "fetchDays": days,
+        "skippedFetch": skipped_fetch,
+        "tookSeconds": round(time.time() - started, 1),
+        "syncedAt": datetime.now().isoformat(timespec="seconds"),
+    }
+    print(
+        f"[sync] FuelArk roster {out['fuelarkCount']} · added {out['addedCount']} new · "
+        f"names touched {updated_names} in {out['tookSeconds']}s",
+        flush=True,
+    )
+    _last_roster_sync = out
+    return out
 
 
 def build_imei_map_from_api(lookback_hours: float = 6) -> dict:

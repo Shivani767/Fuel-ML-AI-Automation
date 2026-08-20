@@ -13,11 +13,11 @@ const FILTERS = {
   },
   running: {
     title: 'Running Vehicles',
-    desc: 'Active vehicles with ignition ON on the latest reading.',
+    desc: 'Active vehicles with ignition ON and moving (speed or movement) — FuelArk Running.',
   },
   inactive: {
     title: 'Inactive Vehicles',
-    desc: 'Not currently online and not in the battery-disconnected soft alert.',
+    desc: 'Not active — offline now, or online with battery-disconnected soft alert. Total = Active + Inactive.',
   },
 }
 
@@ -56,8 +56,7 @@ export default function FleetVehicles() {
     let rows = devices
     if (filter === 'active') rows = devices.filter((d) => d.active)
     if (filter === 'running') rows = devices.filter((d) => d.running)
-    if (filter === 'inactive')
-      rows = devices.filter((d) => !d.active && !d.batteryDisconnected)
+    if (filter === 'inactive') rows = devices.filter((d) => !d.active)
     const q = search.trim().toLowerCase()
     if (!q) return rows
     return rows.filter(

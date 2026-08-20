@@ -23,18 +23,26 @@ export function MetricCard({ rows, palette = 'vehicle', footer = null }) {
   )
 }
 
-export function LiveSummaryCards({ summary, eventStats, eventsLoading }) {
-  if (!summary || !summary.deviceName) {
+export function LiveSummaryCards({ summary, eventStats, eventsLoading, loading = false }) {
+  if (loading && (!summary || !summary.deviceName)) {
     return (
-      <div className="kpi-grid" style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}>
+      <div className="kpi-grid live-kpi-grid">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="kpi-card">
-            <div className="kpi-row" style={{ background: '#94a3b8' }}>
-              <span>Loading…</span>
+          <div key={i} className="kpi-card live-kpi-skeleton">
+            <div className="kpi-row" style={{ background: '#93c5fd' }}>
+              <span>Loading metrics…</span>
               <span>—</span>
             </div>
           </div>
         ))}
+      </div>
+    )
+  }
+
+  if (!summary || !summary.deviceName) {
+    return (
+      <div className="live-empty-hint">
+        Pick a vehicle and date range, then press <strong>Search</strong> to load fuel metrics.
       </div>
     )
   }
@@ -47,7 +55,7 @@ export function LiveSummaryCards({ summary, eventStats, eventsLoading }) {
   const theftLabel = eventsLoading ? '…' : `${theftLiters} ltr (${theftCount})`
 
   return (
-    <div className="kpi-grid" style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}>
+    <div className="kpi-grid live-kpi-grid">
       <MetricCard
         palette="summary"
         rows={[
@@ -93,7 +101,6 @@ export function FleetKpiCards({ summary }) {
     )
   }
 
-  const defs = summary.definitions || {}
   const todayLabel =
     summary.asOfLabel ||
     summary.asOfDate ||
@@ -103,37 +110,28 @@ export function FleetKpiCards({ summary }) {
       year: 'numeric',
     })
   const timeLabel = summary.asOfTime || new Date().toLocaleTimeString()
+  const batteryN = summary.batteryDisconnected || 0
 
   const stats = [
     {
       key: 'total',
       value: summary.totalVehicle ?? 0,
-      label: 'Total Vehicle',
-      desc: defs.totalVehicle || 'Unique vehicles (one per IMEI).',
+      label: 'Total Vehicles',
     },
     {
       key: 'active',
       value: summary.activeVehicle ?? 0,
-      label: 'Active Vehicle',
-      desc:
-        defs.activeVehicle ||
-        'Online now (telemetry in the last ~30 minutes), excluding battery-disconnected.',
+      label: 'Active Vehicles',
     },
     {
       key: 'running',
       value: summary.runningVehicle ?? 0,
-      label: 'Running Vehicle',
-      desc:
-        defs.runningVehicle ||
-        'Active vehicles with ignition ON on the latest reading.',
+      label: 'Running Vehicles',
     },
     {
       key: 'inactive',
       value: summary.inactiveVehicle ?? 0,
-      label: 'Inactive Vehicle',
-      desc:
-        defs.inactiveVehicle ||
-        'Not currently online (and not battery-disconnected).',
+      label: 'Inactive Vehicles',
     },
   ]
 
@@ -146,8 +144,13 @@ export function FleetKpiCards({ summary }) {
         </span>
         <span className="fleet-date">
           Today · {todayLabel}
-          {timeLabel ? ` · Updated ${timeLabel}` : ''}
+          {timeLabel ? ` · ${timeLabel}` : ''}
         </span>
+        {batteryN > 0 ? (
+          <span className="fleet-battery-chip" title="Counted in Inactive">
+            Battery · {batteryN}
+          </span>
+        ) : null}
       </div>
 
       <div className="fleet-status-grid fleet-status-grid-4">
@@ -160,17 +163,9 @@ export function FleetKpiCards({ summary }) {
           >
             <div className="fleet-stat-value">{s.value}</div>
             <div className="fleet-stat-label">{s.label}</div>
-            <p className="fleet-stat-desc">{s.desc}</p>
-            <span className="fleet-stat-hint">Click to view →</span>
           </button>
         ))}
       </div>
-      {(summary.batteryDisconnected || 0) > 0 ? (
-        <p className="muted" style={{ textAlign: 'center', margin: '10px 0 0', fontSize: 12 }}>
-          Battery disconnected soft-alert: {summary.batteryDisconnected} (excluded from Active /
-          Inactive)
-        </p>
-      ) : null}
     </div>
   )
 }

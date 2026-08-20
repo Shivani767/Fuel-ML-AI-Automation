@@ -12,6 +12,18 @@ import {
 
 ChartJS.register(ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend)
 
+// Colorful Fleet mix / Counts palette.
+const BAR_COLORS = ['#7c3aed', '#0ea5e9', '#22c55e', '#f97316']
+
+const PIE_COLORS = {
+  running: '#22c55e',
+  idle: '#0ea5e9',
+  inactive: '#f97316',
+  battery: '#7c3aed',
+}
+
+const PIE_FALLBACK = ['#22c55e', '#0ea5e9', '#f97316', '#7c3aed', '#eab308', '#ec4899']
+
 export default function FleetStatusChart({ summary }) {
   const segments = summary?.chart?.segments || []
 
@@ -25,10 +37,12 @@ export default function FleetStatusChart({ summary }) {
       datasets: [
         {
           data: fallback.map((s) => s.value),
-          backgroundColor: fallback.map((s) => s.color),
-          borderWidth: 2,
+          backgroundColor: fallback.map((s, i) =>
+            PIE_COLORS[s.key] || s.color || PIE_FALLBACK[i % PIE_FALLBACK.length]
+          ),
+          borderWidth: 3,
           borderColor: '#fff',
-          hoverOffset: 6,
+          hoverOffset: 10,
         },
       ],
     }
@@ -40,14 +54,14 @@ export default function FleetStatusChart({ summary }) {
     const running = summary?.runningVehicle ?? 0
     const inactive = summary?.inactiveVehicle ?? 0
     return {
-      labels: ['Total', 'Active', 'Running', 'Inactive'],
+      labels: ['Total Vehicles', 'Active Vehicles', 'Running Vehicles', 'Inactive Vehicles'],
       datasets: [
         {
           label: 'Vehicles',
           data: [total, active, running, inactive],
-          backgroundColor: ['#0f172a', '#2563eb', '#16a34a', '#94a3b8'],
-          borderRadius: 6,
-          maxBarThickness: 42,
+          backgroundColor: BAR_COLORS,
+          borderRadius: 8,
+          maxBarThickness: 44,
         },
       ],
     }
@@ -58,19 +72,19 @@ export default function FleetStatusChart({ summary }) {
   return (
     <div className="fleet-charts">
       <div className="fleet-chart-panel">
-        <h3>Fleet mix now</h3>
-        <p className="muted" style={{ marginTop: 0, fontSize: 12 }}>
-          Running ⊂ Active · Inactive = offline · Total = Active + Inactive (+ battery)
-        </p>
+        <h3>Fleet mix</h3>
         <div className="fleet-doughnut-wrap">
           <Doughnut
             data={doughnut}
             options={{
               responsive: true,
               maintainAspectRatio: false,
-              cutout: '62%',
+              cutout: '64%',
               plugins: {
-                legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } },
+                legend: {
+                  position: 'bottom',
+                  labels: { boxWidth: 12, font: { size: 11 }, padding: 14 },
+                },
                 tooltip: {
                   callbacks: {
                     label: (ctx) => {
@@ -91,11 +105,7 @@ export default function FleetStatusChart({ summary }) {
       </div>
       <div className="fleet-chart-panel">
         <h3>Counts</h3>
-        <p className="muted" style={{ marginTop: 0, fontSize: 12 }}>
-          {summary.definitions?.identityCheck ||
-            `${summary.totalVehicle} total · ${summary.activeVehicle} active · ${summary.runningVehicle} running · ${summary.inactiveVehicle} inactive`}
-        </p>
-        <div style={{ height: 220 }}>
+        <div className="fleet-bar-wrap">
           <Bar
             data={bars}
             options={{
@@ -105,10 +115,15 @@ export default function FleetStatusChart({ summary }) {
               scales: {
                 y: {
                   beginAtZero: true,
-                  ticks: { precision: 0 },
-                  grid: { color: '#f1f5f9' },
+                  ticks: { precision: 0, color: '#64748b' },
+                  grid: { color: '#e2e8f0' },
+                  border: { display: false },
                 },
-                x: { grid: { display: false } },
+                x: {
+                  ticks: { color: '#475569', font: { weight: '600' } },
+                  grid: { display: false },
+                  border: { display: false },
+                },
               },
             }}
           />

@@ -343,9 +343,13 @@ def _merge_verified_with_detector(events: List[Dict[str, Any]]) -> List[Dict[str
 def _suppress_driving_artifacts(events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Drop ignition-on / moving noise that FuelArk would not mark as fill/theft.
 
-    Real siphoning and pump fills happen while stationary. Slope/sloshing while
-    driving produces jagged liter swings that the session detector still sees as
-    short DRAIN/FILL sessions — those must not reach the Live Map markers.
+    Real siphoning and pump fills usually happen while stationary, but this fleet
+    also has genuine multi-litre drains during slow site movement (~5–12 km/h) that
+    FuelArk marks as theft (e.g. Lalit RMC Sonipat TM 2026-08-20, ~20 L while
+    working). The old rule `speed > 3 and not parked → drop` hid those.
+
+    Align with the alert precision gates: suppress short moving blips and highway
+    travel noise; keep sustained or large drains even if ignition is on.
     """
     out: List[Dict[str, Any]] = []
     for e in events:
@@ -384,11 +388,14 @@ def _suppress_driving_artifacts(events: List[Dict[str, Any]]) -> List[Dict[str, 
             continue
         if duration > 0 and duration < config.ALERT_SPIKE_MAX_MINUTES and vol >= config.ALERT_SPIKE_MIN_LITERS:
             continue
-        # Driving / not-parked short drains ≈ terrain slosh, not theft.
-        if speed > 3.0 and not parked:
+        # Instant / sub-minute moving drains under the large-keep floor are slosh.
+        moving = (not ign_off) and (not parked)
+        large_keep = vol >= config.ALERT_THEFT_KEEP_MOVING_MIN_LITERS
+        if moving and duration > 0 and duration < config.ALERT_THEFT_MIN_DURATION_MOVING_MIN and not large_keep:
             continue
-        if (not ign_off) and (not parked) and duration < max(
-            config.ALERT_THEFT_MIN_DURATION_MOVING_MIN, 5.0
+        # Highway travel with modest volume — terrain, not siphoning.
+        if speed > config.ALERT_FILL_MAX_SPEED_KMH and vol < config.ALERT_THEFT_KEEP_MOVING_MIN_LITERS * 2 and (
+            duration <= 0 or duration < 10.0
         ):
             continue
         out.append(e)

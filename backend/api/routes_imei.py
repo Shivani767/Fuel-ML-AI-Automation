@@ -5,7 +5,7 @@ from __future__ import annotations
 from flask import Blueprint, jsonify, request
 
 from backend.services import data_store
-from backend.services.fuelark_live import add_imei_to_fleet
+from backend.services.fuelark_live import add_imei_to_fleet, last_roster_sync, sync_fleet_from_fuelark
 
 bp = Blueprint("imei", __name__)
 
@@ -59,8 +59,39 @@ def list_imeis():
             "count": len(rows),
             "mapped": len(data_store.device_imei_map),
             "devices": rows,
+            "lastFuelarkSync": last_roster_sync(),
         }
     )
+
+
+@bp.get("/api/imei/sync-fuelark")
+def sync_fuelark_status():
+    """Last automatic / manual FuelArk roster sync result."""
+    latest = last_roster_sync()
+    if not latest:
+        return jsonify({"ok": True, "pending": True, "message": "No sync has run yet."})
+    return jsonify({"ok": True, "pending": False, **latest})
+
+
+@bp.post("/api/imei/sync-fuelark")
+def sync_fuelark_now():
+    """Pull vehicles from the FuelArk account and add any new IMEIs locally.
+
+    Uses the same credentials as live fetch (.env). Mirrors the vehicle list on
+    https://web1.fuelark.com after login.
+    """
+    body = request.get_json(silent=True) or {}
+    fetch_new = str(body.get("fetchNew", "1")).lower() not in ("0", "false", "no")
+    try:
+        days = int(body.get("days") or request.args.get("days") or 3)
+    except (TypeError, ValueError):
+        days = 3
+    try:
+        result = sync_fleet_from_fuelark(fetch_new=fetch_new, days=days)
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+    status = 200 if result.get("ok") else 400
+    return jsonify(result), status
 
 
 @bp.route("/api/imei/add", methods=["POST", "OPTIONS"])

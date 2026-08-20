@@ -36,10 +36,29 @@ def run_once(force_fetch: bool = True) -> dict:
 
 def _run_once_locked(force_fetch: bool) -> dict:
     from backend.services import alerts
-    from backend.services.fuelark_live import refresh_fleet_live_snapshot
+    from backend.services.fuelark_live import refresh_fleet_live_snapshot, sync_fleet_from_fuelark
 
     started = time.time()
     out: dict = {"startedAt": datetime.now().isoformat(timespec="seconds")}
+
+    # 0. Roster sync — pick up vehicles newly added on FuelArk Home.
+    if config.FUELARK_SYNC_ENABLED:
+        t_sync = time.time()
+        try:
+            sync = sync_fleet_from_fuelark(fetch_new=True)
+            out["rosterSync"] = {
+                "ok": bool(sync.get("ok")),
+                "fuelarkCount": sync.get("fuelarkCount"),
+                "addedCount": sync.get("addedCount"),
+                "seconds": round(time.time() - t_sync, 1),
+                "error": sync.get("error"),
+            }
+        except Exception as e:
+            out["rosterSync"] = {
+                "ok": False,
+                "error": str(e),
+                "seconds": round(time.time() - t_sync, 1),
+            }
 
     # 1. Fetch -- delta only; each device is asked for the minutes since its newest
     #    held point, not the whole day.
@@ -75,8 +94,10 @@ def _run_once_locked(force_fetch: bool) -> dict:
 
     out["totalSeconds"] = round(time.time() - started, 1)
     f, a = out.get("fetch", {}), out.get("alerts", {})
+    sync = out.get("rosterSync") or {}
     print(
-        f"[pipeline] fetch {f.get('devices', '?')} devices / {f.get('points', '?')} pts "
+        f"[pipeline] sync +{sync.get('addedCount', 0)} · "
+        f"fetch {f.get('devices', '?')} devices / {f.get('points', '?')} pts "
         f"in {f.get('seconds', '?')}s -> alerts {a.get('theft', '?')} theft / "
         f"{a.get('fill', '?')} fill, {a.get('held', '?')} held, "
         f"{a.get('suppressed', '?')} filtered in {a.get('seconds', '?')}s "

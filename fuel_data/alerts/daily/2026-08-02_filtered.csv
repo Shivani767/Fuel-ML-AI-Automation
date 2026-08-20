@@ -1,7 +1,7 @@
-confirmedAt,deviceName,imei,eventType,eventTime,endTime,volume_L,confidence,decision,ignition,trulyParked,tamper,durationMinutes,latitude,longitude,suppressedReason
-,RKC/TIPPER/126 MH-12-YB-9571,353691849945331,Fuel Theft,2026-08-02 20:38:56,2026-08-02 20:47:43,12.0,0.75,AUTO_CONFIRMED,on,False,False,8.8,18.1121,73.76432,voltage_artifact_swing_13.4L
-,RKC/TIPPER/126 MH-12-YB-9571,353691849945331,Fuel Theft,2026-08-02 20:38:56,2026-08-02 20:47:43,12.0,0.75,AUTO_CONFIRMED,on,False,False,8.8,18.1121,73.76432,voltage_artifact_swing_13.4L
-,RKC/TIPPER/126 MH-12-YB-9571,353691849945331,Fuel Theft,2026-08-02 20:38:56,2026-08-02 20:47:43,12.0,0.75,AUTO_CONFIRMED,on,False,False,8.8,18.1121,73.76432,voltage_artifact_swing_13.4L
-,RKC/TIPPER/126 MH-12-YB-9571,353691849945331,Fuel Theft,2026-08-02 20:38:56,2026-08-02 20:47:43,12.0,0.75,AUTO_CONFIRMED,on,False,False,8.8,18.1121,73.76432,voltage_artifact_swing_13.4L
-,SGI GUNA TPR-22,353691846962883,Fuel Theft,2026-08-02 23:30:52,2026-08-02 23:31:49,6.71,0.75,AUTO_CONFIRMED,on,False,False,0.9,24.79308,77.00051,no_baseline_for_persistence
-,Skylark Indore EX14 Excavator No - 14 (NEW),353691846913415,Fuel Theft,2026-08-02 22:45:16,2026-08-02 23:30:10,13.41,0.8123943265723521,AUTO_CONFIRMED,on,True,False,44.9,21.97424,75.625,no_baseline_for_persistence
+confirmedAt,deviceName,imei,eventType,eventTime,endTime,volume_L,confidence,decision,ignition,trulyParked,tamper,durationMinutes,speed,mlLabel,mlConfidence,latitude,longitude,suppressedReason
+,RKC/TIPPER/126 MH-12-YB-9571,353691849945331,Fuel Theft,2026-08-02 20:38:56,2026-08-02 20:47:43,12.0,0.75,AUTO_CONFIRMED,on,False,False,8.8,,,,18.1121,73.76432,voltage_artifact_swing_13.4L
+,RKC/TIPPER/126 MH-12-YB-9571,353691849945331,Fuel Theft,2026-08-02 20:38:56,2026-08-02 20:47:43,12.0,0.75,AUTO_CONFIRMED,on,False,False,8.8,,,,18.1121,73.76432,voltage_artifact_swing_13.4L
+,RKC/TIPPER/126 MH-12-YB-9571,353691849945331,Fuel Theft,2026-08-02 20:38:56,2026-08-02 20:47:43,12.0,0.75,AUTO_CONFIRMED,on,False,False,8.8,,,,18.1121,73.76432,voltage_artifact_swing_13.4L
+,RKC/TIPPER/126 MH-12-YB-9571,353691849945331,Fuel Theft,2026-08-02 20:38:56,2026-08-02 20:47:43,12.0,0.75,AUTO_CONFIRMED,on,False,False,8.8,,,,18.1121,73.76432,voltage_artifact_swing_13.4L
+,SGI GUNA TPR-22,353691846962883,Fuel Theft,2026-08-02 23:30:52,2026-08-02 23:31:49,6.71,0.75,AUTO_CONFIRMED,on,False,False,0.9,,,,24.79308,77.00051,no_baseline_for_persistence
+,Skylark Indore EX14 Excavator No - 14 (NEW),353691846913415,Fuel Theft,2026-08-02 22:45:16,2026-08-02 23:30:10,13.41,0.8123943265723521,AUTO_CONFIRMED,on,True,False,44.9,,,,21.97424,75.625,no_baseline_for_persistence

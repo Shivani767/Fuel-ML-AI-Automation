@@ -6,7 +6,12 @@ from flask import Blueprint, jsonify, request
 
 from backend import config
 from backend.services import data_store
-from backend.services.fuelark_live import refresh_fleet_live_snapshot, snapshot_age_seconds
+from backend.services.fuelark_live import (
+    apply_livetrack_to_cards,
+    fetch_fuelark_live_kpis,
+    refresh_fleet_live_snapshot,
+    snapshot_age_seconds,
+)
 
 bp = Blueprint("fleet", __name__)
 
@@ -48,10 +53,27 @@ def _maybe_refresh_live():
 def fleet_summary():
     data_store.ensure_loaded()
     live = _maybe_refresh_live()
+    kpis = None
+    try:
+        kpis = fetch_fuelark_live_kpis(force=str(request.args.get("refresh", "1")).lower()
+                                       in ("1", "true", "yes", "force", "2"))
+    except Exception as e:
+        kpis = {"error": str(e)}
     cards = data_store.fleet_device_cards(today_only=True)
-    payload = data_store.fleet_summary(cards)
+    if kpis and kpis.get("track"):
+        cards = apply_livetrack_to_cards(cards, kpis.get("track"))
+    payload = data_store.fleet_summary(
+        cards, fuelark_kpis=kpis if kpis and kpis.get("totalDevices") else None
+    )
     payload["liveRefresh"] = live
     payload["snapshot"] = _snapshot_meta()
+    payload["fuelarkStatus"] = {
+        k: (kpis or {}).get(k)
+        for k in (
+            "totalDevices", "active", "inActive", "running",
+            "batteryRemove", "sensorRemove", "fetchedAt", "source", "error",
+        )
+    }
     return jsonify(payload)
 
 
@@ -61,6 +83,12 @@ def fleet_devices():
     live = _maybe_refresh_live()
     q = (request.args.get("q") or request.args.get("search") or "").strip().lower()
     cards = data_store.fleet_device_cards(today_only=True)
+    try:
+        kpis = fetch_fuelark_live_kpis()
+        if kpis and kpis.get("track"):
+            cards = apply_livetrack_to_cards(cards, kpis.get("track"))
+    except Exception:
+        pass
     if q:
         cards = [
             c

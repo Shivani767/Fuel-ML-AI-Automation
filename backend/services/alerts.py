@@ -48,7 +48,9 @@ LEDGER_RETENTION_DAYS = 7
 # Per-cycle digests kept on disk (~2 days at a 30-minute cadence).
 DIGEST_KEEP = 96
 # Context read either side of an ad-hoc slab scan (see scan_window).
-SLAB_CONTEXT_HOURS = 1.0
+# Hours of telemetry ending at the slab's end used to calibrate the 30-min prediction.
+# Overridden by config.SLAB_LOOKBACK_HOURS when set.
+SLAB_CONTEXT_HOURS = 4.0
 
 CSV_FIELDS = [
     "confirmedAt", "deviceName", "imei", "eventType", "eventTime", "endTime",
@@ -74,16 +76,132 @@ def _event_day(ev: dict) -> str:
     return ts if len(ts) == 10 else datetime.now().strftime("%Y-%m-%d")
 
 
+def _looks_like_coord(value) -> bool:
+    try:
+        float(value)
+        return True
+    except (TypeError, ValueError):
+        return False
+
+
+def _normalize_csv_row(row: dict) -> dict:
+    """Repair rows written after a schema change against an older header.
+
+    When speed/mlLabel/mlConfidence were added, appends kept the old header so
+    DictReader stuffed the extra cells under a None key and shifted lat/lon.
+    """
+    extras = row.pop(None, None)
+    out = {k: v for k, v in row.items() if k is not None}
+    if extras is None:
+        return out
+
+    extra_vals = list(extras) if isinstance(extras, (list, tuple)) else [extras]
+    lon = str(out.get("longitude") or "")
+    # Shifted write: latitude<-speed, longitude<-mlLabel, extras<-rest
+    if (not _looks_like_coord(lon) or lon.lower() in ("fill", "theft", "noise", "unknown")) \
+            and len(extra_vals) >= 2:
+        speed = out.get("latitude")
+        ml_label = out.get("longitude")
+        if "suppressedReason" in out and len(extra_vals) >= 3:
+            # filtered CSV: extras = lat, lon, reason; suppressedReason held mlConfidence
+            out["speed"] = speed
+            out["mlLabel"] = ml_label
+            out["mlConfidence"] = out.get("suppressedReason")
+            out["latitude"] = extra_vals[0]
+            out["longitude"] = extra_vals[1]
+            out["suppressedReason"] = extra_vals[2]
+        elif len(extra_vals) >= 3:
+            out["speed"] = speed
+            out["mlLabel"] = ml_label
+            out["mlConfidence"] = extra_vals[0]
+            out["latitude"] = extra_vals[1]
+            out["longitude"] = extra_vals[2]
+        else:
+            out["latitude"] = extra_vals[0]
+            out["longitude"] = extra_vals[1]
+    elif len(extra_vals) >= 2 and _looks_like_coord(extra_vals[0]):
+        # Header missing lat/lon only — keep named fields, take coords from extras
+        out.setdefault("latitude", extra_vals[0])
+        out.setdefault("longitude", extra_vals[1])
+        if "suppressedReason" in out and len(extra_vals) >= 3:
+            out["suppressedReason"] = extra_vals[2]
+    return out
+
+
+def _read_csv_header(path: Path) -> List[str]:
+    try:
+        with path.open(encoding="utf-8", newline="") as f:
+            reader = csv.reader(f)
+            return next(reader, [])
+    except (OSError, StopIteration):
+        return []
+
+
+def _rewrite_csv(path: Path, fields: List[str]) -> None:
+    """Re-read every row (repairing misaligned ones) and rewrite with `fields`."""
+    if not path.exists():
+        return
+    rows: List[dict] = []
+    with path.open(encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            rows.append(_normalize_csv_row(row))
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    with tmp.open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
+        w.writeheader()
+        for r in rows:
+            w.writerow({k: r.get(k, "") for k in fields})
+    tmp.replace(path)
+
+
 def _append_rows(path: Path, rows: List[dict], fields: List[str]) -> None:
     if not rows:
         return
     path.parent.mkdir(parents=True, exist_ok=True)
+
+    if path.exists():
+        header = _read_csv_header(path)
+        # Migrate when the on-disk header is missing columns we now write — otherwise
+        # DictReader puts extras under None and JSON encoding of /api/alerts blows up.
+        if header and list(header) != list(fields):
+            _rewrite_csv(path, fields)
+
+    existing: set = set()
+    if path.exists():
+        try:
+            with path.open(encoding="utf-8") as f:
+                for row in csv.DictReader(f):
+                    row = _normalize_csv_row(row)
+                    existing.add((
+                        str(row.get("deviceName") or ""),
+                        str(row.get("eventType") or ""),
+                        str(row.get("eventTime") or "")[:19],
+                        str(row.get("volume_L") or row.get("volume") or ""),
+                    ))
+        except OSError:
+            existing = set()
+
+    fresh = []
+    for r in rows:
+        key = (
+            str(r.get("deviceName") or ""),
+            str(r.get("eventType") or ""),
+            str(r.get("eventTime") or "")[:19],
+            str(r.get("volume_L") if r.get("volume_L") is not None else r.get("volume") or ""),
+        )
+        if key in existing:
+            continue
+        existing.add(key)
+        fresh.append(r)
+    if not fresh:
+        return
+
     new_file = not path.exists()
     with path.open("a", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
         if new_file:
             w.writeheader()
-        w.writerows(rows)
+        w.writerows(fresh)
 
 
 def write_daily_csvs(released: List[dict], suppressed: List[dict]) -> List[str]:
@@ -116,6 +234,7 @@ def read_daily_alerts(day: Optional[str] = None, include_filtered: bool = False)
         try:
             with path.open(encoding="utf-8") as f:
                 for row in csv.DictReader(f):
+                    row = _normalize_csv_row(row)
                     row["status"] = "filtered" if filtered else "released"
                     row["day"] = path.name[:10]
                     out.append(row)
@@ -444,6 +563,7 @@ def precision_gate_preview(ev: dict) -> str:
         and (not ign_off)
         and (not truly_parked)
         and duration < config.ALERT_THEFT_MIN_DURATION_MOVING_MIN
+        and volume < config.ALERT_THEFT_KEEP_MOVING_MIN_LITERS
     ):
         return f"moving_short_theft_{duration:.1f}min"
     return ""
@@ -747,16 +867,13 @@ def scan_window(window_from: datetime, window_to: datetime,
     now = datetime.now()
     min_rank = DECISION_RANK.get(config.ALERT_MIN_DECISION, 2)
 
-    # Read wider than the slab. A session that opens before it or closes after it is
-    # still the slab's event, and 30 minutes of points on their own rarely give the
-    # detector enough to establish a baseline. Events are narrowed to the slab below.
-    #
-    # An hour either side puts a 30-minute slab in a 2.5h window -- about what the live
-    # cycle detects over (ALERT_WINDOW_HOURS = 3), so findings stay comparable. Padding
-    # by the full window instead would more than double the points fed to the detector
-    # on every device, and this runs while someone waits on a button.
-    pad = timedelta(hours=SLAB_CONTEXT_HOURS)
-    read_from, read_to = window_from - pad, window_to + pad
+    # Read the last SLAB_LOOKBACK_HOURS ending at the slab end so the detector has
+    # calibrated context; keep only events whose start falls inside the 30-min slab.
+    lookback_h = float(
+        getattr(config, "SLAB_LOOKBACK_HOURS", None) or SLAB_CONTEXT_HOURS
+    )
+    lookback = timedelta(hours=max(0.5, lookback_h))
+    read_from, read_to = window_to - lookback, window_to
 
     released: List[dict] = []
     suppressed: List[dict] = []
@@ -813,15 +930,109 @@ def scan_window(window_from: datetime, window_to: datetime,
 
     digest = _build_digest(now, released, suppressed, held, skipped_devices,
                            len(names), time.time() - started)
+    digest["windowHours"] = lookback_h
     digest["slab"] = {
         "from": window_from.isoformat(timespec="seconds"),
         "to": window_to.isoformat(timespec="seconds"),
         "minutes": round((window_to - window_from).total_seconds() / 60.0, 1),
+        "lookbackHours": lookback_h,
+        "contextFrom": read_from.isoformat(timespec="seconds"),
+        "contextTo": read_to.isoformat(timespec="seconds"),
     }
     print(f"[alerts] slab {window_from:%Y-%m-%d %H:%M}-{window_to:%H:%M}: "
           f"{digest['theftCount']} theft / {digest['fillCount']} fill, "
-          f"{held} held, {len(suppressed)} filtered in {digest['tookSeconds']}s")
+          f"{held} held, {len(suppressed)} filtered in {digest['tookSeconds']}s "
+          f"(lookback {lookback_h:.0f}h)")
     return digest
+
+
+def backfill_day(day: str, *, persist: bool = True,
+                 devices: Optional[List[str]] = None) -> dict:
+    """Detect fills/thefts for one calendar day from in-memory telemetry.
+
+    Walks the day in 6h chunks (same ceiling as the slab UI), merges results, and
+    optionally appends to the day CSV so past cases show up in fleet history.
+    Does not touch the live ledger — backfill is for browsing history, not paging.
+    """
+    try:
+        day0 = datetime.fromisoformat(f"{day}T00:00:00")
+    except ValueError as e:
+        raise ValueError(f"day must be YYYY-MM-DD, got {day!r}") from e
+
+    started = time.time()
+    released: List[dict] = []
+    suppressed: List[dict] = []
+    held = 0
+    chunks = 0
+    for hour in range(0, 24, 6):
+        window_from = day0 + timedelta(hours=hour)
+        window_to = day0 + timedelta(hours=min(hour + 6, 24))
+        digest = scan_window(window_from, window_to, devices=devices)
+        chunks += 1
+        released.extend(digest.get("thefts") or [])
+        released.extend(digest.get("fills") or [])
+        suppressed.extend(digest.get("suppressed") or [])
+        held += int(digest.get("heldAwaitingSettle") or 0)
+
+    def _key(e: dict) -> tuple:
+        return (
+            str(e.get("deviceName") or ""),
+            str(e.get("eventType") or ""),
+            str(e.get("eventTime") or "")[:19],
+            round(float(e.get("volume") or e.get("volume_L") or 0), 1),
+        )
+
+    seen = set()
+    uniq_rel: List[dict] = []
+    for e in released:
+        k = _key(e)
+        if k in seen:
+            continue
+        seen.add(k)
+        uniq_rel.append(e)
+    seen_s = set()
+    uniq_sup: List[dict] = []
+    for e in suppressed:
+        k = _key(e)
+        if k in seen_s or k in seen:
+            continue
+        seen_s.add(k)
+        uniq_sup.append(e)
+
+    days_written: List[str] = []
+    if persist and (uniq_rel or uniq_sup):
+        # Stamp confirmation time so CSV rows match the live agent shape.
+        stamp = datetime.now().isoformat(timespec="seconds")
+        for e in uniq_rel:
+            e.setdefault("confirmedAt", stamp)
+        days_written = write_daily_csvs(uniq_rel, uniq_sup)
+
+    thefts = [e for e in uniq_rel if "theft" in str(e.get("eventType", "")).lower()]
+    fills = [e for e in uniq_rel if e not in thefts]
+    out = {
+        "ok": True,
+        "day": day,
+        "persist": persist,
+        "chunks": chunks,
+        "theftCount": len(thefts),
+        "fillCount": len(fills),
+        "suppressedCount": len(uniq_sup),
+        "heldAwaitingSettle": held,
+        "theftLiters": round(sum(float(e.get("volume") or 0) for e in thefts), 2),
+        "fillLiters": round(sum(float(e.get("volume") or 0) for e in fills), 2),
+        "thefts": thefts,
+        "fills": fills,
+        "suppressed": uniq_sup,
+        "daysWritten": days_written,
+        "tookSeconds": round(time.time() - started, 1),
+    }
+    print(
+        f"[alerts] backfill {day}: {out['theftCount']} theft / {out['fillCount']} fill, "
+        f"{out['suppressedCount']} filtered in {out['tookSeconds']}s"
+        + (f"; csv -> {', '.join(days_written)}" if days_written else ""),
+        flush=True,
+    )
+    return out
 
 
 def latest_digest() -> Optional[dict]:

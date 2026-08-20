@@ -14,10 +14,18 @@ function formatLocal(dt) {
   return `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}T${pad(dt.getHours())}:${pad(dt.getMinutes())}:${pad(dt.getSeconds())}`
 }
 
+/** FuelArk TrackingById-style default: today 00:00 → now (live day). */
 function defaultRange() {
-  // Default 24h — faster charts than 48h
-  const to = new Date()
-  const from = new Date(to.getTime() - 24 * 3600 * 1000)
+  return rangeToday()
+}
+
+function rangeYesterday() {
+  const now = new Date()
+  const from = new Date(now)
+  from.setDate(from.getDate() - 1)
+  from.setHours(0, 0, 0, 0)
+  const to = new Date(from)
+  to.setHours(23, 59, 59, 0)
   return { from: formatLocal(from), to: formatLocal(to) }
 }
 
@@ -55,19 +63,30 @@ function isLiveWindow(toIso) {
   return Date.now() - to.getTime() < 3 * 3600 * 1000
 }
 
+function fuelarkTrackUrl(imei) {
+  if (!imei) return ''
+  return `https://web1.fuelark.com/Home/TrackingById/${encodeURIComponent(imei)}`
+}
+
 const MAX_CHART_POINTS = 2500
 
 export default function LiveMap() {
   const [searchParams] = useSearchParams()
   const preset = searchParams.get('device') || ''
+  const presetImei = (searchParams.get('imei') || '').replace(/\D/g, '')
   const presetFrom = (searchParams.get('from') || '').replace(' ', 'T')
   const presetTo = (searchParams.get('to') || '').replace(' ', 'T')
+  // FuelArk Tracking streams live by default; only pause when stream=0.
+  const autoStream = !['0', 'false', 'off'].includes(
+    String(searchParams.get('stream') || '1').toLowerCase()
+  )
   const defaults = useMemo(() => {
     if (presetFrom && presetTo) return { from: presetFrom, to: presetTo }
     return defaultRange()
   }, [presetFrom, presetTo])
 
   const [names, setNames] = useState([])
+  const [imeiByName, setImeiByName] = useState(() => new Map())
   const [device, setDevice] = useState(preset)
   const [from, setFrom] = useState(defaults.from)
   const [to, setTo] = useState(defaults.to)
@@ -77,24 +96,45 @@ export default function LiveMap() {
   const [eventsLoading, setEventsLoading] = useState(false)
   const [view, setView] = useState('chart')
   const [loading, setLoading] = useState(false)
-  const [streaming, setStreaming] = useState(false)
+  const [streaming, setStreaming] = useState(autoStream)
   const [streamStatus, setStreamStatus] = useState('')
   const [error, setError] = useState('')
   const esRef = useRef(null)
   const seenRef = useRef(new Set())
   const loadGen = useRef(0)
 
+  const currentImei = useMemo(() => {
+    if (!device) return presetImei || ''
+    return imeiByName.get(device) || presetImei || ''
+  }, [device, imeiByName, presetImei])
+
   const refreshNames = useCallback(async () => {
-    const list = await api.deviceNames()
+    const [list, roster] = await Promise.all([
+      api.deviceNames(),
+      api.imeiList().catch(() => ({ devices: [] })),
+    ])
     const cleaned = list.map((n) => String(n))
+    const map = new Map()
+    for (const d of roster.devices || []) {
+      if (d.deviceName && d.imei) map.set(String(d.deviceName), String(d.imei))
+    }
+    setImeiByName(map)
     setNames(cleaned)
-    return cleaned
+    return { cleaned, map }
   }, [])
 
   useEffect(() => {
     refreshNames()
-      .then((cleaned) => {
-        const want = (preset || '').trim()
+      .then(({ cleaned, map }) => {
+        let want = (preset || '').trim()
+        if (!want && presetImei) {
+          for (const [name, imei] of map.entries()) {
+            if (String(imei) === presetImei) {
+              want = name
+              break
+            }
+          }
+        }
         const match =
           cleaned.find((n) => n === want) ||
           cleaned.find((n) => n.trim() === want) ||
@@ -113,7 +153,7 @@ export default function LiveMap() {
         })
       })
       .catch((e) => setError(e.message))
-  }, [preset, refreshNames])
+  }, [preset, presetImei, refreshNames])
 
   function stopStream() {
     if (esRef.current) {
@@ -225,6 +265,7 @@ export default function LiveMap() {
     if (!selected) return
     const fromIso = opts.from ?? from
     const toIso = opts.to ?? to
+    const forceFetch = Boolean(opts.forceFetch)
     const gen = ++loadGen.current
     setLoading(true)
     setError('')
@@ -233,24 +274,30 @@ export default function LiveMap() {
     seenRef.current = new Set()
     setPoints([])
 
+    // Shorter windows → denser FuelArk-like graph
+    const hours =
+      (new Date(toIso) - new Date(fromIso)) / 3600000 || 24
+    const downsample = hours <= 36 ? 5 : hours <= 24 * 8 ? 12 : 25
+
     try {
-      // Phase 1: local series + light summary (no FuelArk, no detector) → fast chart
       const [sum, series] = await Promise.all([
-        api.deviceSummary(selected, fromIso, toIso, { fetch: '0', detect: '0' }),
+        api.deviceSummary(selected, fromIso, toIso, {
+          fetch: forceFetch ? 'auto' : '0',
+          detect: '0',
+        }),
         api.deviceSeries(selected, fromIso, toIso, {
-          downsample: 25,
+          downsample,
           limit: 2500,
-          fetch: '0',
+          fetch: forceFetch ? 'auto' : '0',
         }),
       ])
       if (gen !== loadGen.current) return
 
       let pts = series.points || []
-      // Phase 1b: if empty locally, one FuelArk pull then redraw
-      if (!pts.length) {
+      if (!pts.length && !forceFetch) {
         setStreamStatus('No local points — fetching FuelArk…')
         const remote = await api.deviceSeries(selected, fromIso, toIso, {
-          downsample: 25,
+          downsample,
           limit: 2500,
           fetch: 'auto',
         })
@@ -259,27 +306,28 @@ export default function LiveMap() {
         if (remote.error) setStreamStatus(remote.error)
       }
 
-      setSummary(sum && Object.keys(sum).length ? sum : null)
+      setSummary(
+        sum && Object.keys(sum).length
+          ? { ...sum, deviceName: sum.deviceName || selected }
+          : { deviceName: selected }
+      )
       pts.forEach((p) => {
         const key = `${p.time}|${p.fuelLevel}|${p.powerEx}`
         seenRef.current.add(key)
       })
       setPoints(pts)
       if (!pts.length) {
-        setError(
-          series.error ||
-            'No points in this range. Try another day, or add/refresh the IMEI.'
-        )
+        setError('')
+        setStreamStatus('No telemetry yet — try Fetch live or another day')
+      } else {
+        setStreamStatus(`Loaded ${pts.length} points`)
       }
       setLoading(false)
 
-      // Phase 2: predictions in background (does not block the graph)
       loadPredictions(selected, fromIso, toIso, gen)
 
       if (streaming) {
         startStream(selected, fromIso, toIso, pts)
-      } else {
-        setStreamStatus(pts.length ? `Loaded ${pts.length} points` : '')
       }
     } catch (e) {
       if (gen === loadGen.current) {
@@ -314,22 +362,31 @@ export default function LiveMap() {
     if (device) runSearch(device, range)
   }
 
+  const lastPoint = points.length ? points[points.length - 1] : null
+
   return (
-    <>
-      <header className="topbar">
-        <div>
-          <div className="breadcrumb">Fuelark Device Data / Dashboard / Map</div>
-          <h1>Live Map</h1>
+    <div className="live-page">
+      <header className="topbar live-topbar">
+        <div className="topbar-center-block" style={{ textAlign: 'left' }}>
+          <h1>Live Tracking</h1>
+          <p className="topbar-subtitle">
+            FuelArk-style Device Data · live graph for every vehicle
+          </p>
         </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <span className="muted" style={{ fontSize: 13 }}>
-            {streamStatus}
-            {loading ? ' · Loading graph…' : ''}
-            {eventsLoading ? ' · Predicting…' : ''}
+        <div className="live-top-actions">
+          <span className={`live-stream-chip${streaming ? ' is-on' : ''}`}>
+            {streaming ? '● LIVE' : 'Paused'}
           </span>
+          {(streamStatus || loading || eventsLoading) ? (
+            <span className="live-status-chip">
+              {loading ? 'Loading graph…' : null}
+              {!loading && eventsLoading ? 'Predicting…' : null}
+              {!loading && !eventsLoading && streamStatus ? streamStatus : null}
+            </span>
+          ) : null}
           <button
             type="button"
-            className={`btn ${streaming ? 'btn-live' : 'btn-ghost'}`}
+            className={`btn btn-sm ${streaming ? 'btn-live' : 'btn-ghost'}`}
             onClick={() => {
               const next = !streaming
               setStreaming(next)
@@ -337,57 +394,86 @@ export default function LiveMap() {
               else stopStream()
             }}
           >
-            {streaming ? '● Streaming ON' : 'Streaming OFF'}
+            {streaming ? 'Pause' : 'Go live'}
           </button>
         </div>
       </header>
+
       <div className="content">
-        <div className="admin-banner">
-          <span>
-            {preset
-              ? `Opened from Alerts for ${preset}${presetFrom ? ` · ${String(presetFrom).replace('T', ' ').slice(0, 16)} → ${String(presetTo).replace('T', ' ').slice(11, 16)}` : ''}. Chart + fill/theft reports load for this window.`
-              : 'Add or manage vehicles by IMEI in Admin (saved for lifetime).'}
-          </span>
-          <div style={{ display: 'flex', gap: 8 }}>
-            {preset ? (
-              <Link to="/alerts" className="btn btn-ghost" style={{ padding: '6px 12px', fontSize: 13 }}>
-                ← Back to Alerts
-              </Link>
+        <div className="track-hero">
+          <div className="track-hero__main">
+            <div className="track-hero__title">{device || 'Select a vehicle'}</div>
+            <div className="track-hero__meta">
+              {currentImei ? <span>IMEI {currentImei}</span> : null}
+              {lastPoint?.time ? (
+                <span>Last point {String(lastPoint.time).replace('T', ' ').slice(0, 19)}</span>
+              ) : null}
+              {summary?.deviceStatus ? <span>{summary.deviceStatus}</span> : null}
+            </div>
+          </div>
+          <div className="track-hero__stats">
+            <div className="track-mini">
+              <span>Fuel</span>
+              <strong>
+                {summary?.fuel ?? summary?.currentFuel ?? lastPoint?.fuelLevel ?? '—'}
+                <small> L</small>
+              </strong>
+            </div>
+            <div className="track-mini">
+              <span>EDC</span>
+              <strong>{lastPoint?.fuelLevelEDC ?? '—'}</strong>
+            </div>
+            <div className="track-mini">
+              <span>Speed</span>
+              <strong>
+                {summary?.speed ?? lastPoint?.speed ?? 0}
+                <small> km/h</small>
+              </strong>
+            </div>
+            <div className="track-mini">
+              <span>Ignition</span>
+              <strong>
+                {summary?.ignition
+                  || (lastPoint?.ignition ? 'On' : lastPoint ? 'Off' : '—')}
+              </strong>
+            </div>
+          </div>
+          <div className="track-hero__actions">
+            {currentImei ? (
+              <a
+                className="btn btn-sm btn-ghost"
+                href={fuelarkTrackUrl(currentImei)}
+                target="_blank"
+                rel="noreferrer"
+                title="Open same vehicle on FuelArk TrackingById"
+              >
+                Open FuelArk
+              </a>
             ) : null}
-            <Link to="/admin" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: 13 }}>
-              Open Admin
-            </Link>
+            <Link to="/admin" className="btn btn-sm btn-custom">Admin</Link>
           </div>
         </div>
 
-        <LiveSummaryCards
-          summary={summary}
-          eventStats={eventStats}
-          eventsLoading={eventsLoading}
-        />
-
-        <div className="filters">
-          <label>
-            Select Device
+        <div className="live-filters">
+          <label className="live-field">
+            Vehicle
             <select value={device} onChange={(e) => setDevice(e.target.value)}>
               {!device ? <option value="">Select…</option> : null}
               {names.map((n) => (
-                <option key={n} value={n}>
-                  {n}
-                </option>
+                <option key={n} value={n}>{n}</option>
               ))}
             </select>
           </label>
-          <label>
-            From Date
+          <label className="live-field">
+            From
             <input
               type="datetime-local"
               value={toInputValue(from)}
               onChange={(e) => setFrom(fromInputValue(e.target.value))}
             />
           </label>
-          <label>
-            To Date
+          <label className="live-field">
+            To
             <input
               type="datetime-local"
               value={toInputValue(to)}
@@ -396,73 +482,108 @@ export default function LiveMap() {
           </label>
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn btn-sm btn-custom"
             onClick={() => runSearch()}
             disabled={loading || !device}
           >
-            {loading ? 'Loading…' : 'Search'}
+            {loading ? '…' : 'Search'}
+          </button>
+          <button
+            type="button"
+            className="btn btn-sm btn-live"
+            onClick={() => runSearch(device, { forceFetch: true })}
+            disabled={loading || !device}
+            title="Pull latest telemetry from FuelArk for this window"
+          >
+            Fetch live
           </button>
         </div>
 
-        <div className="view-toggle" style={{ marginTop: -4 }}>
-          <button type="button" className="btn btn-ghost" onClick={() => applyPreset(rangeToday())}>
-            Today
-          </button>
-          <button type="button" className="btn btn-ghost" onClick={() => applyPreset(rangeLastDays(1))}>
-            Last 24h
-          </button>
-          <button type="button" className="btn btn-ghost" onClick={() => applyPreset(rangeLastDays(2))}>
-            Last 48h
-          </button>
-          <button type="button" className="btn btn-ghost" onClick={() => applyPreset(rangeLastDays(7))}>
-            Last 7 days
-          </button>
-          <button
-            type="button"
-            className="btn btn-ghost"
-            onClick={() =>
-              applyPreset({
-                from: '2026-06-01T00:00:00',
-                to: '2026-06-30T23:59:59',
-              })
-            }
-          >
-            June 2026
-          </button>
-          <button
-            type="button"
-            className="btn btn-ghost"
-            onClick={() => {
-              if (!device) return
-              applyPreset(rangeLifetime())
-            }}
-          >
-            Lifetime / All data
-          </button>
+        <div className="live-presets">
+          <span className="live-presets__label">Quick range</span>
+          {[
+            ['Today', rangeToday],
+            ['Yesterday', rangeYesterday],
+            ['24h', () => rangeLastDays(1)],
+            ['48h', () => rangeLastDays(2)],
+            ['7 days', () => rangeLastDays(7)],
+            ['May', () => ({ from: '2026-05-01T00:00:00', to: '2026-05-31T23:59:59' })],
+            ['June', () => ({ from: '2026-06-01T00:00:00', to: '2026-06-30T23:59:59' })],
+            ['July', () => ({ from: '2026-07-01T00:00:00', to: '2026-07-31T23:59:59' })],
+            ['May–July', () => ({ from: '2026-05-01T00:00:00', to: '2026-07-31T23:59:59' })],
+            ['All data', rangeLifetime],
+          ].map(([label, fn]) => (
+            <button
+              key={label}
+              type="button"
+              className="live-preset-chip"
+              onClick={() => applyPreset(fn())}
+              disabled={!device && label === 'All data'}
+            >
+              {label}
+            </button>
+          ))}
         </div>
 
         {error ? <p className="error">{error}</p> : null}
 
-        <div className="view-toggle">
-          <button
-            type="button"
-            className={`btn btn-ghost ${view === 'chart' ? 'active' : ''}`}
-            onClick={() => setView('chart')}
-          >
-            Live Chart
-          </button>
-          <button
-            type="button"
-            className={`btn btn-ghost ${view === 'table' ? 'active' : ''}`}
-            onClick={() => setView('table')}
-          >
-            Live Table
-          </button>
-          <span className="muted" style={{ alignSelf: 'center', marginLeft: 8 }}>
-            {points.length} points
-            {eventsLoading ? ' · predictions loading…' : ''}
+        <LiveSummaryCards
+          summary={summary}
+          eventStats={eventStats}
+          eventsLoading={eventsLoading}
+          loading={loading}
+        />
+
+        <div className="live-view-bar">
+          <div className="live-view-tabs">
+            <button
+              type="button"
+              className={`live-view-tab${view === 'chart' ? ' is-active' : ''}`}
+              onClick={() => setView('chart')}
+            >
+              Device Data
+            </button>
+            <button
+              type="button"
+              className={`live-view-tab${view === 'table' ? ' is-active' : ''}`}
+              onClick={() => setView('table')}
+            >
+              Live Table
+            </button>
+          </div>
+          <span className="live-points-chip">
+            {points.length} point{points.length === 1 ? '' : 's'}
+            {eventsLoading ? ' · predicting…' : ''}
           </span>
         </div>
+
+        {!loading && !points.length && device ? (
+          <div className="live-empty-panel">
+            <strong>No points in this range yet</strong>
+            <p>
+              Like FuelArk Tracking, press <em>Fetch live</em> to pull this vehicle from FuelArk,
+              or try <em>Today</em> / <em>Yesterday</em>.
+              {currentImei ? (
+                <>
+                  {' '}Compare on{' '}
+                  <a href={fuelarkTrackUrl(currentImei)} target="_blank" rel="noreferrer">
+                    FuelArk TrackingById
+                  </a>
+                  .
+                </>
+              ) : null}
+            </p>
+            <button
+              type="button"
+              className="btn btn-sm btn-live"
+              style={{ marginTop: 10 }}
+              onClick={() => runSearch(device, { forceFetch: true })}
+              disabled={loading}
+            >
+              Fetch live from FuelArk
+            </button>
+          </div>
+        ) : null}
 
         {view === 'chart' ? (
           <DeviceChart
@@ -478,6 +599,6 @@ export default function LiveMap() {
 
         <FillTheftPanel eventsPayload={eventStats} loading={eventsLoading} />
       </div>
-    </>
+    </div>
   )
 }

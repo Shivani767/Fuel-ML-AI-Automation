@@ -10,8 +10,17 @@ PROJECT_ROOT = PACKAGE_DIR.parent
 
 FUEL_DATA_DIR = Path(os.environ.get("FUEL_DATA_DIR", PROJECT_ROOT / "fuel_data"))
 DEVICE_IMEI_MAP_PATH = FUEL_DATA_DIR / "device_imei_map.json"
+MAY_DATA_PATH = FUEL_DATA_DIR / "may_2026_data.json"
 JUNE_DATA_PATH = FUEL_DATA_DIR / "june_2026_data.json"
 LIVE_DATA_PATH = FUEL_DATA_DIR / "live_fuel_data.json"
+DAILY_DIR = FUEL_DATA_DIR / "daily"
+# Comma list of monthly dump stems to load (may_2026_data.json → "may").
+# July early days come from daily/*.json.gz; mid-July+ from live overlay.
+LOAD_MONTH_DUMPS = [
+    m.strip().lower()
+    for m in os.environ.get("LOAD_MONTH_DUMPS", "may,june").split(",")
+    if m.strip()
+]
 EVENTS_PATH = FUEL_DATA_DIR / "fuel_events.json"
 ML_ALERTS_PATH = FUEL_DATA_DIR / "ml_alerts.json"
 FLEET_IMEIS_PATH = FUEL_DATA_DIR / "fleet_imeis.txt"
@@ -26,7 +35,11 @@ INACTIVE_HOURS = float(os.environ.get("FLEET_INACTIVE_HOURS", "24"))
 # Must exceed the pipeline cadence plus a cycle's runtime, or the cache ages out
 # between fetches and every vehicle reads inactive. At a 30-min cadence a cycle can
 # finish ~32 min after the previous fetch, so 45 holds a real margin.
-ACTIVE_ONLINE_MINUTES = float(os.environ.get("FLEET_ACTIVE_ONLINE_MINUTES", "45"))
+ACTIVE_ONLINE_MINUTES = float(os.environ.get("FLEET_ACTIVE_ONLINE_MINUTES", "5"))
+# Running matches FuelArk Live: any reported speed > this (ignition not required).
+RUNNING_SPEED_KMH = float(os.environ.get("FLEET_RUNNING_SPEED", "0"))
+# Prefer FuelArk Helper/DeviceStatus for dashboard KPI cards when reachable.
+FUELARK_KPI_LIVE = os.environ.get("FUELARK_KPI_LIVE", "1").lower() in ("1", "true", "yes")
 # --- the 30-minute pipeline: fetch -> detect -> confirm -> alert ---
 # One cadence for the whole chain, so every scan runs on data fetched moments before.
 # Replaces the old split of a 15-min fetch and a separate 30-min alert timer, which
@@ -37,8 +50,11 @@ ALERT_INTERVAL_SECONDS = float(os.environ.get("ALERT_INTERVAL_SECONDS", "1800"))
 # Hold an event back until its drop has persisted this long. 68% of >2L fuel dips at
 # ignition start recover within ~30 min, so waiting is what separates them from theft.
 ALERT_SETTLE_MINUTES = float(os.environ.get("ALERT_SETTLE_MINUTES", "25"))
-# Rolling detection window; wide enough for a session to open and close inside it.
-ALERT_WINDOW_HOURS = float(os.environ.get("ALERT_WINDOW_HOURS", "3"))
+# Rolling detection window for Scan now / agent cycle (calibrated lookback).
+ALERT_WINDOW_HOURS = float(os.environ.get("ALERT_WINDOW_HOURS", "4"))
+# 30-min slab: feed this many hours of telemetry ending at the slab end, then
+# keep only events that start inside the 30-minute prediction window.
+SLAB_LOOKBACK_HOURS = float(os.environ.get("SLAB_LOOKBACK_HOURS", "4"))
 # Fraction of the original drop that must still be missing after the settle period.
 ALERT_PERSIST_FRACTION = float(os.environ.get("ALERT_PERSIST_FRACTION", "0.70"))
 # Ignition OFF->ON this close to a session start makes it a crank-transient suspect.
@@ -100,6 +116,11 @@ ALERT_FILL_MAX_SPEED_KMH = float(os.environ.get("ALERT_FILL_MAX_SPEED_KMH", "15.
 ALERT_THEFT_MIN_DURATION_MOVING_MIN = float(
     os.environ.get("ALERT_THEFT_MIN_DURATION_MOVING_MIN", "3.0")
 )
+# Sustained / large drains while slowly moving (site work) still count as theft —
+# FuelArk marks them. Below this volume, short moving drains stay suppressed.
+ALERT_THEFT_KEEP_MOVING_MIN_LITERS = float(
+    os.environ.get("ALERT_THEFT_KEEP_MOVING_MIN_LITERS", "8.0")
+)
 # If session RF strongly says noise/fault, do not alert even if rules said AUTO.
 ALERT_ML_DISAGREE_MIN = float(os.environ.get("ALERT_ML_DISAGREE_MIN", "0.70"))
 
@@ -109,9 +130,13 @@ ALERT_ML_DISAGREE_MIN = float(os.environ.get("ALERT_ML_DISAGREE_MIN", "0.70"))
 FLEET_BG_REFRESH_SECONDS = float(os.environ.get("FLEET_BG_REFRESH_SECONDS", "0"))
 # External voltage (iO_66 mV) below this → Battery Disconnected soft alert
 BATTERY_DISCONNECT_MV = float(os.environ.get("FLEET_BATTERY_DISCONNECT_MV", "11000"))
-# Running if speed > threshold and ignition on (legacy; live KPI uses ignition only)
-RUNNING_SPEED_KMH = float(os.environ.get("FLEET_RUNNING_SPEED", "1.0"))
 ROSTER_PATH = FUEL_DATA_DIR / "fuelark_vehicle_roster.json"
+# Auto-pull new vehicles from the FuelArk account (web1 / api1 Helper/GetDevices).
+FUELARK_SYNC_ENABLED = os.environ.get("FUELARK_SYNC_ENABLED", "1").lower() in (
+    "1", "true", "yes",
+)
+FUELARK_SYNC_FETCH_DAYS = int(os.environ.get("FUELARK_SYNC_FETCH_DAYS", "3"))
+FUELARK_SYNC_MAX_NEW = int(os.environ.get("FUELARK_SYNC_MAX_NEW", "20"))
 
 # Default series downsample for chart (keep every Nth point after sort)
 DEFAULT_DOWNSAMPLE = int(os.environ.get("SERIES_DOWNSAMPLE", "20"))

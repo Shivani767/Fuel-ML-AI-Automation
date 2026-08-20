@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 import sys
 from pathlib import Path
 
@@ -32,16 +31,47 @@ def create_app() -> Flask:
         response.headers["Access-Control-Allow-Methods"] = "GET,POST,OPTIONS"
         return response
 
+    @app.before_request
+    def _gate_while_loading():
+        from flask import request
+
+        # Health + CORS preflight always answer so the UI can show "loading".
+        if request.method == "OPTIONS":
+            return None
+        path = request.path or ""
+        if path == "/api/health" or not path.startswith("/api/"):
+            return None
+        if data_store.is_ready():
+            return None
+        if data_store.is_loading() or data_store.load_status().get("error"):
+            status = data_store.load_status()
+            return jsonify({
+                "error": status.get("error")
+                or "Backend is still loading May–July telemetry into memory. Retry in a minute.",
+                "loading": True,
+                "elapsedSec": status.get("elapsedSec"),
+            }), 503
+        # Not started yet — kick load and say so.
+        return jsonify({
+            "error": "Backend telemetry load has not finished yet.",
+            "loading": True,
+        }), 503
+
     @app.route("/api/health")
     def health():
-        data_store.ensure_loaded()
+        status = data_store.load_status()
+        code = 200 if status["ready"] else 503
         return jsonify(
             {
-                "ok": True,
-                "devices": len(data_store.device_data_dict),
-                "mapped": len(data_store.device_imei_map),
+                "ok": status["ready"],
+                "loading": status["loading"],
+                "error": status.get("error"),
+                "devices": status.get("devices", 0),
+                "points": status.get("points", 0),
+                "mapped": len(data_store.device_imei_map) if status["ready"] else 0,
+                "elapsedSec": status.get("elapsedSec"),
             }
-        )
+        ), code
 
     app.register_blueprint(fleet_bp)
     app.register_blueprint(devices_bp)
@@ -50,7 +80,7 @@ def create_app() -> Flask:
     app.register_blueprint(alerts_bp)
 
     # Optional: serve built frontend from frontend/dist
-    dist = ROOT / "frontend" / "dist"
+    dist = ROOT / "frontend/dist"
 
     @app.route("/", defaults={"path": ""})
     @app.route("/<path:path>")
@@ -77,33 +107,36 @@ def create_app() -> Flask:
 app = create_app()
 
 
-def main():
-    print("Loading telemetry into memory (may take a minute for June dump)...")
-    data_store.ensure_loaded()
+def _after_data_ready():
     try:
         from backend.services.session_ml import load_model
 
         if load_model():
-            print("Session RF model ready (fuel_session_rf.pkl)")
+            print("Session RF model ready (fuel_session_rf.pkl)", flush=True)
         else:
-            print("Session RF model not loaded — rule detector only")
+            print("Session RF model not loaded — rule detector only", flush=True)
     except Exception as e:
-        print(f"Session RF warmup skipped: {e}")
+        print(f"Session RF warmup skipped: {e}", flush=True)
 
-    # One 30-minute chain: fetch from FuelArk, then detect, confirm and report on the
-    # data just fetched. Keeping the fetch off the request path matters because a live
-    # pull takes ~2 minutes -- request-driven, it would either block the dashboard or
-    # leave the cache stale enough that every vehicle reads offline.
     if config.PIPELINE_INTERVAL_SECONDS > 0:
         try:
             from backend.services.pipeline import start_pipeline
 
             start_pipeline()
         except Exception as e:
-            print(f"Pipeline not started: {e}")
+            print(f"Pipeline not started: {e}", flush=True)
 
-    print(f"Backend listening on http://{config.HOST}:{config.PORT}")
-    print("API: /api/fleet/summary  /api/fleet/devices  /api/devices/<name>/series")
+
+def main():
+    print(
+        "Starting API immediately; loading May + June + July + live in background "
+        "(avoids 502 while dumps parse)…",
+        flush=True,
+    )
+    data_store.start_background_load(on_ready=_after_data_ready)
+
+    print(f"Backend listening on http://{config.HOST}:{config.PORT}", flush=True)
+    print("API: /api/fleet/summary  /api/fleet/devices  /api/devices/<name>/series", flush=True)
     app.run(debug=config.DEBUG, port=config.PORT, host=config.HOST, threaded=True)
 
 
