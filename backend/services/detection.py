@@ -28,7 +28,9 @@ from backend.services.vehicle_aliases import names_for_device, spreadsheet_to_de
 
 # Method defaults aligned with alert precision (Live Map was too sensitive at 2 L).
 DEFAULT_THEFT_MIN_L = 5.0
-DEFAULT_FILL_MIN_L = 5.0
+# Fills are ignored at or below config.ALERT_FILL_MIN_LITERS (10 L), so the default
+# cannot be lower than that floor.
+DEFAULT_FILL_MIN_L = config.ALERT_FILL_MIN_LITERS
 
 
 def _ensure_detector_path():
@@ -102,7 +104,7 @@ def _heuristic_events(
         speed = float(prev.get("speed") or 0)
         movement = bool(int(prev.get("iO_2", 0) or prev.get("iO_6", 0) or 0))
         parked = ign == 0 and speed < 1.0 and not movement
-        if delta >= fill_min and parked:
+        if delta > fill_min and parked:
             events.append(
                 {
                     "eventType": "Fuel Filling",
@@ -149,7 +151,12 @@ def _keep_session_row(row, *, theft_min: float, fill_min: float) -> Optional[Dic
     raw = float(scored.get("raw_magnitude") or mag)
     event_type = "Fuel Filling" if etype == "FILL" else "Fuel Theft"
     floor = fill_min if event_type == "Fuel Filling" else theft_min
-    if mag < floor and raw < floor:
+    volume = mag if mag >= floor else raw
+    if event_type == "Fuel Filling":
+        # A fill at or below the floor is not an event at all.
+        if volume <= floor:
+            return None
+    elif mag < floor and raw < floor:
         return None
 
     ml_label = scored.get("ml_label")
@@ -163,7 +170,7 @@ def _keep_session_row(row, *, theft_min: float, fill_min: float) -> Optional[Dic
         "eventType": event_type,
         "eventTime": str(scored.get("start_time") or ""),
         "endTime": str(scored.get("end_time") or ""),
-        "volume": round(mag if mag >= floor else raw, 2),
+        "volume": round(volume, 2),
         "rawVolume": round(raw, 2),
         "expectedBurn": float(scored.get("expected_burn_liters") or 0) or None,
         "confidence": float(scored.get("confidence") or 0),
@@ -374,6 +381,9 @@ def _suppress_driving_artifacts(events: List[Dict[str, Any]]) -> List[Dict[str, 
         parked = bool(e.get("trulyParked"))
 
         if not theft:
+            # Fills of 10 L or less are ignored fleet-wide.
+            if vol <= config.ALERT_FILL_MIN_LITERS:
+                continue
             # Highway/site travel "fills" are sensor ghosts.
             if speed > config.ALERT_FILL_MAX_SPEED_KMH:
                 continue
@@ -400,6 +410,25 @@ def _suppress_driving_artifacts(events: List[Dict[str, Any]]) -> List[Dict[str, 
             continue
         out.append(e)
     return out
+
+
+def _drop_small_fills(events: List[Dict[str, Any]], fill_min: float) -> List[Dict[str, Any]]:
+    """Last line of the fill floor: a fill of `fill_min` liters or less is not reported.
+
+    Applies to every source -- detector sessions, the heuristic fallback, verified
+    spreadsheet rows and stored noise -- so no path can surface a sub-floor fill.
+    """
+    kept: List[Dict[str, Any]] = []
+    for e in events:
+        if "fill" in str(e.get("eventType") or "").lower():
+            try:
+                vol = abs(float(e.get("volume") or 0))
+            except (TypeError, ValueError):
+                vol = 0.0
+            if vol <= fill_min:
+                continue
+        kept.append(e)
+    return kept
 
 
 def _level_near(points: List[dict], when: datetime, *, ahead: bool = False) -> Optional[float]:
@@ -568,7 +597,8 @@ def detect_fill_theft(
     theft_min = float(theft_min if theft_min is not None else (min_liters or DEFAULT_THEFT_MIN_L))
     fill_min = float(fill_min if fill_min is not None else (min_liters or DEFAULT_FILL_MIN_L))
     theft_min = max(2.0, theft_min)
-    fill_min = max(2.0, fill_min)
+    # Fills at or below the floor are never reported; callers may raise it, not lower it.
+    fill_min = max(config.ALERT_FILL_MIN_LITERS, fill_min)
 
     # Always day-by-day for multi-day / all-time windows
     try:
@@ -597,7 +627,7 @@ def detect_fill_theft(
             )
         )
         cleaned = _suppress_slope_recoveries(points, cleaned)
-        return _dedupe(_merge_verified_with_detector(cleaned))
+        return _drop_small_fills(_dedupe(_merge_verified_with_detector(cleaned)), fill_min)
 
     allowed_names = {n.lower() for n in names_for_device(device_name)}
     allowed_names.add(device_name.strip().lower())
@@ -660,4 +690,4 @@ def detect_fill_theft(
     cleaned = _suppress_driving_artifacts(cleaned)
     cleaned = _suppress_slope_recoveries(points, cleaned)
     cleaned = _merge_verified_with_detector(cleaned)
-    return _dedupe(cleaned)
+    return _drop_small_fills(_dedupe(cleaned), fill_min)

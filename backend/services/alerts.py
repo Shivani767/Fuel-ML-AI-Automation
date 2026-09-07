@@ -550,6 +550,8 @@ def precision_gate_preview(ev: dict) -> str:
     if ml_label in ("noise", "sensor_fault") and ml_conf >= config.ALERT_ML_DISAGREE_MIN:
         return f"ml_{ml_label}_{ml_conf:.2f}"
     if not is_theft:
+        if volume <= config.ALERT_FILL_MIN_LITERS:
+            return f"fill_at_or_below_{config.ALERT_FILL_MIN_LITERS:.0f}L"
         if speed > config.ALERT_FILL_MAX_SPEED_KMH:
             return f"moving_fill_{speed:.0f}kmh"
         return ""
@@ -799,6 +801,8 @@ def _build_digest(now, released, suppressed, held, skipped, n_devices, took) -> 
         "windowHours": config.ALERT_WINDOW_HOURS,
         "settleMinutes": config.ALERT_SETTLE_MINUTES,
         "minDecision": config.ALERT_MIN_DECISION,
+        "fillMinLiters": config.ALERT_FILL_MIN_LITERS,
+        "theftMinLiters": config.ALERT_THEFT_MIN_LITERS,
         "devicesScanned": n_devices,
         "devicesSkipped": skipped,
         "theftCount": len(thefts),

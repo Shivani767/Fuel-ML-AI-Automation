@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
-import { api } from '../api/client'
+import { api, FILL_MIN_LITERS } from '../api/client'
 import { LiveSummaryCards } from '../components/SummaryCards'
 import DeviceChart from '../components/DeviceChart'
 import FillTheftPanel from '../components/FillTheftPanel'
@@ -215,7 +215,11 @@ export default function LiveMap() {
           setStreamStatus('Range complete')
           if (selected && fromIso && toIso) {
             api
-              .deviceEvents(selected, fromIso, toIso, { theftMin: 5, fillMin: 5, fetch: '0' })
+              .deviceEvents(selected, fromIso, toIso, {
+                theftMin: 5,
+                fillMin: FILL_MIN_LITERS,
+                fetch: '0',
+              })
               .then((evPayload) => setEventStats(evPayload))
               .catch(() => {})
           }
@@ -246,7 +250,7 @@ export default function LiveMap() {
     try {
       const ev = await api.deviceEvents(selected, fromIso, toIso, {
         theftMin: 5,
-        fillMin: 5,
+        fillMin: FILL_MIN_LITERS,
         includeStored: false,
         fetch: '0',
       })

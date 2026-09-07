@@ -109,6 +109,12 @@ ALERT_THEFT_MIN_LITERS = float(os.environ.get("ALERT_THEFT_MIN_LITERS", "5.0"))
 # A huge liter jump in a few seconds is almost always a sensor spike, not siphoning.
 ALERT_SPIKE_MAX_MINUTES = float(os.environ.get("ALERT_SPIKE_MAX_MINUTES", "0.5"))
 ALERT_SPIKE_MIN_LITERS = float(os.environ.get("ALERT_SPIKE_MIN_LITERS", "8.0"))
+# Fuel fills of this many liters or less are not events at all: on this sensor a
+# sub-10 L rise is slope rebound, tank slosh or sender drift rather than a pump.
+# The floor is a hard minimum -- callers and the API may raise it, never lower it.
+ALERT_FILL_MIN_LITERS = max(
+    10.0, float(os.environ.get("ALERT_FILL_MIN_LITERS", "10.0"))
+)
 # Filling while driving at highway/site travel speed is not a pump event.
 ALERT_FILL_MAX_SPEED_KMH = float(os.environ.get("ALERT_FILL_MAX_SPEED_KMH", "15.0"))
 # Ignition-ON + moving short drains are the noisiest false thefts on this fleet.

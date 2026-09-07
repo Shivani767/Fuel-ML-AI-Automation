@@ -1,3 +1,5 @@
+import { FILL_MIN_LITERS } from '../api/client'
+
 function fmtTime(t) {
   return String(t || '').replace('T', ' ').slice(0, 19)
 }
@@ -134,6 +136,7 @@ export default function FillTheftPanel({ eventsPayload, loading }) {
       <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
         Graph loads first from local data; predictions run next (session detector + RandomForest).
         AUTO_CONFIRMED = high confidence; MANUAL_REVIEW needs a human check.
+        Fuel fills of {FILL_MIN_LITERS} L or less are ignored.
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
