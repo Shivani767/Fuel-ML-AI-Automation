@@ -1,5 +1,8 @@
 const BASE = import.meta.env.VITE_API_BASE || ''
 
+// Fuel fills of this many liters or less are ignored (backend ALERT_FILL_MIN_LITERS).
+export const FILL_MIN_LITERS = 10
+
 async function get(path) {
   const res = await fetch(`${BASE}${path}`)
   const data = await res.json().catch(() => ({}))
@@ -91,7 +94,7 @@ export const api = {
         to,
         fetch: opts.fetch ?? '0',
         theft_min: opts.theftMin ?? 5,
-        fill_min: opts.fillMin ?? 5,
+        fill_min: opts.fillMin ?? FILL_MIN_LITERS,
         include_stored: opts.includeStored ? '1' : '0',
       })}`
     ),

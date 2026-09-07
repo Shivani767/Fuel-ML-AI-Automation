@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { api } from '../api/client'
+import { api, FILL_MIN_LITERS } from '../api/client'
 import DeviceChart from '../components/DeviceChart'
 
 const POLL_MS = 15000 // pick up the 30-min agent soon after it finishes
@@ -1227,7 +1227,10 @@ export default function AlertsPage() {
 
         <div className="alerts-scan-bar">
           <span className="alerts-scan-bar__title">Scan now</span>
-          <span className="alerts-scan-bar__meta">Last 4 hours · all vehicles</span>
+          <span className="alerts-scan-bar__meta">
+            Last 4 hours · all vehicles · fuel fills of{' '}
+            {digest?.fillMinLiters ?? FILL_MIN_LITERS} L or less are ignored
+          </span>
           <button
             type="button"
             className="btn btn-sm btn-scan"
